@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Student_Complain_Management_System.Data;
+﻿using HelpdeskRepository.Data;
+using Microsoft.AspNetCore.Identity;
 using Student_Complain_Management_System.Models;
+using HelpdeskModel.Models;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
-namespace Student_Complain_Management_System.Services
+namespace HelpdeskService.Services
 {
     public class SeedService
     {

@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Student_Complain_Management_System.Data;
 using Student_Complain_Management_System.Models;
-using Student_Complain_Management_System.Services;
-
+using HelpdeskModel.Models;
+using HelpdeskRepository.Data;
+using HelpdeskService.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

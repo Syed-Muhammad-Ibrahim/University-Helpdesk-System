@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using HelpdeskModel.Models;
 using Student_Complain_Management_System.Models;
 
-namespace Student_Complain_Management_System.Data
+namespace HelpdeskRepository.Data
 {
     public class AppDbContext : IdentityDbContext<ApplicationUser,ApplicationRole,long>
     {

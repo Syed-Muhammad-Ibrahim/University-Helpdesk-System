@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Student_Complain_Management_System.Models;
 using Student_Complain_Management_System.ViewModels;
+using HelpdeskModel.Models;
 
 namespace UserRoles.Controllers
 {
