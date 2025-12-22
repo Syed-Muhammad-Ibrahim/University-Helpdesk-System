@@ -1,0 +1,40 @@
+﻿@using Student_Complain_Management_System.ViewModels;
+@model RegisterViewModel;
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<div class="account-container">
+    <div class="account-box">
+        <h2 class="text-center mb-4">Register As</h2>
+
+       @*  <p class="text-center mt-2">
+            As :
+            <a asp-controller="Account" asp-action="RegisterStudent" class="text-decoration-none">Student</a> |
+            <a asp-controller="Account" asp-action="RegisterStaff" class="text-decoration-none">Staff</a> |
+        </p> *@
+
+        <div>
+            <p>
+                <a asp-controller="Account" asp-action="RegisterStudent" class="btn btn-success w-100 p-2">Student</a>
+            </p>
+        </div>
+        <div>
+            <p>
+                <a asp-controller="Account" asp-action="RegisterStaff" class="btn btn-success w-100 p-2">Staff</a>
+            </p>
+        </div>
+
+            <div class="text-center">
+                <a asp-controller="Home" asp-action="Index" class="text-decoration-none mt-3">Back</a>
+            </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");
+    }
+}
