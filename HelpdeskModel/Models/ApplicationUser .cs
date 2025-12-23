@@ -6,7 +6,7 @@ namespace HelpdeskModel.Models
     {
         public string FullName { get; set; }
 
-        public string StudentId { get; set; }
-        public string StaffId { get; set; }
+        public string? StudentId { get; set; }
+        public string? StaffId { get; set; }
     }
 }
