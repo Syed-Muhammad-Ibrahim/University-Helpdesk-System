@@ -1,5 +1,5 @@
-﻿@using Student_Complain_Management_System.ViewModels;
-@model RegisterViewModel;
+﻿@using HelpdeskModel.ViewModels;
+@model StaffRegisterViewModel;
 
 @{
     ViewData["Title"] = "Staff Register";
@@ -12,6 +12,11 @@
         <form asp-action="RegisterStaff" method="post">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="StaffId" class="form-label"></label>
+                <input asp-for="StaffId" class="form-control" />
+                <span asp-validation-for="StaffId" class="text-danger"></span>
+            </div>
             <div class="mb-3">
                 <label asp-for="Name" class="form-label"></label>
                 <input asp-for="Name" class="form-control" />

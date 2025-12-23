@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Student_Complain_Management_System.ViewModels
+namespace HelpdeskModel.ViewModels
 {
     public class VerifyEmailViewModel
     {

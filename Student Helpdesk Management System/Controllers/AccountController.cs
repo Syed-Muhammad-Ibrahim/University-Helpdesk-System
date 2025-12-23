@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Student_Complain_Management_System.Models;
-using Student_Complain_Management_System.ViewModels;
 using HelpdeskModel.Models;
+using HelpdeskModel.ViewModels;
 
 namespace UserRoles.Controllers
 {
@@ -127,7 +126,7 @@ namespace UserRoles.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RegisterStudent(RegisterViewModel model)
+        public async Task<IActionResult> RegisterStudent(StudentRegisterViewModel model)
         {
             if (!ModelState.IsValid)
                 return View("RegisterStudent", model);
@@ -136,7 +135,8 @@ namespace UserRoles.Controllers
             {
                 FullName = model.Name,
                 UserName = model.Email,
-                Email = model.Email
+                Email = model.Email,
+                StudentId = model.StudentId
             };
 
             var result = await userManager.CreateAsync(user, model.Password);
@@ -165,7 +165,7 @@ namespace UserRoles.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RegisterStaff(RegisterViewModel model)
+        public async Task<IActionResult> RegisterStaff(StaffRegisterViewModel model)
         {
             if (!ModelState.IsValid)
                 return View("RegisterStaff", model);
@@ -174,7 +174,8 @@ namespace UserRoles.Controllers
             {
                 FullName = model.Name,
                 UserName = model.Email,
-                Email = model.Email
+                Email = model.Email,
+                StaffId = model.StaffId
             };
 
             var result = await userManager.CreateAsync(user, model.Password);

@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Student_Complain_Management_System.Models;
+using HelpdeskModel.Models;
 
 namespace Student_Complain_Management_System.Controllers
 {

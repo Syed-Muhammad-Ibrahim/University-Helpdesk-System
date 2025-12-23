@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Student_Complain_Management_System.Models;
+using HelpdeskModel.ViewModels;
 using HelpdeskModel.Models;
 using HelpdeskRepository.Data;
 using HelpdeskService.Services;
