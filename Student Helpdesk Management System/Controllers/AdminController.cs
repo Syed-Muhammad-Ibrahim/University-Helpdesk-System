@@ -24,6 +24,11 @@ namespace Student_Complain_Management_System.Controllers
             return View();
         }
 
+        public IActionResult DashBoard()
+        {
+            return View();
+        }
+
         // CREATE STAFF
         [HttpGet]
         public IActionResult CreateStaff()
