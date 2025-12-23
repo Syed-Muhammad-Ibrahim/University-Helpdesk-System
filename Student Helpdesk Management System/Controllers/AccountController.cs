@@ -156,44 +156,7 @@ namespace UserRoles.Controllers
             return View("RegisterStudent", model);
         }
 
-        // STAFF REGISTER
-        [HttpGet]
-        public IActionResult RegisterStaff()
-        {
-            return View("RegisterStaff");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RegisterStaff(StaffRegisterViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View("RegisterStaff", model);
-
-            var user = new ApplicationUser
-            {
-                FullName = model.Name,
-                UserName = model.Email,
-                Email = model.Email,
-                StaffId = model.StaffId
-            };
-
-            var result = await userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                if (!await roleManager.RoleExistsAsync("Staff"))
-                    await roleManager.CreateAsync(new ApplicationRole { Name = "Staff" });
-
-                await userManager.AddToRoleAsync(user, "Staff");
-                await signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Login", "Account");
-            }
-
-            foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
-
-            return View("RegisterStaff", model);
-        }
+        
 
         // ADMIN REGISTER (usually protected)
         [Authorize("Admin")]
