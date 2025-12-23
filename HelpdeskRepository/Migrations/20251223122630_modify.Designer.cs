@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HelpdeskRepository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251223110252_addStudent")]
-    partial class addStudent
+    [Migration("20251223122630_modify")]
+    partial class modify
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -163,7 +163,7 @@ namespace HelpdeskRepository.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("HelpdeskModel.Models.StudentModel", b =>
+            modelBuilder.Entity("HelpdeskModel.Models.Staff", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,7 +178,7 @@ namespace HelpdeskRepository.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("CreatedBy")
+                    b.Property<long?>("CreatedById")
                         .HasColumnType("bigint");
 
                     b.Property<long>("DepartmentId")
@@ -187,7 +187,7 @@ namespace HelpdeskRepository.Migrations
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("ModifiedBy")
+                    b.Property<long?>("ModifiedById")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
@@ -206,7 +206,65 @@ namespace HelpdeskRepository.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedById");
+
                     b.HasIndex("DepartmentId");
+
+                    b.HasIndex("ModifiedById");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Staffs");
+                });
+
+            modelBuilder.Entity("HelpdeskModel.Models.Student", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("DepartmentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("ModifiedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("ModifiedById");
 
                     b.HasIndex("UserId");
 
@@ -331,13 +389,21 @@ namespace HelpdeskRepository.Migrations
                     b.Navigation("ModifiedBy");
                 });
 
-            modelBuilder.Entity("HelpdeskModel.Models.StudentModel", b =>
+            modelBuilder.Entity("HelpdeskModel.Models.Staff", b =>
                 {
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
                     b.HasOne("HelpdeskModel.Models.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "ModifiedBy")
+                        .WithMany()
+                        .HasForeignKey("ModifiedById");
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "User")
                         .WithMany()
@@ -345,7 +411,42 @@ namespace HelpdeskRepository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("CreatedBy");
+
                     b.Navigation("Department");
+
+                    b.Navigation("ModifiedBy");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HelpdeskModel.Models.Student", b =>
+                {
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
+                    b.HasOne("HelpdeskModel.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "ModifiedBy")
+                        .WithMany()
+                        .HasForeignKey("ModifiedById");
+
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("ModifiedBy");
 
                     b.Navigation("User");
                 });
