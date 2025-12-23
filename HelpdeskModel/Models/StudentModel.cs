@@ -10,7 +10,7 @@ namespace HelpdeskModel.Models
     public class StudentModel
     {
         [Required(ErrorMessage ="Student Id is Requierd")]
-        public long StudentId { get; set; }
+        public long Id { get; set; }
 
         [Required(ErrorMessage = "Student Name is Requierd")]
         public string Name { get; set; }
@@ -30,6 +30,8 @@ namespace HelpdeskModel.Models
 
         [Required(ErrorMessage = "Student Department is Requierd")]
         public string Department {  get; set; }
+
+        public Date
 
 
     }
