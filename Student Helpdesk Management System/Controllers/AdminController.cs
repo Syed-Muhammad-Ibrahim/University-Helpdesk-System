@@ -47,8 +47,7 @@ namespace Student_Complain_Management_System.Controllers
             {
                 FullName = model.Name,
                 UserName = model.Email,
-                Email = model.Email,
-                StaffId = model.StaffId   
+                Email = model.Email   
             };
 
             var result = await userManager.CreateAsync(user, model.Password);

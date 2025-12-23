@@ -136,7 +136,6 @@ namespace UserRoles.Controllers
                 FullName = model.Name,
                 UserName = model.Email,
                 Email = model.Email,
-                StudentId = model.StudentId
             };
 
             var result = await userManager.CreateAsync(user, model.Password);

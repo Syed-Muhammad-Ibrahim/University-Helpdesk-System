@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HelpdeskRepository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251223103913_addDeptDatabase")]
+    [Migration("20251223105013_addDeptDatabase")]
     partial class addDeptDatabase
     {
         /// <inheritdoc />
@@ -105,12 +105,6 @@ namespace HelpdeskRepository.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StaffId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
