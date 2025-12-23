@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace HelpdeskModel.BusinessRules
 {
-    public class ModelRules
-    {
        public enum ModelStatus 
        {
             Active,
@@ -15,5 +13,5 @@ namespace HelpdeskModel.BusinessRules
             Deleted,
             Solved
        }
-    }
+    
 }

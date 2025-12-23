@@ -10,6 +10,6 @@ namespace HelpdeskRepository.Data
         {
         }
 
-        
+        public DbSet<Department> Departments { get; set; }
     }
 }
