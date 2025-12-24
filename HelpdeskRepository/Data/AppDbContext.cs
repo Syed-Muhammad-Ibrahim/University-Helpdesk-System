@@ -13,5 +13,6 @@ namespace HelpdeskRepository.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Staff> Staffs { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
     }
 }
