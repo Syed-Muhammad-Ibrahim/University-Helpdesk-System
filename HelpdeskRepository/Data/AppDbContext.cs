@@ -21,6 +21,7 @@ namespace HelpdeskRepository.Data
         public DbSet<Conversation> Conversations { get; set; }
         public DbSet<ConversationLog> ConversationLogs { get; set; }
         public DbSet<Notice> Notices { get; set; }
+        public DbSet<NoticeLog>NoticeLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
