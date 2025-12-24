@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Admin Panel</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+</head>
+<body>
+    <header class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand ms-3" asp-controller="Admin" asp-action="DashBoard">
+            Admin Dashboard
+        </a>
+        <form asp-controller="Account" asp-action="Logout" method="post" class="me-3">
+            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+        </form>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left menu -->
+            <nav class="col-md-2 bg-light sidebar py-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Complain" asp-action="Index">View All Complaints</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Student" asp-action="Index">View All Students</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Staff" asp-action="Index">View All Staff</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Department" asp-action="Index">Department</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Notice" asp-action="Index">Notice</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-10 py-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
