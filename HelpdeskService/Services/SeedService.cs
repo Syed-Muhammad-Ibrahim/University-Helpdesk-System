@@ -1,6 +1,7 @@
-﻿using HelpdeskRepository.Data;
-using Microsoft.AspNetCore.Identity;
+﻿using HelpdeskModel.BusinessRules;
 using HelpdeskModel.Models;
+using HelpdeskRepository.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace HelpdeskService.Services
@@ -105,6 +106,36 @@ namespace HelpdeskService.Services
                         _userManager.AddToRoleAsync(staffUser, "Staff").Wait();
                     }
                 }
+                if (!_context.Departments.Any())
+                {
+                    var departments = new List<Department>
+                    {
+                        new Department
+                        {
+                            Name      = "Accounting",
+                            CreatedAt = DateTime.UtcNow,
+                            Status    = ModelStatus.Active,
+                        },
+                        new Department
+                        {
+                            Name       = "IT",
+                            CreatedAt  = DateTime.UtcNow,
+                            Status     = ModelStatus.Active
+                        },
+                        new Department
+                        {
+                            Name       = "Business Administration",
+                            CreatedAt  = DateTime.UtcNow,
+                            Status     = ModelStatus.Active
+                        }
+
+                    };
+
+                    _context.Departments.AddRange(departments);
+                    _context.SaveChanges();
+                }
+
+
             }
             catch (Exception ex)
             {
