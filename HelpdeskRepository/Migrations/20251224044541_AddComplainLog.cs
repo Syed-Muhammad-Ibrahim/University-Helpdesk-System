@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HelpdeskRepository.Migrations
 {
     /// <inheritdoc />
-    public partial class AddComplain : Migration
+    public partial class AddComplainLog : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -362,6 +362,65 @@ namespace HelpdeskRepository.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ComplainsLog",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedById = table.Column<long>(type: "bigint", nullable: true),
+                    ApprovedById = table.Column<long>(type: "bigint", nullable: true),
+                    RejectedById = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ApprovedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RejectedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    DepartmentId = table.Column<long>(type: "bigint", nullable: false),
+                    ComplainId = table.Column<long>(type: "bigint", nullable: false),
+                    AttachmentId = table.Column<long>(type: "bigint", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ComplainsLog", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ComplainsLog_AspNetUsers_ApprovedById",
+                        column: x => x.ApprovedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ComplainsLog_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ComplainsLog_AspNetUsers_RejectedById",
+                        column: x => x.RejectedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ComplainsLog_Attachments_AttachmentId",
+                        column: x => x.AttachmentId,
+                        principalTable: "Attachments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ComplainsLog_Complains_ComplainId",
+                        column: x => x.ComplainId,
+                        principalTable: "Complains",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ComplainsLog_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -442,6 +501,36 @@ namespace HelpdeskRepository.Migrations
                 column: "RejectedById");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ComplainsLog_ApprovedById",
+                table: "ComplainsLog",
+                column: "ApprovedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComplainsLog_AttachmentId",
+                table: "ComplainsLog",
+                column: "AttachmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComplainsLog_ComplainId",
+                table: "ComplainsLog",
+                column: "ComplainId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComplainsLog_CreatedById",
+                table: "ComplainsLog",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComplainsLog_DepartmentId",
+                table: "ComplainsLog",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComplainsLog_RejectedById",
+                table: "ComplainsLog",
+                column: "RejectedById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Departments_CreatedById",
                 table: "Departments",
                 column: "CreatedById");
@@ -511,7 +600,7 @@ namespace HelpdeskRepository.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Complains");
+                name: "ComplainsLog");
 
             migrationBuilder.DropTable(
                 name: "Staffs");
@@ -521,6 +610,9 @@ namespace HelpdeskRepository.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Complains");
 
             migrationBuilder.DropTable(
                 name: "Attachments");

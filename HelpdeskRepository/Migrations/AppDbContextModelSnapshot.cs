@@ -233,6 +233,65 @@ namespace HelpdeskRepository.Migrations
                     b.ToTable("Complains");
                 });
 
+            modelBuilder.Entity("HelpdeskModel.Models.ComplainLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("ApprovedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("ApprovedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AttachmentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ComplainId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("DepartmentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RejectedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("RejectedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApprovedById");
+
+                    b.HasIndex("AttachmentId");
+
+                    b.HasIndex("ComplainId");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("RejectedById");
+
+                    b.ToTable("ComplainsLog");
+                });
+
             modelBuilder.Entity("HelpdeskModel.Models.Department", b =>
                 {
                     b.Property<long>("Id")
@@ -534,6 +593,54 @@ namespace HelpdeskRepository.Migrations
                     b.Navigation("Department");
 
                     b.Navigation("ModifiedBy");
+
+                    b.Navigation("RejectedBy");
+                });
+
+            modelBuilder.Entity("HelpdeskModel.Models.ComplainLog", b =>
+                {
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "ApprovedBy")
+                        .WithMany()
+                        .HasForeignKey("ApprovedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HelpdeskModel.Models.Attachment", "Attachment")
+                        .WithMany()
+                        .HasForeignKey("AttachmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HelpdeskModel.Models.Complain", "Complain")
+                        .WithMany()
+                        .HasForeignKey("ComplainId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HelpdeskModel.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "RejectedBy")
+                        .WithMany()
+                        .HasForeignKey("RejectedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ApprovedBy");
+
+                    b.Navigation("Attachment");
+
+                    b.Navigation("Complain");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Department");
 
                     b.Navigation("RejectedBy");
                 });
