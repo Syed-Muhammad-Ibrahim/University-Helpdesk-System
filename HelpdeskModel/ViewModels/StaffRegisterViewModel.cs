@@ -16,9 +16,6 @@ namespace HelpdeskModel.ViewModels
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Staff ID is required.")]
-        public string StaffId { get; set; }
-
         [Required(ErrorMessage = "Password is required.")]
         [StringLength(40, MinimumLength = 8)]
         [DataType(DataType.Password)]
@@ -29,5 +26,9 @@ namespace HelpdeskModel.ViewModels
         [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "Password does not match.")]
         public string ConfirmPassword { get; set; }
+
+        public string Address { get; set; }
+        public string Phone {  get; set; }
+        public long DepartmentId {  get; set; }
     }
 }
