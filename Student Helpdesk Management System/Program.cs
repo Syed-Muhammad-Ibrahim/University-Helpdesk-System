@@ -33,9 +33,14 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 .AddDefaultTokenProviders();
 
 
+builder.Services.AddScoped<ISeedService, SeedService>();
 var app = builder.Build();
 
-await SeedService.SeedDatabase(app.Services);
+using (var scope = app.Services.CreateScope())
+{
+    var seedService = scope.ServiceProvider.GetRequiredService<ISeedService>();
+    seedService.DatabaseSeeder();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
