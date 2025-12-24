@@ -13,6 +13,7 @@ namespace HelpdeskService.Services
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly AppDbContext _context;
         private readonly ILogger<StaffService> _logger;
+        private Department department;
 
         public StaffService(
             UserManager<ApplicationUser> userManager,
@@ -60,10 +61,11 @@ namespace HelpdeskService.Services
                 {
                     Name = model.Name,
                     User = user,
-                    Address = model.Address,   
+                    Address = model.Address,
                     Phone = model.Phone,
+                    Department = department,
                     CreatedAt = DateTime.UtcNow,
-                    Status = ModelStatus.Active,
+                    Status = ModelStatus.Active
                 };
 
                 _context.Staffs.Add(staff);

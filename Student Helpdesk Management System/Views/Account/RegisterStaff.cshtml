@@ -1,57 +1,66 @@
 ﻿@using HelpdeskModel.ViewModels;
-@model StaffRegisterViewModel;
+@model StaffRegisterViewModel
 
 @{
-    ViewData["Title"] = "Staff Register";
-    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    ViewData["Title"] = "Create Staff";
+    Layout = "_AdminLayout";
 }
 
 <div class="account-container">
     <div class="account-box">
-        <h2 class="text-center mb-4">Register</h2>
-        <form asp-action="RegisterStaff" method="post">
+        <h2 class="text-center mb-4">Create Staff</h2>
+
+        <form asp-controller="Admin" asp-action="CreateStaff" method="post">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="mb-3">
-                <label asp-for="StaffId" class="form-label"></label>
-                <input asp-for="StaffId" class="form-control" />
-                <span asp-validation-for="StaffId" class="text-danger"></span>
-            </div>
             <div class="mb-3">
                 <label asp-for="Name" class="form-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
             <div class="mb-3">
                 <label asp-for="Email" class="form-label"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+
             <div class="mb-3">
                 <label asp-for="Password" class="form-label"></label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+
             <div class="mb-3">
                 <label asp-for="ConfirmPassword" class="form-label"></label>
                 <input asp-for="ConfirmPassword" class="form-control" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
-            <input type="submit" value="Register" class="btn btn-success w-100 p-2" />
-            <p class="text-center mt-2">
-                Already have an account? <a asp-controller="Account" asp-action="Login" class="text-decoration-none">Login</a>
-            </p>
-            <div class="text-center">
-                <a asp-controller="Account" asp-action="Register" class="text-decoration-none mt-3">Back</a>
+            
+            <div class="mb-3">
+                <label asp-for="Address" class="form-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Phone" class="form-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
             
 
+            <input type="submit" value="Create Staff" class="btn btn-success w-100 p-2" />
+
+            <div class="text-center mt-3">
+                <a asp-controller="Admin" asp-action="Index" class="text-decoration-none">Back to Admin</a>
+            </div>
         </form>
     </div>
 </div>
 
 @section Scripts {
     @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

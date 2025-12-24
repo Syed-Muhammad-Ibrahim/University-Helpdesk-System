@@ -32,7 +32,7 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
-
+builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<ISeedService, SeedService>();
 var app = builder.Build();
 

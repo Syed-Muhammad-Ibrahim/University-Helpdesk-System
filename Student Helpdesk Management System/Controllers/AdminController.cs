@@ -1,22 +1,23 @@
-﻿using HelpdeskModel.Models;
-using HelpdeskModel.ViewModels;
+﻿using HelpdeskModel.ViewModels;
+using HelpdeskRepository.Data;
+using HelpdeskService.Services;          
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Student_Complain_Management_System.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly RoleManager<ApplicationRole> roleManager;
+        private readonly IStaffService _staffService;
+        private readonly AppDbContext _context;
 
-        public AdminController(UserManager<ApplicationUser> userManager,
-                               RoleManager<ApplicationRole> roleManager)
+        public AdminController(IStaffService staffService, AppDbContext context)
         {
-            this.userManager = userManager;
-            this.roleManager = roleManager;
+            _staffService = staffService;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -33,8 +34,17 @@ namespace Student_Complain_Management_System.Controllers
         [HttpGet]
         public IActionResult CreateStaff()
         {
+            ViewBag.Departments = _context.Departments
+                .Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.Name
+                })
+                .ToList();
+
             return View();
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -43,29 +53,15 @@ namespace Student_Complain_Management_System.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var user = new ApplicationUser
+            var ok = await _staffService.CreateStaffAsync(model);
+
+            if (!ok)
             {
-                FullName = model.Name,
-                UserName = model.Email,
-                Email = model.Email   
-            };
-
-            var result = await userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                if (!await roleManager.RoleExistsAsync("Staff"))
-                    await roleManager.CreateAsync(new ApplicationRole { Name = "Staff" });
-
-                await userManager.AddToRoleAsync(user, "Staff");
-
-              
-                return RedirectToAction("Index", "Admin");
+                ModelState.AddModelError("", "Failed to create staff. Please try again.");
+                return View(model);
             }
 
-            foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
-
-            return View(model);
+            return RedirectToAction("Index", "Admin");
         }
     }
 }

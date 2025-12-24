@@ -1,12 +1,16 @@
 ﻿@model HelpdeskModel.ViewModels.StaffRegisterViewModel
+
 @{
     ViewData["Title"] = "Create Staff";
+    Layout = "_AdminLayout";
 }
 
 <h2>Create Staff</h2>
 
-<form asp-action="CreateStaff" method="post">
+<form asp-controller="Admin" asp-action="CreateStaff" method="post">
     @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <div class="mb-3">
         <label asp-for="Name" class="form-label"></label>
@@ -21,12 +25,6 @@
     </div>
 
     <div class="mb-3">
-        <label asp-for="StaffId" class="form-label"></label>
-        <input asp-for="StaffId" class="form-control" />
-        <span asp-validation-for="StaffId" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
         <label asp-for="Password" class="form-label"></label>
         <input asp-for="Password" class="form-control" />
         <span asp-validation-for="Password" class="text-danger"></span>
@@ -38,5 +36,34 @@
         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
     </div>
 
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DepartmentId" class="form-label"></label>
+        <select asp-for="DepartmentId"
+                asp-items="ViewBag.Departments"
+                class="form-control">
+            <option value="">-- Select Department --</option>
+        </select>
+        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+    </div>
+
     <button type="submit" class="btn btn-primary">Create Staff</button>
+    <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary ms-2">Back to Admin</a>
 </form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
