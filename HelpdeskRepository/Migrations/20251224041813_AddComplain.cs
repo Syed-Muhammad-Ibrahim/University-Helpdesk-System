@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HelpdeskRepository.Migrations
 {
     /// <inheritdoc />
-    public partial class modify : Migration
+    public partial class AddComplain : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -160,6 +160,36 @@ namespace HelpdeskRepository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Attachments",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedById = table.Column<long>(type: "bigint", nullable: true),
+                    ModifiedById = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    FileNmae = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FileType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attachments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Attachments_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Attachments_AspNetUsers_ModifiedById",
+                        column: x => x.ModifiedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Departments",
                 columns: table => new
                 {
@@ -185,6 +215,63 @@ namespace HelpdeskRepository.Migrations
                         column: x => x.ModifiedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Complains",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedById = table.Column<long>(type: "bigint", nullable: true),
+                    ModifiedById = table.Column<long>(type: "bigint", nullable: true),
+                    ApprovedById = table.Column<long>(type: "bigint", nullable: true),
+                    RejectedById = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ApprovedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RejectedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    isSolved = table.Column<bool>(type: "bit", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DepartmentId = table.Column<long>(type: "bigint", nullable: false),
+                    AttachmentId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Complains", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Complains_AspNetUsers_ApprovedById",
+                        column: x => x.ApprovedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Complains_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Complains_AspNetUsers_ModifiedById",
+                        column: x => x.ModifiedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Complains_AspNetUsers_RejectedById",
+                        column: x => x.RejectedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Complains_Attachments_AttachmentId",
+                        column: x => x.AttachmentId,
+                        principalTable: "Attachments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Complains_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -315,6 +402,46 @@ namespace HelpdeskRepository.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Attachments_CreatedById",
+                table: "Attachments",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Attachments_ModifiedById",
+                table: "Attachments",
+                column: "ModifiedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Complains_ApprovedById",
+                table: "Complains",
+                column: "ApprovedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Complains_AttachmentId",
+                table: "Complains",
+                column: "AttachmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Complains_CreatedById",
+                table: "Complains",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Complains_DepartmentId",
+                table: "Complains",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Complains_ModifiedById",
+                table: "Complains",
+                column: "ModifiedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Complains_RejectedById",
+                table: "Complains",
+                column: "RejectedById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Departments_CreatedById",
                 table: "Departments",
                 column: "CreatedById");
@@ -384,6 +511,9 @@ namespace HelpdeskRepository.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Complains");
+
+            migrationBuilder.DropTable(
                 name: "Staffs");
 
             migrationBuilder.DropTable(
@@ -391,6 +521,9 @@ namespace HelpdeskRepository.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Attachments");
 
             migrationBuilder.DropTable(
                 name: "Departments");

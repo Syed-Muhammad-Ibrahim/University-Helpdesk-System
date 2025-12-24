@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HelpdeskRepository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251224040300_AddAttachment")]
-    partial class AddAttachment
+    [Migration("20251224041813_AddComplain")]
+    partial class AddComplain
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -169,6 +169,71 @@ namespace HelpdeskRepository.Migrations
                     b.HasIndex("ModifiedById");
 
                     b.ToTable("Attachments");
+                });
+
+            modelBuilder.Entity("HelpdeskModel.Models.Complain", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("ApprovedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("ApprovedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AttachmentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("DepartmentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("ModifiedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("RejectedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("RejectedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isSolved")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApprovedById");
+
+                    b.HasIndex("AttachmentId");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("ModifiedById");
+
+                    b.HasIndex("RejectedById");
+
+                    b.ToTable("Complains");
                 });
 
             modelBuilder.Entity("HelpdeskModel.Models.Department", b =>
@@ -431,6 +496,49 @@ namespace HelpdeskRepository.Migrations
                     b.Navigation("CreatedBy");
 
                     b.Navigation("ModifiedBy");
+                });
+
+            modelBuilder.Entity("HelpdeskModel.Models.Complain", b =>
+                {
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "ApprovedBy")
+                        .WithMany()
+                        .HasForeignKey("ApprovedById");
+
+                    b.HasOne("HelpdeskModel.Models.Attachment", "Attachment")
+                        .WithMany()
+                        .HasForeignKey("AttachmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
+                    b.HasOne("HelpdeskModel.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "ModifiedBy")
+                        .WithMany()
+                        .HasForeignKey("ModifiedById");
+
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "RejectedBy")
+                        .WithMany()
+                        .HasForeignKey("RejectedById");
+
+                    b.Navigation("ApprovedBy");
+
+                    b.Navigation("Attachment");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("ModifiedBy");
+
+                    b.Navigation("RejectedBy");
                 });
 
             modelBuilder.Entity("HelpdeskModel.Models.Department", b =>
