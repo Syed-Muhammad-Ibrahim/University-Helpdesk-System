@@ -1,10 +1,10 @@
-﻿body {
+﻿<style >
+body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
     background-color: #f4f6f9;
 }
 
-/* Top Navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -31,13 +31,11 @@
         background-color: #c0392b;
     }
 
-/* Dashboard Layout */
 .dashboard {
     display: flex;
     height: calc(100vh - 60px);
 }
 
-/* Sidebar */
 .sidebar {
     width: 230px;
     background-color: #34495e;
@@ -56,7 +54,6 @@
             background-color: #1abc9c;
         }
 
-/* Main Content */
 .content {
     flex: 1;
     padding: 20px;
@@ -68,3 +65,81 @@
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
+
+.page-container {
+    margin-left: 250px; /* sidebar offset */
+    padding: 20px;
+}
+
+.form-card {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.12);
+    max-width: 900px;
+}
+
+.form-title {
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #333;
+}
+
+.form-input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: 0.2s;
+}
+
+.form-input:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 4px rgba(13,110,253,0.4);
+}
+
+.validation {
+    color: red;
+    font-size: 13px;
+}
+
+.btn-row {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-save {
+    background: #0d6efd;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    transition: 0.3s;
+}
+
+.btn-save:hover {
+    background: #0b5ed7;
+}
+
+.btn-back {
+    background: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-back:hover {
+    background: #5a6268;
+}
+
+
+</style >

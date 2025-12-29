@@ -5,65 +5,70 @@
     Layout = "_AdminLayout";
 }
 
-<h2>Create Staff</h2>
+<div class="page-container mt-4">
+    <div class="form-card">
+        <h3 class="form-title">➕ Create New Staff</h3>
+        <hr />
 
-<form asp-controller="Admin" asp-action="CreateStaff" method="post">
-    @Html.AntiForgeryToken()
+        <form asp-controller="Admin" asp-action="CreateStaff" method="post">
+            @Html.AntiForgeryToken()
 
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
 
-    <div class="mb-3">
-        <label asp-for="Name" class="form-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-input" />
+                    <span asp-validation-for="Name" class="validation"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-input" />
+                    <span asp-validation-for="Email" class="validation"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" type="password" class="form-input" />
+                    <span asp-validation-for="Password" class="validation"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="ConfirmPassword" class="form-label"></label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-input" />
+                    <span asp-validation-for="ConfirmPassword" class="validation"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Address" class="form-label"></label>
+                    <input asp-for="Address" class="form-input" />
+                    <span asp-validation-for="Address" class="validation"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Phone" class="form-label"></label>
+                    <input asp-for="Phone" class="form-input" />
+                    <span asp-validation-for="Phone" class="validation"></span>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label asp-for="DepartmentId" class="form-label"></label>
+                    <select asp-for="DepartmentId" asp-items="ViewBag.Departments" class="form-input">
+                        <option value="">-- Select Department --</option>
+                    </select>
+                    <span asp-validation-for="DepartmentId" class="validation"></span>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button type="submit" class="btn-save">Create Staff</button>
+                <a asp-controller="Admin" asp-action="DashBoard" class="btn-back">Back</a>
+            </div>
+        </form>
     </div>
-
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Password" class="form-label"></label>
-        <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="ConfirmPassword" class="form-label"></label>
-        <input asp-for="ConfirmPassword" class="form-control" />
-        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Address" class="form-label"></label>
-        <input asp-for="Address" class="form-control" />
-        <span asp-validation-for="Address" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Phone" class="form-label"></label>
-        <input asp-for="Phone" class="form-control" />
-        <span asp-validation-for="Phone" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="DepartmentId" class="form-label"></label>
-        <select asp-for="DepartmentId"
-                asp-items="ViewBag.Departments"
-                class="form-control">
-            <option value="">-- Select Department --</option>
-        </select>
-        <span asp-validation-for="DepartmentId" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Create Staff</button>
-    <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary ms-2">Back to Admin</a>
-</form>
+</div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    await Html.RenderPartialAsync("_ValidationScriptsPartial")
 }

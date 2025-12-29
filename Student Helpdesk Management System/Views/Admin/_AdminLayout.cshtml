@@ -1,47 +1,39 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@{
+    Layout = null;
+    var title = ViewData["Title"] ?? "Admin Dashboard";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>@ViewData["Title"] - Admin Panel</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <meta charset="UTF-8">
+    <title>@(ViewData["Title"] ?? "Admin Dashboard")</title>
+    <link rel="stylesheet" href="~/css/admin.css" />
 </head>
+
 <body>
-    <header class="navbar navbar-dark bg-dark">
-        <a class="navbar-brand ms-3" asp-controller="Admin" asp-action="DashBoard">
-            Admin Dashboard
-        </a>
-        <form asp-controller="Account" asp-action="Logout" method="post" class="me-3">
-            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+
+    <div class="navbar">
+        <h2>Admin Dashboard</h2>
+        <form asp-controller="Account" asp-action="Logout" method="post">
+            <button type="submit" class="logout-btn">Logout</button>
         </form>
-    </header>
+    </div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Left menu -->
-            <nav class="col-md-2 bg-light sidebar py-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Complain" asp-action="Index">View All Complaints</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Student" asp-action="Index">View All Students</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Admin" asp-action="CreateStaff">View All Staff</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Department" asp-action="Index">Department</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Notice" asp-action="Index">Notice</a>
-                    </li>
-                </ul>
-            </nav>
+    <div class="dashboard">
+        <div class="sidebar">
+            <a asp-controller="Complain" asp-action="Index">View All Complaints</a>
+            <a asp-controller="Student" asp-action="Index">View All Students</a>
+            <a asp-controller="Admin" asp-action="CreateStaff">View All Staff</a>
+            <a asp-controller="Department" asp-action="Index">Department</a>
+            <a asp-controller="Notice" asp-action="Index">Notice</a>
+        </div>
 
-            <!-- Main content -->
-            <main class="col-md-10 py-3">
-                @RenderBody()
-            </main>
+        <div class="content">
+            @RenderBody()
         </div>
     </div>
 
