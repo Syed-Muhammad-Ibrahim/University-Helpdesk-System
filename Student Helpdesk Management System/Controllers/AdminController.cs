@@ -1,4 +1,5 @@
 ﻿using HelpdeskModel.ViewModels;
+using HelpdeskModel.ViewModels.UpdateViewModels;
 using HelpdeskRepository.Data;
 using HelpdeskService.Services;          
 using Microsoft.AspNetCore.Authorization;
@@ -82,6 +83,81 @@ namespace Student_Complain_Management_System.Controllers
 
             return View(staffs);
         }
+
+        // Update Staff
+        [HttpGet]
+        public async Task<IActionResult> EditStaff(long id)
+        {
+            var staff = await _context.Staffs
+                .Include(s => s.Department)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (staff == null)
+                return NotFound();
+
+            var model = new StaffUpdateViewModel
+            {
+                Id = staff.Id,
+                Name = staff.Name,
+                Address = staff.Address,
+                Phone = staff.Phone,
+                DepartmentId = staff.Department.Id
+            };
+
+            ViewBag.Departments = _context.Departments
+                .Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.Name
+                })
+                .ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditStaff(StaffUpdateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Departments = _context.Departments
+                    .Select(d => new SelectListItem
+                    {
+                        Value = d.Id.ToString(),
+                        Text = d.Name
+                    })
+                    .ToList();
+                return View(model);
+            }
+
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var currentUserId))
+            {
+                ModelState.AddModelError("", "Could not determine current user.");
+                return View(model);
+            }
+
+            var ok = await _staffService.UpdateStaffAsync(model, currentUserId);
+
+            if (!ok)
+            {
+                ModelState.AddModelError("", "Failed to update staff. Please try again.");
+                ViewBag.Departments = _context.Departments
+                    .Select(d => new SelectListItem
+                    {
+                        Value = d.Id.ToString(),
+                        Text = d.Name
+                    })
+                    .ToList();
+                return View(model);
+            }
+
+            return RedirectToAction("StaffList");
+        }
+
+
+
 
     }
 }

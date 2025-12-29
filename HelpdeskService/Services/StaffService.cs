@@ -1,10 +1,13 @@
 ﻿using HelpdeskModel.BusinessRules;
 using HelpdeskModel.Models;
 using HelpdeskModel.ViewModels;
+using HelpdeskModel.ViewModels.UpdateViewModels;
 using HelpdeskRepository.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
+using System.Linq.Expressions;
 
 namespace HelpdeskService.Services
 {
@@ -89,6 +92,45 @@ namespace HelpdeskService.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while creating staff.");
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateStaffAsync(StaffUpdateViewModel model, long? modifiedById)
+        {
+            try
+            {
+                var staff = await _context.Staffs
+                    .Include(s => s.Department)
+                    .FirstOrDefaultAsync(s => s.Id == model.DepartmentId);
+
+                if (staff == null)
+                {
+                    return false;
+                }
+
+                staff.Name = model.Name;
+                staff.Address = model.Address;
+                staff.Phone = model.Phone; ;
+                var dept = await _context.Departments
+                    .FirstOrDefaultAsync(d => d.Id == model.DepartmentId);
+
+                if (dept == null)
+                {
+                    staff.Department = dept;
+                }
+                    staff.ModifiedAt = DateTime.UtcNow;
+                    staff.ModifiedById = modifiedById;
+
+                    await _context.SaveChangesAsync();
+
+                    return true;
+                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while updating staff {Id}", model.Id);
+
                 return false;
             }
         }

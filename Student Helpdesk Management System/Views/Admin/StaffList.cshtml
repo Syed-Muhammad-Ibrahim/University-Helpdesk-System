@@ -27,6 +27,14 @@
                     <td>@s.Department?.Name</td>
                     <td>@s.Phone</td>
                     <td>@s.Address</td>
+                    <td>
+                        <a asp-controller="Admin"
+                           asp-action="EditStaff"
+                           asp-route-id="@s.Id"
+                           class="btn btn-sm btn-primary">
+                            Edit
+                        </a>
+                    </td>
                 </tr>
             }
         </tbody>
