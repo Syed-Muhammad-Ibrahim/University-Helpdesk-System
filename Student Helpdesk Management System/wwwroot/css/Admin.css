@@ -1,0 +1,70 @@
+﻿body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f6f9;
+}
+
+/* Top Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c3e50;
+    color: white;
+    padding: 15px 20px;
+}
+
+    .navbar h2 {
+        margin: 0;
+    }
+
+.logout-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+    .logout-btn:hover {
+        background-color: #c0392b;
+    }
+
+/* Dashboard Layout */
+.dashboard {
+    display: flex;
+    height: calc(100vh - 60px);
+}
+
+/* Sidebar */
+.sidebar {
+    width: 230px;
+    background-color: #34495e;
+    padding-top: 20px;
+}
+
+    .sidebar a {
+        display: block;
+        padding: 12px 20px;
+        color: white;
+        text-decoration: none;
+        border-bottom: 1px solid #2c3e50;
+    }
+
+        .sidebar a:hover {
+            background-color: #1abc9c;
+        }
+
+/* Main Content */
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+.card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}

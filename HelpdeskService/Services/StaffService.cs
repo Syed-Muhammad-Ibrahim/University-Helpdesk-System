@@ -3,6 +3,7 @@ using HelpdeskModel.Models;
 using HelpdeskModel.ViewModels;
 using HelpdeskRepository.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace HelpdeskService.Services
@@ -13,7 +14,7 @@ namespace HelpdeskService.Services
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly AppDbContext _context;
         private readonly ILogger<StaffService> _logger;
-        private Department department;
+        
 
         public StaffService(
             UserManager<ApplicationUser> userManager,
@@ -39,6 +40,14 @@ namespace HelpdeskService.Services
                     Email = model.Email,
                     EmailConfirmed = true
                 };
+                var department = await _context.Departments.
+                    FirstOrDefaultAsync(d => d.Id == model.DepartmentId);
+                if (department == null)
+                {
+                    _logger.LogError("Invalid DepartmentId {DepartmentId} for staff {Email}",
+                        model.DepartmentId, model.Email);
+                    return false;
+                }
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (!result.Succeeded)
