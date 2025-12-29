@@ -33,17 +33,6 @@
                     @Html.DisplayNameFor(a => a.RememberMe)
                 </label>
             </div>
-
-            <div class="mb-3">
-                <label asp-for="Role" class="form-label"></label>
-                <select asp-for="Role" class="form-control">
-                    <option value="">-- Select role --</option>
-                    <option value="Student">Student</option>
-                    <option value="Staff">Staff</option>
-                    <option value="Admin">Admin</option>
-                </select>
-                <span asp-validation-for="Role" class="text-danger"></span>
-            </div>
             <input type="submit" value="Login" class="btn btn-success w-100 p-2" />
             <p class="text-center mt-2">
                 Don't have an account? <a asp-controller="Account" asp-action="RegisterStudent" class="text-decoration-none">Register</a>

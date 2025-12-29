@@ -13,10 +13,6 @@ namespace HelpdeskModel.ViewModels
         public string Password { get; set; }
 
         [Display(Name = "Remember me?")]
-        public bool RememberMe { get; set; }
-
-        [Required(ErrorMessage = "Role is required.")]
-        [Display(Name = "Login as")]
-        public string Role { get; set; } 
+        public bool RememberMe { get; set; } 
     }
 }

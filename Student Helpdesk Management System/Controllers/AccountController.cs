@@ -41,39 +41,32 @@ namespace UserRoles.Controllers
                 model.RememberMe,
                 lockoutOnFailure: false);
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                // Optional: verify user has that role
-                var user = await userManager.FindByEmailAsync(model.Email);
-                if (user == null)
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View(model);
-                }
-
-                if (!await userManager.IsInRoleAsync(user, model.Role))
-                {
-                    ModelState.AddModelError(string.Empty, $"You are not assigned to the {model.Role} role.");
-                    await signInManager.SignOutAsync();
-                    return View(model);
-                }
-
-                // Redirect based on chosen role
-                switch (model.Role)
-                {
-                    case "Admin":
-                        return RedirectToAction("DashBoard", "Admin");
-                    case "Staff":
-                        return RedirectToAction("Index", "Staff");
-                    case "Student":
-                        return RedirectToAction("Index", "Student");
-                    default:
-                        return RedirectToAction("Index", "Home");
-                }
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return View(model);
             }
 
-            ModelState.AddModelError(string.Empty, "Invalid Login Attempt.");
-            return View(model);
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                await signInManager.SignOutAsync();
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return View(model);
+            }
+
+            // Redirect based on user’s stored roles
+            if (await userManager.IsInRoleAsync(user, "Admin"))
+                return RedirectToAction("DashBoard", "Admin");
+
+            if (await userManager.IsInRoleAsync(user, "Staff"))
+                return RedirectToAction("Index", "Staff");
+
+            if (await userManager.IsInRoleAsync(user, "Student"))
+                return RedirectToAction("Index", "Student");
+
+            // Fallback
+            return RedirectToAction("Index", "Home");
         }
 
 
