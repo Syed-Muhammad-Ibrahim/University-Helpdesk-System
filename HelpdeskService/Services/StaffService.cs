@@ -32,7 +32,7 @@ namespace HelpdeskService.Services
         {
             try
             {
-                // 1) Identity user create
+                // Identity user create
                 var user = new ApplicationUser
                 {
                     FullName = model.Name,
@@ -40,6 +40,7 @@ namespace HelpdeskService.Services
                     Email = model.Email,
                     EmailConfirmed = true
                 };
+                // Getting The Department
                 var department = await _context.Departments.
                     FirstOrDefaultAsync(d => d.Id == model.DepartmentId);
                 if (department == null)
@@ -57,7 +58,7 @@ namespace HelpdeskService.Services
                     return false;
                 }
 
-                // 2) Role ensure + assign
+                // Role ensure + assign
                 if (!await _roleManager.RoleExistsAsync("Staff"))
                 {
                     await _roleManager.CreateAsync(new ApplicationRole { Name = "Staff" });
@@ -65,7 +66,7 @@ namespace HelpdeskService.Services
 
                 await _userManager.AddToRoleAsync(user, "Staff");
 
-                // 3) Staff table e entry
+                // Staff table e entry
                 var staff = new Staff
                 {
                     Name = model.Name,
