@@ -12,5 +12,7 @@ namespace HelpdeskService.Services
     {
         Task<bool> CreateStaffAsync(StaffRegisterViewModel model,long? createdById);
         Task<bool> UpdateStaffAsync(StaffUpdateViewModel model,long? modifiedById);
+        Task<bool> DeleteStaffAsync(long id, long? deletedById);
+
     }
 }

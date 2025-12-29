@@ -134,5 +134,30 @@ namespace HelpdeskService.Services
                 return false;
             }
         }
+
+        public async Task<bool> DeleteStaffAsync(long id, long? deletedById)
+        {
+            try
+            {
+                var staff = await _context.Staffs
+                    .FirstOrDefaultAsync(s => s.Id == id);
+
+                if (staff == null)
+                    return false;
+
+                staff.Status = ModelStatus.Deleted;
+                staff.ModifiedAt = DateTime.UtcNow;
+                staff.ModifiedById = deletedById;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while soft deleting staff {Id}", id);
+                return false;
+            }
+        }
+
     }
 }

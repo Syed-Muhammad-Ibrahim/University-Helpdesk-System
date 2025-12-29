@@ -1,4 +1,5 @@
-﻿using HelpdeskModel.ViewModels;
+﻿using HelpdeskModel.BusinessRules;
+using HelpdeskModel.ViewModels;
 using HelpdeskModel.ViewModels.UpdateViewModels;
 using HelpdeskRepository.Data;
 using HelpdeskService.Services;          
@@ -79,6 +80,7 @@ namespace Student_Complain_Management_System.Controllers
             var staffs = await _context.Staffs
                 .Include(s => s.Department)
                 .Include(s => s.User)
+                .Where(s => s.Status == ModelStatus.Active) 
                 .ToListAsync();
 
             return View(staffs);
@@ -155,6 +157,29 @@ namespace Student_Complain_Management_System.Controllers
 
             return RedirectToAction("StaffList");
         }
+
+
+        // Delete Staff
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteStaff(long id)
+        {
+            var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            long? currentUserId = null;
+            if (!string.IsNullOrEmpty(userIdStr) && long.TryParse(userIdStr, out var parsed))
+                currentUserId = parsed;
+
+            var ok = await _staffService.DeleteStaffAsync(id, currentUserId);
+
+            if (!ok)
+            {
+
+            }
+
+            return RedirectToAction("StaffList");
+        }
+
+
 
 
 
