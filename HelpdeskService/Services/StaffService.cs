@@ -28,7 +28,7 @@ namespace HelpdeskService.Services
             _logger = logger;
         }
 
-        public async Task<bool> CreateStaffAsync(StaffRegisterViewModel model)
+        public async Task<bool> CreateStaffAsync(StaffRegisterViewModel model, long? createdById)
         {
             try
             {
@@ -75,8 +75,11 @@ namespace HelpdeskService.Services
                     Phone = model.Phone,
                     Department = department,
                     CreatedAt = DateTime.UtcNow,
-                    Status = ModelStatus.Active
+                    Status = ModelStatus.Active,
+                    CreatedById = createdById
                 };
+                
+
 
                 _context.Staffs.Add(staff);
                 await _context.SaveChangesAsync();

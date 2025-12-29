@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Student_Complain_Management_System.Controllers
 {
@@ -53,7 +54,15 @@ namespace Student_Complain_Management_System.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var ok = await _staffService.CreateStaffAsync(model);
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            long? currentUserId = null;
+            if(!string.IsNullOrEmpty(userIdString) && long.TryParse(userIdString, out var parsed))
+            {
+                 currentUserId = parsed;
+            }
+            
+
+            var ok = await _staffService.CreateStaffAsync(model,currentUserId);
 
             if (!ok)
             {
@@ -61,7 +70,7 @@ namespace Student_Complain_Management_System.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("Index", "Admin");
+            return RedirectToAction("DashBoard", "Admin");
         }
 
         public async Task<IActionResult> StaffList()

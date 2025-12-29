@@ -9,6 +9,6 @@ namespace HelpdeskService.Services
 {
     public interface IStaffService
     {
-        Task<bool> CreateStaffAsync(StaffRegisterViewModel model);
+        Task<bool> CreateStaffAsync(StaffRegisterViewModel model,long? createdById);
     }
 }
