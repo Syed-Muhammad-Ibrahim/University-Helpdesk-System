@@ -63,5 +63,17 @@ namespace Student_Complain_Management_System.Controllers
 
             return RedirectToAction("Index", "Admin");
         }
+
+        // in AdminController
+        public async Task<IActionResult> StaffList()
+        {
+            var staffs = await _context.Staffs
+                .Include(s => s.Department)
+                .Include(s => s.User)
+                .ToListAsync();
+
+            return View(staffs);
+        }
+
     }
 }
