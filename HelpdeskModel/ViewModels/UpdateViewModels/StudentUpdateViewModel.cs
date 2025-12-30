@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HelpdeskModel.ViewModels.UpdateViewModels
 {
-    public class StudentRegisterViewModel
+    public class StudentUpdateViewModel
     {
         public long Id { get; set; }
 
