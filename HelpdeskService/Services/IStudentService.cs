@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace HelpdeskService.Services
 {
-        public interface IStudentService
-        {
-            Task<bool> CreateStudentAsync(StudentRegisterViewModel model, long? createdById);
-            Task<bool> UpdateStudentAsync(StudentUpdateViewModel model, long? modifiedById);
-            Task<List<Student>> GetAllStudentsAsync();
-        }
+    public interface IStudentService
+    {
+        Task<bool> CreateStudentAsync(StudentRegisterViewModel model, long? createdById);
+        Task<bool> UpdateStudentAsync(StudentUpdateViewModel model, long? modifiedById);
+        Task<List<Student>> GetAllStudentsAsync();
+    }
 }

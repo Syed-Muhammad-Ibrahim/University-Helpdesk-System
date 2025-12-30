@@ -34,6 +34,7 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 
 builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<ISeedService, SeedService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
