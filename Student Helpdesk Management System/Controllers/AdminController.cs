@@ -54,21 +54,37 @@ namespace Student_Complain_Management_System.Controllers
         public async Task<IActionResult> CreateStaff(StaffRegisterViewModel model)
         {
             if (!ModelState.IsValid)
+            {
+                ViewBag.Departments = _context.Departments
+                    .Select(d => new SelectListItem
+                    {
+                        Value = d.Id.ToString(),
+                        Text = d.Name
+                    })
+                    .ToList();
+
                 return View(model);
+            }
 
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             long? currentUserId = null;
-            if(!string.IsNullOrEmpty(userIdString) && long.TryParse(userIdString, out var parsed))
-            {
-                 currentUserId = parsed;
-            }
-            
+            if (!string.IsNullOrEmpty(userIdString) && long.TryParse(userIdString, out var parsed))
+                currentUserId = parsed;
 
-            var ok = await _staffService.CreateStaffAsync(model,currentUserId);
+            var ok = await _staffService.CreateStaffAsync(model, currentUserId);
 
             if (!ok)
             {
                 ModelState.AddModelError("", "Failed to create staff. Please try again.");
+
+                ViewBag.Departments = _context.Departments
+                    .Select(d => new SelectListItem
+                    {
+                        Value = d.Id.ToString(),
+                        Text = d.Name
+                    })
+                    .ToList();
+
                 return View(model);
             }
 
