@@ -1,4 +1,5 @@
-﻿using HelpdeskModel.ViewModels;
+﻿using HelpdeskModel.Models;
+using HelpdeskModel.ViewModels;
 using HelpdeskModel.ViewModels.UpdateViewModels;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,7 @@ namespace HelpdeskService.Services
     {
         Task<bool> CreateStaffAsync(StaffRegisterViewModel model,long? createdById);
         Task<bool> UpdateStaffAsync(StaffUpdateViewModel model,long? modifiedById);
+        Task<List<Staff>> GetAllStaffAsync();
+
     }
 }

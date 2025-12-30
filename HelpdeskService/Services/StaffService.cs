@@ -132,5 +132,14 @@ namespace HelpdeskService.Services
                 return false;
             }
         }
+
+        public async Task<List<Staff>> GetAllStaffAsync()
+        {
+            return await _context.Staffs
+                .Include(s => s.Department)
+                .Include(s => s.User)
+                .ToListAsync();
+        }
+
     }
 }

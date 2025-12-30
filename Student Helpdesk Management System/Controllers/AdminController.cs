@@ -94,13 +94,10 @@ namespace Student_Complain_Management_System.Controllers
         // Staff List
         public async Task<IActionResult> StaffList()
         {
-            var staffs = await _context.Staffs
-                .Include(s => s.Department)
-                .Include(s => s.User)
-                .ToListAsync();
-
+            var staffs = await _staffService.GetAllStaffAsync();
             return View(staffs);
         }
+
 
         // Update Staff
         [HttpGet]
