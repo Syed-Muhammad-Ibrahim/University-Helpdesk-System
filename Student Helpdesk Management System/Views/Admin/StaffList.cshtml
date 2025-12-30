@@ -16,6 +16,8 @@
                 <th>Department</th>
                 <th>Phone</th>
                 <th>Address</th>
+                <th>Status</th>   <!-- নতুন -->
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -28,6 +30,24 @@
                     <td>@s.Phone</td>
                     <td>@s.Address</td>
                     <td>
+                        @if (s.Status == HelpdeskModel.BusinessRules.ModelStatus.Active)
+                        {
+                            @:Active
+                        }
+                        else if (s.Status == HelpdeskModel.BusinessRules.ModelStatus.Deleted)
+                        {
+                            @:Deleted
+                        }
+                        else if (s.Status == HelpdeskModel.BusinessRules.ModelStatus.InActive)
+                        {
+                            @:InActive
+                        }
+                        else
+                        {
+                            @s.Status.ToString()
+                        }
+                    </td>
+                    <td>
                         <a asp-controller="Admin"
                            asp-action="EditStaff"
                            asp-route-id="@s.Id"
@@ -35,19 +55,8 @@
                             Edit
                         </a>
                     </td>
-                    <td>
-                        <form asp-action="DeleteStaff" asp-controller="Admin" method="post" style="display:inline">
-                            <input type="hidden" name="id" value="s.Id" />
-                            <button type="submit" class="btn btn-sm btn-danger"
-                                    onclick="return confirm('Are you sure you want to delete this staff?');">
-                                Delete
-                            </button>
-                        </form>
-                    </td>
                 </tr>
             }
-
-            
         </tbody>
     </table>
 </div>

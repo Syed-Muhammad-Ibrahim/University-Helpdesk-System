@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HelpdeskModel.BusinessRules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,6 @@ namespace HelpdeskModel.ViewModels.UpdateViewModels
         public string Address { get; set; }
         public string Phone { get; set; }
         public long DepartmentId { get; set; }
+        public ModelStatus Status { get; set; }
     }
 }

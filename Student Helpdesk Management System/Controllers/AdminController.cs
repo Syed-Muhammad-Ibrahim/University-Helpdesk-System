@@ -75,12 +75,12 @@ namespace Student_Complain_Management_System.Controllers
             return RedirectToAction("DashBoard", "Admin");
         }
 
+        // Staff List
         public async Task<IActionResult> StaffList()
         {
             var staffs = await _context.Staffs
                 .Include(s => s.Department)
                 .Include(s => s.User)
-                .Where(s => s.Status == ModelStatus.Active) 
                 .ToListAsync();
 
             return View(staffs);
@@ -103,7 +103,8 @@ namespace Student_Complain_Management_System.Controllers
                 Name = staff.Name,
                 Address = staff.Address,
                 Phone = staff.Phone,
-                DepartmentId = staff.Department.Id
+                DepartmentId = staff.Department.Id,
+                Status = staff.Status             
             };
 
             ViewBag.Departments = _context.Departments
@@ -157,32 +158,5 @@ namespace Student_Complain_Management_System.Controllers
 
             return RedirectToAction("StaffList");
         }
-
-
-        // Delete Staff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteStaff(long id)
-        {
-            var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            long? currentUserId = null;
-            if (!string.IsNullOrEmpty(userIdStr) && long.TryParse(userIdStr, out var parsed))
-                currentUserId = parsed;
-
-            var ok = await _staffService.DeleteStaffAsync(id, currentUserId);
-
-            if (!ok)
-            {
-
-            }
-
-            return RedirectToAction("StaffList");
-        }
-
-
-
-
-
-
     }
 }
