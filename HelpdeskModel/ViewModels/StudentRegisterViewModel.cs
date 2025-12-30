@@ -9,10 +9,6 @@ namespace HelpdeskModel.ViewModels
 {
     public class StudentRegisterViewModel
     {
-        [Required]
-        [Range(8,8)]
-        public long StudentId { get; set; }
-
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(40, MinimumLength = 4, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.")]
         public string Name { get; set; }

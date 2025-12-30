@@ -22,6 +22,7 @@ namespace HelpdeskModel.Models
         public ApplicationUser User { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
+        public long DepartmentId { get; set; }
         public Department Department { get; set; }
 
 

@@ -58,12 +58,23 @@ namespace HelpdeskService.Services
 
                 await _userManager.AddToRoleAsync(user, "Student");
 
+                var department = await _context.Departments
+                .FirstOrDefaultAsync(d => d.Id == model.DepartmentId);
+
+                if (department == null)
+                {
+                    _logger.LogError("Invalid DepartmentId {DepartmentId} for student {Email}",
+                        model.DepartmentId, model.Email);
+                    return false;
+                }
+
                 var student = new Student
                 {
                     Name = model.Name,
                     User = user,
                     Address = model.Address,
                     Phone = model.Phone,
+                    Department = department,
                     CreatedAt = DateTime.UtcNow,
                     Status = ModelStatus.Active,
                     CreatedById = createdById
