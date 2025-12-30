@@ -3,6 +3,7 @@ using HelpdeskModel.Models;
 using HelpdeskModel.ViewModels;
 using HelpdeskModel.ViewModels.UpdateViewModels;
 using HelpdeskRepository.Data;
+using HelpdeskRepository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -19,17 +20,20 @@ namespace HelpdeskService.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IStudentRepository _studentRepository;
         private readonly AppDbContext _context;
         private readonly ILogger<StudentService> _logger;
 
         public StudentService(
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
+            IStudentRepository studentRepository,
             AppDbContext context,
             ILogger<StudentService> logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _studentRepository = studentRepository;
             _context = context;
             _logger = logger;
         }
@@ -83,8 +87,8 @@ namespace HelpdeskService.Services
                     CreatedById = createdById
                 };
 
-                _context.Students.Add(student);
-                await _context.SaveChangesAsync();
+                await _studentRepository.AddAsync(student);
+                await _studentRepository.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -98,10 +102,7 @@ namespace HelpdeskService.Services
         {
             try
             {
-                var student = await _context.Students
-                    .Include(s => s.Department)
-                    .FirstOrDefaultAsync(s => s.Id == model.Id);
-
+                var student = await _studentRepository.GetByIdAsync(model.Id);
                 if (student == null)
                     return false;
 
@@ -111,7 +112,6 @@ namespace HelpdeskService.Services
 
                 var dept = await _context.Departments
                     .FirstOrDefaultAsync(d => d.Id == model.DepartmentId);
-
                 if (dept != null)
                     student.Department = dept;
 
@@ -119,7 +119,7 @@ namespace HelpdeskService.Services
                 student.ModifiedAt = DateTime.UtcNow;
                 student.ModifiedById = modifiedById;
 
-                await _context.SaveChangesAsync();
+                await _studentRepository.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -131,11 +131,14 @@ namespace HelpdeskService.Services
 
         public async Task<List<Student>> GetAllStudentsAsync()
         {
-            return await _context.Students
-                .Include(s => s.User)
-                .Include(x => x.Department)
-                .ToListAsync();
+            return await _studentRepository.GetAllAsync();
         }
+
+        public async Task<Student?> GetStudentByIdAsync(long id)
+        {
+            return await _studentRepository.GetByIdAsync(id);
+        }
+
     }
 
 }
