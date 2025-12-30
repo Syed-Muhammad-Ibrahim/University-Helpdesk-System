@@ -4,9 +4,10 @@ using HelpdeskModel.ViewModels;
 using HelpdeskModel.ViewModels.UpdateViewModels;
 using HelpdeskRepository.Data;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,6 +38,7 @@ namespace HelpdeskService.Services
         {
             try
             {
+                // Identity user create
                 var user = new ApplicationUser
                 {
                     FullName = model.Name,
@@ -53,6 +55,7 @@ namespace HelpdeskService.Services
                     return false;
                 }
 
+                // Role assign
                 if (!await _roleManager.RoleExistsAsync("Student"))
                     await _roleManager.CreateAsync(new ApplicationRole { Name = "Student" });
 
@@ -96,6 +99,7 @@ namespace HelpdeskService.Services
             try
             {
                 var student = await _context.Students
+                    .Include(s => s.Department)
                     .FirstOrDefaultAsync(s => s.Id == model.Id);
 
                 if (student == null)
@@ -104,6 +108,13 @@ namespace HelpdeskService.Services
                 student.Name = model.Name;
                 student.Address = model.Address;
                 student.Phone = model.Phone;
+
+                var dept = await _context.Departments
+                    .FirstOrDefaultAsync(d => d.Id == model.DepartmentId);
+
+                if (dept != null)
+                    student.Department = dept;
+
                 student.Status = model.Status;
                 student.ModifiedAt = DateTime.UtcNow;
                 student.ModifiedById = modifiedById;
@@ -122,6 +133,7 @@ namespace HelpdeskService.Services
         {
             return await _context.Students
                 .Include(s => s.User)
+                .Include(x => x.Department)
                 .ToListAsync();
         }
     }

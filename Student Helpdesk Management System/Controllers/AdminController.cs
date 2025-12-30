@@ -182,7 +182,7 @@ namespace Student_Complain_Management_System.Controllers
 
         // Edit Student
         [HttpGet]
-        public async Task<IActionResult> UpdateStudent(long id)
+        public async Task<IActionResult> EditStudent(long id)
         {
             var student = await _context.Students
                 .Include(s => s.User)
@@ -197,8 +197,17 @@ namespace Student_Complain_Management_System.Controllers
                 Name = student.Name,
                 Address = student.Address,
                 Phone = student.Phone,
-                Status = student.Status
+                Status = student.Status,
+                DepartmentId= student.DepartmentId
             };
+
+            ViewBag.Departments = _context.Departments
+                .Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.Name
+                })
+                .ToList();
 
             return View(model);
         }
@@ -206,10 +215,19 @@ namespace Student_Complain_Management_System.Controllers
         // Edit Student
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateStudent(StudentUpdateViewModel model)
+        public async Task<IActionResult> EditStudent(StudentUpdateViewModel model)
         {
             if (!ModelState.IsValid)
+            {
+                ViewBag.Departments = _context.Departments
+                    .Select(d => new SelectListItem
+                    {
+                        Value = d.Id.ToString(),
+                        Text = d.Name
+                    })
+                    .ToList();
                 return View(model);
+            }
 
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var currentUserId))
@@ -222,7 +240,13 @@ namespace Student_Complain_Management_System.Controllers
 
             if (!ok)
             {
-                ModelState.AddModelError("", "Failed to update student. Please try again.");
+                ViewBag.Departments = _context.Departments
+                    .Select(d => new SelectListItem
+                    {
+                        Value = d.Id.ToString(),
+                        Text = d.Name
+                    })
+                    .ToList();
                 return View(model);
             }
 
