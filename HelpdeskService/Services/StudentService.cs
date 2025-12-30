@@ -21,6 +21,7 @@ namespace HelpdeskService.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IStudentRepository _studentRepository;
+        private readonly IDepartmentRepository _departmentRepository;
         private readonly AppDbContext _context;
         private readonly ILogger<StudentService> _logger;
 
@@ -28,12 +29,14 @@ namespace HelpdeskService.Services
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
             IStudentRepository studentRepository,
+            IDepartmentRepository departmentRepository,
             AppDbContext context,
             ILogger<StudentService> logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _studentRepository = studentRepository;
+            _departmentRepository = departmentRepository;
             _context = context;
             _logger = logger;
         }
@@ -65,8 +68,7 @@ namespace HelpdeskService.Services
 
                 await _userManager.AddToRoleAsync(user, "Student");
 
-                var department = await _context.Departments
-                .FirstOrDefaultAsync(d => d.Id == model.DepartmentId);
+                var department = await _departmentRepository.GetByIdAsync(model.DepartmentId);
 
                 if (department == null)
                 {
@@ -109,9 +111,11 @@ namespace HelpdeskService.Services
                 student.Name = model.Name;
                 student.Address = model.Address;
                 student.Phone = model.Phone;
+               
+                
 
-                var dept = await _context.Departments
-                    .FirstOrDefaultAsync(d => d.Id == model.DepartmentId);
+                var dept = await _departmentRepository.GetByIdAsync(model.DepartmentId);
+
                 if (dept != null)
                     student.Department = dept;
 

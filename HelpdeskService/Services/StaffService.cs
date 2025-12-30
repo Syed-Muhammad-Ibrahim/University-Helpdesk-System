@@ -17,6 +17,7 @@ namespace HelpdeskService.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IStaffRepository _staffRepository;
+        private readonly IDepartmentRepository _departmentRepository;
         private readonly AppDbContext _context;
         private readonly ILogger<StaffService> _logger;
 
@@ -24,12 +25,14 @@ namespace HelpdeskService.Services
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
             IStaffRepository staffRepository,
+            IDepartmentRepository departmentRepository,
             AppDbContext context,
             ILogger<StaffService> logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _staffRepository = staffRepository;
+            _departmentRepository = departmentRepository;
             _context = context;
             _logger = logger;
         }
@@ -48,8 +51,8 @@ namespace HelpdeskService.Services
                     EmailConfirmed = true
                 };
                 // Getting The Department
-                var department = await _context.Departments.
-                    FirstOrDefaultAsync(d => d.Id == model.DepartmentId);
+                var department = await _departmentRepository.GetByIdAsync(model.DepartmentId);
+
                 if (department == null)
                 {
                     _logger.LogError("Invalid DepartmentId {DepartmentId} for staff {Email}",
@@ -111,8 +114,8 @@ namespace HelpdeskService.Services
                 staff.Address = model.Address;
                 staff.Phone = model.Phone;
 
-                var dept = await _context.Departments
-                    .FirstOrDefaultAsync(d => d.Id == model.DepartmentId);
+                var dept = await _departmentRepository.GetByIdAsync(model.DepartmentId);
+
                 if (dept != null)
                     staff.Department = dept;
 
