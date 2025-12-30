@@ -1,0 +1,43 @@
+﻿@model IEnumerable<HelpdeskModel.Models.Student>
+
+@{
+    ViewData["Title"] = "All Students";
+    Layout = "_AdminLayout";
+}
+
+<div class="card">
+    <h3>All Students</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in Model)
+            {
+                <tr>
+                    <td>@s.Name</td>
+                    <td>@s.User?.Email</td>
+                    <td>@s.Phone</td>
+                    <td>@s.Address</td>
+                    <td>@s.Status</td>
+                    <td>
+                        <a asp-controller="Admin"
+                           asp-action="EditStudent"
+                           asp-route-id="@s.Id"
+                           class="btn btn-sm btn-primary">
+                            Edit
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
