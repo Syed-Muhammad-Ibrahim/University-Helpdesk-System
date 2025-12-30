@@ -3,6 +3,7 @@ using HelpdeskModel.Models;
 using HelpdeskModel.ViewModels;
 using HelpdeskModel.ViewModels.UpdateViewModels;
 using HelpdeskRepository.Data;
+using HelpdeskRepository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -15,18 +16,20 @@ namespace HelpdeskService.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IStaffRepository _staffRepository;
         private readonly AppDbContext _context;
         private readonly ILogger<StaffService> _logger;
-        
 
         public StaffService(
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
+            IStaffRepository staffRepository,
             AppDbContext context,
             ILogger<StaffService> logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _staffRepository = staffRepository;
             _context = context;
             _logger = logger;
         }
@@ -82,11 +85,9 @@ namespace HelpdeskService.Services
                     Status = ModelStatus.Active,
                     CreatedById = createdById
                 };
-                
 
-
-                _context.Staffs.Add(staff);
-                await _context.SaveChangesAsync();
+                await _staffRepository.AddAsync(staff);
+                await _staffRepository.SaveChangesAsync();
 
                 return true;
             }
@@ -102,10 +103,7 @@ namespace HelpdeskService.Services
         {
             try
             {
-                var staff = await _context.Staffs
-                    .Include(s => s.Department)
-                    .FirstOrDefaultAsync(s => s.Id == model.Id);
-
+                var staff = await _staffRepository.GetByIdAsync(model.Id);
                 if (staff == null)
                     return false;
 
@@ -115,15 +113,14 @@ namespace HelpdeskService.Services
 
                 var dept = await _context.Departments
                     .FirstOrDefaultAsync(d => d.Id == model.DepartmentId);
-
                 if (dept != null)
                     staff.Department = dept;
 
-                staff.Status = model.Status;              
+                staff.Status = model.Status;
                 staff.ModifiedAt = DateTime.UtcNow;
                 staff.ModifiedById = modifiedById;
 
-                await _context.SaveChangesAsync();
+                await _staffRepository.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -135,10 +132,15 @@ namespace HelpdeskService.Services
 
         public async Task<List<Staff>> GetAllStaffAsync()
         {
+            return await _staffRepository.GetAllAsync();
+        }
+
+        public async Task<Staff?> GetStaffByIdAsync(long id)
+        {
             return await _context.Staffs
                 .Include(s => s.Department)
                 .Include(s => s.User)
-                .ToListAsync();
+                .FirstOrDefaultAsync(s => s.Id == id);
         }
 
     }

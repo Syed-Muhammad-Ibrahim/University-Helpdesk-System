@@ -1,10 +1,12 @@
+using HelpdeskModel.Models;
+using HelpdeskModel.ViewModels;
+using HelpdeskRepository.Data;
+using HelpdeskRepository.IRepository;
+using HelpdeskRepository.Repository;
+using HelpdeskService.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using HelpdeskModel.ViewModels;
-using HelpdeskModel.Models;
-using HelpdeskRepository.Data;
-using HelpdeskService.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -33,6 +35,7 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<IStaffService, StaffService>();
+builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 builder.Services.AddScoped<ISeedService, SeedService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 var app = builder.Build();

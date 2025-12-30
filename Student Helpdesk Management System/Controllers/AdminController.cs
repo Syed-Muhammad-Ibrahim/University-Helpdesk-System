@@ -104,10 +104,7 @@ namespace Student_Complain_Management_System.Controllers
         [HttpGet]
         public async Task<IActionResult> EditStaff(long id)
         {
-            var staff = await _context.Staffs
-                .Include(s => s.Department)
-                .FirstOrDefaultAsync(s => s.Id == id);
-
+            var staff = await _staffService.GetStaffByIdAsync(id);
             if (staff == null)
                 return NotFound();
 
@@ -118,7 +115,7 @@ namespace Student_Complain_Management_System.Controllers
                 Address = staff.Address,
                 Phone = staff.Phone,
                 DepartmentId = staff.Department.Id,
-                Status = staff.Status             
+                Status = staff.Status
             };
 
             ViewBag.Departments = _context.Departments
