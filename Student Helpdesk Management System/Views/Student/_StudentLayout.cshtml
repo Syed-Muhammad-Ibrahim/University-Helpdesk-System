@@ -1,5 +1,37 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = null;
+    var title = ViewData["Title"] ?? "Student Dashboard";
 }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>@(ViewData["Title"] ?? "Student Dashboard")</title>
+    <link rel="stylesheet" href="~/css/admin.css" />
+</head>
+
+<body>
+
+    <div class="navbar">
+        <h2>Admin Dashboard</h2>
+        <form asp-controller="Account" asp-action="Logout" method="post">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <a asp-controller="Student" asp-action="Complain">Open New Complaint</a>
+            <a asp-controller="Student" asp-action="MyComplain">MyComplain</a>
+            <a asp-controller="Notice" asp-action="Index">Notice</a>
+        </div>
+
+        <div class="content">
+            @RenderBody()
+        </div>
+    </div>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
