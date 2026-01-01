@@ -29,7 +29,7 @@ namespace HelpdeskRepository.Repository
         public async Task<List<Department>> GetAllAsync()
         {
             return await _context.Departments
-                .Where(d => d.Status == ModelStatus.Active) // চাইলে filter
+                .Where(d => d.Status == ModelStatus.Active)
                 .ToListAsync();
         }
 
@@ -37,5 +37,10 @@ namespace HelpdeskRepository.Repository
         {
             return _context.SaveChangesAsync();
         }
+        public async Task AddAsync(Department dept)
+        {
+            await _context.Departments.AddAsync(dept);
+        }
+
     }
 }
