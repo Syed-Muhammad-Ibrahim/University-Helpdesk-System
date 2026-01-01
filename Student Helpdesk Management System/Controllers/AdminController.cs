@@ -188,7 +188,7 @@ namespace Student_Complain_Management_System.Controllers
             if (student == null)
                 return NotFound();
 
-            var model = new StudentUpdateViewModel
+            var model = new StudentEditViewModel
             {
                 Id = student.Id,
                 Name = student.Name,
@@ -212,7 +212,7 @@ namespace Student_Complain_Management_System.Controllers
         // Edit Student
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditStudent(StudentUpdateViewModel model)
+        public async Task<IActionResult> EditStudent(StudentEditViewModel model)
         {
             if (!ModelState.IsValid)
             {
