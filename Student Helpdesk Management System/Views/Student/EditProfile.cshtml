@@ -14,9 +14,6 @@
             <input type="hidden" asp-for="Id" />
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <!-- Name, Email, Address, Phone আগের মতোই থাকবে -->
-
             <div class="mb-3">
                 <label asp-for="Name" class="form-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -35,7 +32,6 @@
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
 
-            <!-- Department dropdown -->
             <<div class="mb-3">
                 <label asp-for="DepartmentId" class="form-label"></label>
                 <select asp-for="DepartmentId" asp-items="ViewBag.Departments" class="form-control">

@@ -10,7 +10,7 @@ namespace HelpdeskModel.Models
     public class Conversation
     {
         public long Id { get; set; }
-        public long? CreatedById { get; set; }
+        public long CreatedById { get; set; }
         public ApplicationUser CreatedBy { get; set; }
         public long? ModifiedById { get; set; }
         public ApplicationUser? ModifiedBy { get; set; }
@@ -21,6 +21,6 @@ namespace HelpdeskModel.Models
         public Complain Complain { get; set; }
         public string Description { get; set; }
         public long? AttachmentId { get; set; }
-        public Attachment Attachment { get; set; }
+        public Attachment? Attachment { get; set; }
     }
 }
