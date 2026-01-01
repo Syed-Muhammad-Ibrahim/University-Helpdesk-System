@@ -15,5 +15,6 @@ namespace HelpdeskService.Services
         Task<bool> UpdateStudentAsync(StudentEditViewModel model, long? modifiedById);
         Task<List<Student>> GetAllStudentsAsync();
         Task<Student?> GetStudentByIdAsync(long id);
+        Task<Student?> GetStudentByUserIdAsync(long userId);
     }
 }

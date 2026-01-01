@@ -143,6 +143,11 @@ namespace HelpdeskService.Services
             return await _studentRepository.GetByIdAsync(id);
         }
 
+        public async Task<Student?> GetStudentByUserIdAsync(long userId)
+        {
+            return await _studentRepository.GetByUserIdAsync(userId);
+        }
+
     }
 
 }

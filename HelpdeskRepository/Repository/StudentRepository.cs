@@ -44,5 +44,13 @@ namespace HelpdeskRepository.Repository
         {
             return _context.SaveChangesAsync();
         }
+
+        public async Task<Student?> GetByUserIdAsync(long userId)
+        {
+            return await _context.Students
+                .Include(s => s.User)
+                .Include(s => s.Department)
+                .FirstOrDefaultAsync(s => s.UserId == userId);
+        }
     }
 }
