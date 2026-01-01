@@ -100,7 +100,7 @@ namespace HelpdeskService.Services
             }
         }
 
-        public async Task<bool> UpdateStudentAsync(StudentUpdateViewModel model, long? modifiedById)
+        public async Task<bool> UpdateStudentAsync(StudentEditViewModel model, long? modifiedById)
         {
             try
             {

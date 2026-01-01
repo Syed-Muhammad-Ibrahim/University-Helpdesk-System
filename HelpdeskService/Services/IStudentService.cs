@@ -12,7 +12,7 @@ namespace HelpdeskService.Services
     public interface IStudentService
     {
         Task<bool> CreateStudentAsync(StudentRegisterViewModel model, long? createdById);
-        Task<bool> UpdateStudentAsync(StudentUpdateViewModel model, long? modifiedById);
+        Task<bool> UpdateStudentAsync(StudentEditViewModel model, long? modifiedById);
         Task<List<Student>> GetAllStudentsAsync();
         Task<Student?> GetStudentByIdAsync(long id);
     }
