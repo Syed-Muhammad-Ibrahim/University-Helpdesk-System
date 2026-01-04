@@ -1,37 +1,52 @@
 ﻿@model HelpdeskModel.ViewModels.UpdateViewModels.StaffUpdateViewModel
 
-@{
-    ViewData["Title"] = "My Profile";
-    Layout = "_StaffLayout";
-}
+<h3>My Profile</h3>
 
-<div class="account-container">
-    <div class="account-box">
-        <h2 class="text-center mb-4">My Profile</h2>
+<div class="mb-3">
+    <p><strong>Name:</strong> @Model.Name</p>
+    <p><strong>Address:</strong> @Model.Address</p>
+    <p><strong>Phone:</strong> @Model.Phone</p>
+    <p><strong>Department Name:</strong> @Model.DepartmentId</p>
+</div>
 
-        <dl class="row">
-            <dt class="col-sm-3">Id</dt>
-            <dd class="col-sm-9">@Model.Id</dd>
+<button type="button"
+        class="btn btn-secondary mb-3"
+        data-bs-toggle="collapse"
+        data-bs-target="#editForm">
+    Edit Profile
+</button>
 
-            <dt class="col-sm-3">Name</dt>
-            <dd class="col-sm-9">@Model.Name</dd>
+<div id="editForm" class="collapse">
+    <form asp-action="Profile" method="post">
+        <input asp-for="Id" type="hidden" />
 
-            <dt class="col-sm-3">Address</dt>
-            <dd class="col-sm-9">@Model.Address</dd>
+        <div class="form-group mb-2">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
 
-            <dt class="col-sm-3">Phone</dt>
-            <dd class="col-sm-9">@Model.Phone</dd>
+        <div class="form-group mb-2">
+            <label asp-for="Address"></label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
 
-            @* <dt class="col-sm-3">Department</dt>
-            <dd class="col-sm-9">@Model.DepartmentId</dd> *@
+        <div class="form-group mb-2">
+            <label asp-for="Phone"></label>
+            <input asp-for="Phone" class="form-control" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
 
-            <dt class="col-sm-3">Status</dt>
-            <dd class="col-sm-9">@Model.Status</dd>
+        <div class="form-group mb-3">
+            <label asp-for="DepartmentId"></label>
+            <select asp-for="DepartmentId"
+                    asp-items="ViewBag.Departments"
+                    class="form-control">
+            </select>
+            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+        </div>
 
-        </dl>
-
-        <a asp-action="EditProfile" asp-route-id="@Model.Id" class="btn btn-primary w-100">
-            Edit Profile
-        </a>
-    </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
 </div>

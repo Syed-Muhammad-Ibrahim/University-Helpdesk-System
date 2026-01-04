@@ -4,6 +4,7 @@ using HelpdeskModel.ViewModels;
 using HelpdeskModel.ViewModels.UpdateViewModels;
 using HelpdeskRepository.Data;
 using HelpdeskRepository.IRepository;
+using HelpdeskRepository.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -145,6 +146,47 @@ namespace HelpdeskService.Services
                 .Include(s => s.User)
                 .FirstOrDefaultAsync(s => s.Id == id);
         }
+
+
+        public async Task<Staff?> GetStaffByUserIdAsync(long userId)
+        {
+            return await _context.Staffs
+                .Include(s => s.Department)
+                .Include(s => s.User)
+                .FirstOrDefaultAsync(s => s.UserId == userId);
+        }
+
+        public async Task<bool> UpdateOwnProfileAsync(StaffUpdateViewModel model, long userId)
+        {
+            try
+            {
+                var staff = await _context.Staffs
+                    .FirstOrDefaultAsync(s => s.Id == model.Id);
+
+                if (staff == null || staff.UserId != userId)
+                    return false; // unauthorized
+
+                staff.Name = model.Name;
+                staff.Address = model.Address;
+                staff.Phone = model.Phone;
+
+                var dept = await _departmentRepository.GetByIdAsync(model.DepartmentId);
+                if (dept != null)
+                    staff.Department = dept;
+
+                staff.ModifiedAt = DateTime.UtcNow;
+                staff.ModifiedById = userId; // nijer Id
+
+                await _staffRepository.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while updating own staff profile {Id}", model.Id);
+                return false;
+            }
+        }
+
 
     }
 }
