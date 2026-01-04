@@ -43,7 +43,8 @@ builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IComplainRepository, ComplainRepository>();
 builder.Services.AddScoped<IComplainService, ComplainService>();
-
+builder.Services.AddScoped<IConversationRepository, ConversationRepository>();
+builder.Services.AddScoped<IConversationService, ConversationService>();
 
 var app = builder.Build();
 

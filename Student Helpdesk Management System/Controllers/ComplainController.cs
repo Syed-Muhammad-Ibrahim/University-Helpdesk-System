@@ -191,12 +191,11 @@ namespace Student_Complain_Management_System.Controllers
             if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
-            // sudhu oi student er complain dekhte parbe
             var complain = await _complainService.GetByIdForStudentAsync(id, userId);
             if (complain == null)
                 return NotFound();
 
-            return View(complain);   // View name: Details.cshtml, model: Complain
+            return View(complain);   
         }
     }
 }

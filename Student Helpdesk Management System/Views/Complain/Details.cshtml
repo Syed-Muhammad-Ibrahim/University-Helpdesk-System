@@ -1,4 +1,4 @@
-﻿@model Complain
+﻿@model HelpdeskModel.Models.Complain
 @{
     ViewData["Title"] = "Complain Details";
 }
@@ -30,8 +30,9 @@
             {
                 <dt class="col-sm-3">Attachment</dt>
                 <dd class="col-sm-9">
-                    <!-- ekhane attachment download link/show korba, tumi ja implement korecho tar upor -->
-                    <a asp-controller="Attachment" asp-action="Download" asp-route-id="@Model.AttachmentId">
+                    <a asp-controller="Attachment"
+                       asp-action="Download"
+                       asp-route-id="@Model.AttachmentId">
                         Download
                     </a>
                 </dd>
@@ -45,12 +46,16 @@
 
     @if (!Model.isSolved)
     {
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-action="Edit"
+           asp-route-id="@Model.Id"
+           class="btn btn-warning">
+            Edit
+        </a>
     }
 
-    <!-- conversation page link (student, staff, admin sobai use korbe) -->
-    <a asp-controller="Conversation" asp-action="Thread" asp-route-complainId="@Model.Id"
+    <a href="@Url.Action("Thread", "Conversation", new { complainId = Model.Id })"
        class="btn btn-info">
         Open Conversation
     </a>
+
 </div>

@@ -1,5 +1,35 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model HelpdeskModel.ViewModels.Conversation.ConversationThreadViewModel
+
+<h2>Conversation for Complain #@Model.ComplainId</h2>
+
+<div>
+    <p><strong>Complain:</strong> @Model.ComplainDescription</p>
+    <p><strong>Status:</strong> @(Model.IsSolved ? "Solved" : "Open")</p>
+</div>
+
+<hr />
+
+<div>
+    @if (Model.Messages != null && Model.Messages.Any())
+    {
+        foreach (var msg in Model.Messages)
+        {
+            <div>
+                <strong>@msg.SenderName</strong> (@msg.CreatedAt.ToString("g")):
+                <p>@msg.Text</p>
+            </div>
+            <hr />
+        }
+    }
+    else
+    {
+        <p>No messages yet.</p>
+    }
+</div>
+
+<form asp-action="PostMessage" method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="NewMessage.ComplainId" type="hidden" />
+    <textarea asp-for="NewMessage.Text" class="form-control" rows="3"></textarea>
+    <button type="submit" class="btn btn-primary">Send</button>
+</form>

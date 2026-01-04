@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace HelpdeskModel.ViewModels.Conversation
 {
-    internal class ConversationMessageItem
+    public class ConversationMessageItem
     {
+        public string SenderName { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string Text { get; set; }
     }
 }
