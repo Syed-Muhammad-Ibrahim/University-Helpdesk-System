@@ -18,5 +18,6 @@ namespace HelpdeskService.Services
         Task<Complain?> GetByIdForStaffAsync(long complainId, long staffUserId, bool isAdmin);
         Task<bool> UpdateComplainAsync(ComplainViewModel model, long studentUserId);
         Task<bool> DeleteComplainAsync(long complainId, long studentUserId);
+        Task<List<Complain>> GetAllComplainsAsync();
     }
 }

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<HelpdeskModel.Models.Complain>
+
+@{
+    ViewData["Title"] = "Department Complains";
+}
+
+<h2>Department Complains</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Student</th>
+            <th>Description</th>
+            <th>Created At</th>
+            <th>Solved</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.Id</td>
+                    <td>@c.CreatedBy?.FullName</td>
+                    <td>@(c.Description?.Length > 40 ? c.Description.Substring(0, 40) + "..." : c.Description)</td>
+                    <td>@c.CreatedAt.ToString("g")</td>
+                    <td>@(c.isSolved ? "Yes" : "No")</td>
+                    <td>
+                        <a asp-controller="StaffComplain"
+                           asp-action="Details"
+                           asp-route-id="@c.Id"
+                           class="btn btn-sm btn-info">
+                            Details
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-center">No complains for your department.</td>
+            </tr>
+        }
+    </tbody>
+</table>

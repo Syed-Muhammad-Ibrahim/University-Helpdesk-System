@@ -171,6 +171,10 @@ namespace HelpdeskService.Services
                 return false;
             }
         }
+        public async Task<List<Complain>> GetAllComplainsAsync()
+        {
+            return await _complainRepository.GetAllAsync();
+        }
     }
 
 }

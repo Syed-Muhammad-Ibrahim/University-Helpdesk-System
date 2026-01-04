@@ -17,11 +17,17 @@ namespace Student_Complain_Management_System.Controllers
         private readonly IStaffService _staffService;
         private readonly IStudentService _studentService;
         private readonly AppDbContext _context;
+        private readonly IComplainService _complainService;
 
-        public AdminController(IStaffService staffService,IStudentService studentService, AppDbContext context)
+        public AdminController(
+                                IStaffService staffService,
+                                IStudentService studentService,
+                                IComplainService complainService,
+                                AppDbContext context)
         {
             _staffService = staffService;
             _studentService = studentService;
+            _complainService = complainService;
             _context = context;
         }
 
@@ -33,6 +39,12 @@ namespace Student_Complain_Management_System.Controllers
         public IActionResult DashBoard()
         {
             return View();
+        }
+
+        public async Task<IActionResult> ComplainList()
+        {
+            var complains = await _complainService.GetAllComplainsAsync();
+            return View(complains);
         }
 
         // Create Staff

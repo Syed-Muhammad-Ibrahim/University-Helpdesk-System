@@ -1,0 +1,25 @@
+﻿@model HelpdeskModel.Models.Complain
+
+<h2>Complain Details</h2>
+
+<dl class="row">
+    <dt class="col-sm-3">Id</dt>
+    <dd class="col-sm-9">@Model.Id</dd>
+
+    <dt class="col-sm-3">Student</dt>
+    <dd class="col-sm-9">@Model.CreatedBy?.FullName</dd>
+
+    <dt class="col-sm-3">Department</dt>
+    <dd class="col-sm-9">@Model.Department?.Name</dd>
+
+    <dt class="col-sm-3">Description</dt>
+    <dd class="col-sm-9">@Model.Description</dd>
+
+    <dt class="col-sm-3">Created At</dt>
+    <dd class="col-sm-9">@Model.CreatedAt.ToString("g")</dd>
+
+    <dt class="col-sm-3">Solved</dt>
+    <dd class="col-sm-9">@((Model.isSolved) ? "Yes" : "No")</dd>
+</dl>
+
+<a asp-action="DepartmentComplains" class="btn btn-secondary">Back to list</a>
