@@ -29,5 +29,8 @@ namespace HelpdeskModel.Models
         public Department Department { get; set; }
         public long? AttachmentId { get; set; } 
         public Attachment? Attachment { get; set; }
+        public long StudentId { get; set; }
+
+        public Student Student { get; set; }
     }
 }

@@ -24,83 +24,98 @@ namespace HelpdeskRepository.Data
         public DbSet<Notice> Notices { get; set; }
         public DbSet<NoticeLog>NoticeLogs { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        //protected override void OnModelCreating(ModelBuilder builder)
+        //{
+        //    base.OnModelCreating(builder);
+
+        //    builder.Entity<ComplainLog>(entity =>
+        //    {
+        //        // Created By
+        //        entity.HasOne(x => x.CreatedBy)
+        //            .WithMany()
+        //            .HasForeignKey(x => x.CreatedById)
+        //            .OnDelete(DeleteBehavior.Restrict);
+
+        //        // Approved By
+        //        entity.HasOne(x => x.ApprovedBy)
+        //            .WithMany()
+        //            .HasForeignKey(x => x.ApprovedById)
+        //            .OnDelete(DeleteBehavior.Restrict);
+
+        //        // Rejected By
+        //        entity.HasOne(x => x.RejectedBy)
+        //            .WithMany()
+        //            .HasForeignKey(x => x.RejectedById)
+        //            .OnDelete(DeleteBehavior.Restrict);
+
+        //        // Complain
+        //        entity.HasOne(x => x.Complain)
+        //            .WithMany()
+        //            .HasForeignKey("ComplainId")
+        //            .OnDelete(DeleteBehavior.Restrict);
+
+        //        // Optional: Department
+        //        entity.HasOne(x => x.Department)
+        //            .WithMany()
+        //            .OnDelete(DeleteBehavior.Restrict);
+
+        //        // Optional: Attachment
+        //        entity.HasOne(x => x.Attachment)
+        //            .WithMany()
+        //            .OnDelete(DeleteBehavior.Restrict);
+
+        //        builder.Entity<Conversation>()
+        //            .HasOne(c => c.User)
+        //            .WithMany()
+        //            .HasForeignKey(c => c.UserId)
+        //            .OnDelete(DeleteBehavior.Restrict);   // or DeleteBehavior.NoAction
+
+        //        builder.Entity<Conversation>()
+        //            .HasOne(c => c.CreatedBy)
+        //            .WithMany()
+        //            .HasForeignKey(c => c.CreatedById)
+        //            .OnDelete(DeleteBehavior.Restrict);
+
+        //        builder.Entity<Conversation>()
+        //            .HasOne(c => c.ModifiedBy)
+        //            .WithMany()
+        //            .HasForeignKey(c => c.ModifiedById)
+        //            .OnDelete(DeleteBehavior.Restrict);
+
+        //        builder.Entity<Conversation>()
+        //            .HasOne(c => c.Complain)
+        //            .WithMany()
+        //            .HasForeignKey(c => c.ComplainId)
+        //            .OnDelete(DeleteBehavior.Restrict);
+
+        //        builder.Entity<Conversation>()
+        //            .HasOne(c => c.Attachment)
+        //            .WithMany()
+        //            .HasForeignKey(c => c.AttachmentId)
+        //            .OnDelete(DeleteBehavior.Restrict);
+
+        //        builder.Entity<Student>()
+        //            .HasIndex(s => s.StudentId)
+        //            .IsUnique();
+        //    });
+
+
+
+
+        //}
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
 
-            builder.Entity<ComplainLog>(entity =>
+            foreach (var fk in modelBuilder.Model
+                .GetEntityTypes()
+                .SelectMany(e => e.GetForeignKeys()))
             {
-                // Created By
-                entity.HasOne(x => x.CreatedBy)
-                    .WithMany()
-                    .HasForeignKey(x => x.CreatedById)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                // Approved By
-                entity.HasOne(x => x.ApprovedBy)
-                    .WithMany()
-                    .HasForeignKey(x => x.ApprovedById)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                // Rejected By
-                entity.HasOne(x => x.RejectedBy)
-                    .WithMany()
-                    .HasForeignKey(x => x.RejectedById)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                // Complain
-                entity.HasOne(x => x.Complain)
-                    .WithMany()
-                    .HasForeignKey("ComplainId")
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                // Optional: Department
-                entity.HasOne(x => x.Department)
-                    .WithMany()
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                // Optional: Attachment
-                entity.HasOne(x => x.Attachment)
-                    .WithMany()
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                builder.Entity<Conversation>()
-                    .HasOne(c => c.User)
-                    .WithMany()
-                    .HasForeignKey(c => c.UserId)
-                    .OnDelete(DeleteBehavior.Restrict);   // or DeleteBehavior.NoAction
-
-                builder.Entity<Conversation>()
-                    .HasOne(c => c.CreatedBy)
-                    .WithMany()
-                    .HasForeignKey(c => c.CreatedById)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                builder.Entity<Conversation>()
-                    .HasOne(c => c.ModifiedBy)
-                    .WithMany()
-                    .HasForeignKey(c => c.ModifiedById)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                builder.Entity<Conversation>()
-                    .HasOne(c => c.Complain)
-                    .WithMany()
-                    .HasForeignKey(c => c.ComplainId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                builder.Entity<Conversation>()
-                    .HasOne(c => c.Attachment)
-                    .WithMany()
-                    .HasForeignKey(c => c.AttachmentId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                builder.Entity<Student>()
-                    .HasIndex(s => s.StudentId)
-                    .IsUnique();
-            });
-
-
+                fk.DeleteBehavior = DeleteBehavior.Restrict;
+            }
         }
+
 
     }
 }

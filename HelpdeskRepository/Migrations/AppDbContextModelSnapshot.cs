@@ -213,6 +213,9 @@ namespace HelpdeskRepository.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<long>("StudentId")
+                        .HasColumnType("bigint");
+
                     b.Property<bool>("isSolved")
                         .HasColumnType("bit");
 
@@ -229,6 +232,8 @@ namespace HelpdeskRepository.Migrations
                     b.HasIndex("ModifiedById");
 
                     b.HasIndex("RejectedById");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Complains");
                 });
@@ -636,9 +641,6 @@ namespace HelpdeskRepository.Migrations
 
                     b.HasIndex("ModifiedById");
 
-                    b.HasIndex("StudentId")
-                        .IsUnique();
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Students");
@@ -751,11 +753,13 @@ namespace HelpdeskRepository.Migrations
                 {
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "ModifiedBy")
                         .WithMany()
-                        .HasForeignKey("ModifiedById");
+                        .HasForeignKey("ModifiedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("CreatedBy");
 
@@ -766,31 +770,41 @@ namespace HelpdeskRepository.Migrations
                 {
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "ApprovedBy")
                         .WithMany()
-                        .HasForeignKey("ApprovedById");
+                        .HasForeignKey("ApprovedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HelpdeskModel.Models.Attachment", "Attachment")
                         .WithMany()
-                        .HasForeignKey("AttachmentId");
+                        .HasForeignKey("AttachmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "ModifiedBy")
                         .WithMany()
-                        .HasForeignKey("ModifiedById");
+                        .HasForeignKey("ModifiedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "RejectedBy")
                         .WithMany()
-                        .HasForeignKey("RejectedById");
+                        .HasForeignKey("RejectedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HelpdeskModel.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("ApprovedBy");
 
@@ -803,6 +817,8 @@ namespace HelpdeskRepository.Migrations
                     b.Navigation("ModifiedBy");
 
                     b.Navigation("RejectedBy");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("HelpdeskModel.Models.ComplainLog", b =>
@@ -898,18 +914,19 @@ namespace HelpdeskRepository.Migrations
                 {
                     b.HasOne("HelpdeskModel.Models.Attachment", "Attachment")
                         .WithMany()
-                        .HasForeignKey("AttachmentId");
+                        .HasForeignKey("AttachmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HelpdeskModel.Models.Conversation", "Conversation")
                         .WithMany()
                         .HasForeignKey("ConversationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Attachment");
@@ -923,11 +940,13 @@ namespace HelpdeskRepository.Migrations
                 {
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "ModifiedBy")
                         .WithMany()
-                        .HasForeignKey("ModifiedById");
+                        .HasForeignKey("ModifiedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("CreatedBy");
 
@@ -938,23 +957,25 @@ namespace HelpdeskRepository.Migrations
                 {
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "ApprovedBy")
                         .WithMany()
-                        .HasForeignKey("ApprovedById");
+                        .HasForeignKey("ApprovedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "RejectedBy")
                         .WithMany()
-                        .HasForeignKey("RejectedById");
+                        .HasForeignKey("RejectedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ApprovedBy");
 
@@ -969,23 +990,25 @@ namespace HelpdeskRepository.Migrations
                 {
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "ApprovedBy")
                         .WithMany()
-                        .HasForeignKey("ApprovedById");
+                        .HasForeignKey("ApprovedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "RejectedBy")
                         .WithMany()
-                        .HasForeignKey("RejectedById");
+                        .HasForeignKey("RejectedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ApprovedBy");
 
@@ -1000,22 +1023,24 @@ namespace HelpdeskRepository.Migrations
                 {
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HelpdeskModel.Models.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "ModifiedBy")
                         .WithMany()
-                        .HasForeignKey("ModifiedById");
+                        .HasForeignKey("ModifiedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("CreatedBy");
@@ -1031,22 +1056,24 @@ namespace HelpdeskRepository.Migrations
                 {
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HelpdeskModel.Models.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "ModifiedBy")
                         .WithMany()
-                        .HasForeignKey("ModifiedById");
+                        .HasForeignKey("ModifiedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("CreatedBy");
@@ -1063,7 +1090,7 @@ namespace HelpdeskRepository.Migrations
                     b.HasOne("HelpdeskModel.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -1072,7 +1099,7 @@ namespace HelpdeskRepository.Migrations
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -1081,7 +1108,7 @@ namespace HelpdeskRepository.Migrations
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -1090,13 +1117,13 @@ namespace HelpdeskRepository.Migrations
                     b.HasOne("HelpdeskModel.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -1105,7 +1132,7 @@ namespace HelpdeskRepository.Migrations
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
