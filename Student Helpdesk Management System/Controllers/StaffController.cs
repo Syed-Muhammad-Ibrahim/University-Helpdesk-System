@@ -17,5 +17,17 @@ namespace Student_Complain_Management_System.Controllers
         {
             return View();
         }
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+        public IActionResult EditProfile()
+        {
+            return View();
+        }
+        public IActionResult Profile()
+        {
+            return View();
+        }
     }
 }

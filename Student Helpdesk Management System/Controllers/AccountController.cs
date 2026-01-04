@@ -67,7 +67,7 @@ namespace UserRoles.Controllers
                 return RedirectToAction("DashBoard", "Admin");
 
             if (await userManager.IsInRoleAsync(user, "Staff"))
-                return RedirectToAction("Index", "Staff");
+                return RedirectToAction("Dashboard", "Staff");
 
             if (await userManager.IsInRoleAsync(user, "Student"))
                 return RedirectToAction("Dashboard", "Student");
