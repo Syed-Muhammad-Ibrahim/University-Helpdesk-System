@@ -38,6 +38,12 @@
                            class="btn btn-sm btn-info">
                             Details
                         </a>
+                        <a asp-controller="Conversation"
+                           asp-action="Thread"
+                           asp-route-complainId="@c.Id"
+                           class="btn btn-sm btn-secondary">
+                            Conversation
+                        </a>
                     </td>
                 </tr>
             }
