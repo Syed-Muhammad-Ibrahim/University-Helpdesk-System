@@ -125,5 +125,21 @@ namespace HelpdeskService.Services
                 return false;
             }
         }
+
+        public async Task<List<Complain>> GetComplainsRepliedByUserAsync(long userId)
+        {
+            var logs = await _conversationRepository.GetLogsByUserIdAsync(userId);
+
+            var complainIds = logs
+                .Where(l => l.Conversation?.ComplainId != null)
+                .Select(l => l.Conversation.ComplainId.Value)
+                .Distinct()
+                .ToList();
+
+            if (!complainIds.Any())
+                return new List<Complain>();
+
+            return await _complainRepository.GetByIdsAsync(complainIds);
+        }
     }
 }

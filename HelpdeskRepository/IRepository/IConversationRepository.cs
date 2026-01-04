@@ -15,5 +15,7 @@ namespace HelpdeskRepository.IRepository
         Task AddConversationAsync(Conversation conversation);
         Task AddLogAsync(ConversationLog log);
         Task SaveChangesAsync();
+        Task<List<ConversationLog>> GetLogsByUserIdAsync(long userId);
+
     }
 }

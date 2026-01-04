@@ -1,4 +1,5 @@
-﻿using HelpdeskModel.ViewModels.Conversation;
+﻿using HelpdeskModel.Models;
+using HelpdeskModel.ViewModels.Conversation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,7 @@ namespace HelpdeskService.Services
     {
         Task<ConversationThreadViewModel?> GetThreadForUserAsync(long complainId, long userId, ClaimsPrincipal user);
         Task<bool> AddMessageAsync(ConversationMessageViewModel model, long userId);
+        Task<List<Complain>> GetComplainsRepliedByUserAsync(long userId);
+
     }
 }

@@ -45,6 +45,15 @@ namespace HelpdeskRepository.Repository
 
         public async Task SaveChangesAsync()
             => await _context.SaveChangesAsync();
+
+        public async Task<List<Complain>> GetByIdsAsync(List<long> ids)
+        {
+            return await _context.Complains
+                .Include(c => c.Department)
+                .Include(c => c.CreatedBy)
+                .Where(c => ids.Contains(c.Id))
+                .ToListAsync();
+        }
     }
 
 }

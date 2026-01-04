@@ -54,5 +54,16 @@ namespace HelpdeskRepository.Repository
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<ConversationLog>> GetLogsByUserIdAsync(long userId)
+        {
+            return await _context.ConversationLogs
+                .Include(l => l.Conversation)
+                .ThenInclude(c => c.Complain)
+                .Where(l => l.CreatedById == userId)
+                .ToListAsync();
+        }
+
+
     }
 }

@@ -16,5 +16,6 @@ namespace HelpdeskRepository.IRepository
         Task<List<Complain>> GetByDepartmentIdAsync(long departmentId);
         void Remove(Complain complain);
         Task SaveChangesAsync();
+        Task<List<Complain>> GetByIdsAsync(List<long> ids);
     }
 }
