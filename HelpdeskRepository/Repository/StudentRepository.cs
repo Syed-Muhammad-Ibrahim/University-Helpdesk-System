@@ -52,5 +52,11 @@ namespace HelpdeskRepository.Repository
                 .Include(s => s.Department)
                 .FirstOrDefaultAsync(s => s.UserId == userId);
         }
+
+        public async Task<Student?> GetByStudentIdAsync(long studentId)
+        {
+            return await _context.Students
+                .FirstOrDefaultAsync(s => s.StudentId == studentId);
+        }
     }
 }

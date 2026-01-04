@@ -17,6 +17,8 @@ namespace HelpdeskModel.Models
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
         public ModelStatus Status { get; set; }
+        public long UserId { get; set; }
+        public ApplicationUser User { get; set; }
         public long? ComplainId { get; set; }
         public Complain Complain { get; set; }
         public string Description { get; set; }

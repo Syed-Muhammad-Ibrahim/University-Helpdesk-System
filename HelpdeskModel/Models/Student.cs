@@ -10,6 +10,7 @@ namespace HelpdeskModel.Models
     public class Student
     {
         public long Id { get; set; }
+        public long StudentId { get; set; }
         public string Name { get; set; }
         public long? CreatedById { get; set; }
         public ApplicationUser CreatedBy { get; set; }

@@ -189,7 +189,8 @@ namespace UserRoles.Controllers
                     Phone = model.Phone,
                     Department = department,
                     CreatedAt = DateTime.UtcNow,
-                    Status = ModelStatus.Active
+                    Status = ModelStatus.Active,
+                    StudentId = model.StudentId,
                 };
 
                 _context.Students.Add(student);

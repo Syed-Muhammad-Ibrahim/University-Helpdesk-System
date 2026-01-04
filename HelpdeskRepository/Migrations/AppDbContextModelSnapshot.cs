@@ -182,13 +182,13 @@ namespace HelpdeskRepository.Migrations
                     b.Property<long?>("ApprovedById")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("AttachmentId")
+                    b.Property<long?>("AttachmentId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("CreatedById")
+                    b.Property<long>("CreatedById")
                         .HasColumnType("bigint");
 
                     b.Property<long>("DepartmentId")
@@ -256,7 +256,7 @@ namespace HelpdeskRepository.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("CreatedById")
+                    b.Property<long>("CreatedById")
                         .HasColumnType("bigint");
 
                     b.Property<long>("DepartmentId")
@@ -309,7 +309,7 @@ namespace HelpdeskRepository.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("CreatedById")
+                    b.Property<long>("CreatedById")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
@@ -325,6 +325,9 @@ namespace HelpdeskRepository.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AttachmentId");
@@ -334,6 +337,8 @@ namespace HelpdeskRepository.Migrations
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("ModifiedById");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Conversations");
                 });
@@ -349,13 +354,13 @@ namespace HelpdeskRepository.Migrations
                     b.Property<long?>("AttachmentId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ConversationId")
+                    b.Property<long>("ConversationId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("CreatedById")
+                    b.Property<long>("CreatedById")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
@@ -426,10 +431,13 @@ namespace HelpdeskRepository.Migrations
                     b.Property<long?>("ApprovedById")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("AttachmentId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("CreatedById")
+                    b.Property<long>("CreatedById")
                         .HasColumnType("bigint");
 
                     b.Property<long>("DepartmentId")
@@ -465,8 +473,6 @@ namespace HelpdeskRepository.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("ModifiedById");
-
                     b.HasIndex("RejectedById");
 
                     b.ToTable("Notices");
@@ -489,7 +495,7 @@ namespace HelpdeskRepository.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("CreatedById")
+                    b.Property<long>("CreatedById")
                         .HasColumnType("bigint");
 
                     b.Property<long>("DepartmentId")
@@ -616,6 +622,9 @@ namespace HelpdeskRepository.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<long>("StudentId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -626,6 +635,9 @@ namespace HelpdeskRepository.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("ModifiedById");
+
+                    b.HasIndex("StudentId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -758,13 +770,13 @@ namespace HelpdeskRepository.Migrations
 
                     b.HasOne("HelpdeskModel.Models.Attachment", "Attachment")
                         .WithMany()
-                        .HasForeignKey("AttachmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AttachmentId");
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.Department", "Department")
                         .WithMany()
@@ -815,7 +827,8 @@ namespace HelpdeskRepository.Migrations
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.Department", "Department")
                         .WithMany()
@@ -845,19 +858,30 @@ namespace HelpdeskRepository.Migrations
                 {
                     b.HasOne("HelpdeskModel.Models.Attachment", "Attachment")
                         .WithMany()
-                        .HasForeignKey("AttachmentId");
+                        .HasForeignKey("AttachmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HelpdeskModel.Models.Complain", "Complain")
                         .WithMany()
-                        .HasForeignKey("ComplainId");
+                        .HasForeignKey("ComplainId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "ModifiedBy")
                         .WithMany()
-                        .HasForeignKey("ModifiedById");
+                        .HasForeignKey("ModifiedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Attachment");
 
@@ -866,6 +890,8 @@ namespace HelpdeskRepository.Migrations
                     b.Navigation("CreatedBy");
 
                     b.Navigation("ModifiedBy");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("HelpdeskModel.Models.ConversationLog", b =>
@@ -876,11 +902,15 @@ namespace HelpdeskRepository.Migrations
 
                     b.HasOne("HelpdeskModel.Models.Conversation", "Conversation")
                         .WithMany()
-                        .HasForeignKey("ConversationId");
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Attachment");
 
@@ -912,17 +942,15 @@ namespace HelpdeskRepository.Migrations
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById");
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "RejectedBy")
                         .WithMany()
@@ -933,8 +961,6 @@ namespace HelpdeskRepository.Migrations
                     b.Navigation("CreatedBy");
 
                     b.Navigation("Department");
-
-                    b.Navigation("ModifiedBy");
 
                     b.Navigation("RejectedBy");
                 });
@@ -947,7 +973,9 @@ namespace HelpdeskRepository.Migrations
 
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("HelpdeskModel.Models.Department", "Department")
                         .WithMany()

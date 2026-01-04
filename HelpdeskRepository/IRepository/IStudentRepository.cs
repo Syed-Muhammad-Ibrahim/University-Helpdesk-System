@@ -17,5 +17,6 @@ namespace HelpdeskRepository.IRepository
 
         Task SaveChangesAsync();
         Task<Student?> GetByUserIdAsync(long userId);
+        Task<Student?> GetByStudentIdAsync(long studentCode);
     }
 }

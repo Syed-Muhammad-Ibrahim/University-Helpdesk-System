@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using HelpdeskModel.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using HelpdeskModel.Models;
+using System.Reflection.Emit;
 
 namespace HelpdeskRepository.Data
 {
@@ -62,7 +63,44 @@ namespace HelpdeskRepository.Data
                 entity.HasOne(x => x.Attachment)
                     .WithMany()
                     .OnDelete(DeleteBehavior.Restrict);
+
+                builder.Entity<Conversation>()
+                    .HasOne(c => c.User)
+                    .WithMany()
+                    .HasForeignKey(c => c.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);   // or DeleteBehavior.NoAction
+
+                builder.Entity<Conversation>()
+                    .HasOne(c => c.CreatedBy)
+                    .WithMany()
+                    .HasForeignKey(c => c.CreatedById)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                builder.Entity<Conversation>()
+                    .HasOne(c => c.ModifiedBy)
+                    .WithMany()
+                    .HasForeignKey(c => c.ModifiedById)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                builder.Entity<Conversation>()
+                    .HasOne(c => c.Complain)
+                    .WithMany()
+                    .HasForeignKey(c => c.ComplainId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                builder.Entity<Conversation>()
+                    .HasOne(c => c.Attachment)
+                    .WithMany()
+                    .HasForeignKey(c => c.AttachmentId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                builder.Entity<Student>()
+                    .HasIndex(s => s.StudentId)
+                    .IsUnique();
             });
+
+
         }
+
     }
 }

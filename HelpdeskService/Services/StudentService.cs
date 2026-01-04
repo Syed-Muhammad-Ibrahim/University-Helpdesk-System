@@ -45,6 +45,14 @@ namespace HelpdeskService.Services
         {
             try
             {
+                var existing = await _studentRepository.GetByStudentIdAsync(model.StudentId);
+                if (existing != null)
+                {
+                    _logger.LogWarning("Duplicate StudentCode {StudentCode}", model.StudentId);
+                    return false;
+                }
+
+
                 // Identity user create
                 var user = new ApplicationUser
                 {
@@ -86,7 +94,8 @@ namespace HelpdeskService.Services
                     Department = department,
                     CreatedAt = DateTime.UtcNow,
                     Status = ModelStatus.Active,
-                    CreatedById = createdById
+                    CreatedById = createdById,
+                    StudentId = model.StudentId
                 };
 
                 await _studentRepository.AddAsync(student);
