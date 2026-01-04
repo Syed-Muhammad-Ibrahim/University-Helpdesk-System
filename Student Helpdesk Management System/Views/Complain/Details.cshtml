@@ -1,0 +1,56 @@
+﻿@model Complain
+@{
+    ViewData["Title"] = "Complain Details";
+}
+
+<h2>Complain Details</h2>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Id</dt>
+            <dd class="col-sm-9">@Model.Id</dd>
+
+            <dt class="col-sm-3">Department</dt>
+            <dd class="col-sm-9">@Model.Department?.Name</dd>
+
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            <dt class="col-sm-3">Created At</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("g")</dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+
+            <dt class="col-sm-3">Solved</dt>
+            <dd class="col-sm-9">@((Model.isSolved) ? "Yes" : "No")</dd>
+
+            @if (Model.Attachment != null)
+            {
+                <dt class="col-sm-3">Attachment</dt>
+                <dd class="col-sm-9">
+                    <!-- ekhane attachment download link/show korba, tumi ja implement korecho tar upor -->
+                    <a asp-controller="Attachment" asp-action="Download" asp-route-id="@Model.AttachmentId">
+                        Download
+                    </a>
+                </dd>
+            }
+        </dl>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="MyComplains" class="btn btn-secondary">Back to list</a>
+
+    @if (!Model.isSolved)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    }
+
+    <!-- conversation page link (student, staff, admin sobai use korbe) -->
+    <a asp-controller="Conversation" asp-action="Thread" asp-route-complainId="@Model.Id"
+       class="btn btn-info">
+        Open Conversation
+    </a>
+</div>

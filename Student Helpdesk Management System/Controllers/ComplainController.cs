@@ -183,5 +183,20 @@ namespace Student_Complain_Management_System.Controllers
             await _complainService.DeleteComplainAsync(id, userId);
             return RedirectToAction(nameof(MyComplains));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(long id)
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            // sudhu oi student er complain dekhte parbe
+            var complain = await _complainService.GetByIdForStudentAsync(id, userId);
+            if (complain == null)
+                return NotFound();
+
+            return View(complain);   // View name: Details.cshtml, model: Complain
+        }
     }
 }

@@ -45,6 +45,7 @@ namespace HelpdeskService.Services
                     DepartmentId = model.DepartmentId,
                     AttachmentId = model.AttachmentId,
                     CreatedById = studentUserId,
+                    StudentId = student.Id,
                     CreatedAt = DateTime.UtcNow,
                     Status = ModelStatus.Active,
                     isSolved = false
