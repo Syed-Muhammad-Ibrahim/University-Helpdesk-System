@@ -16,15 +16,23 @@
     <div class="navbar">
         <h2>Student Dashboard</h2>
         <form asp-controller="Account" asp-action="Logout" method="post">
+            @Html.AntiForgeryToken()
             <button type="submit" class="logout-btn">Logout</button>
         </form>
     </div>
 
     <div class="dashboard">
         <div class="sidebar">
-            <a asp-controller="Student" asp-action="Complain">Open New Complaint</a>
-            <a asp-controller="Student" asp-action="MyComplain">MyComplain</a>
+            <!-- New complain -->
+            <a asp-controller="Complain" asp-action="Create">Open New Complain</a>
+
+            <!-- My complains list -->
+            <a asp-controller="Complain" asp-action="MyComplains">My Complains</a>
+
+            <!-- Notice -->
             <a asp-controller="Notice" asp-action="Index">Notice</a>
+
+            <!-- Student profile (existing StudentController.Profile) -->
             <a asp-controller="Student" asp-action="Profile">Profile</a>
         </div>
 
