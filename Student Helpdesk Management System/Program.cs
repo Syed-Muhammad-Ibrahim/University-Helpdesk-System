@@ -45,6 +45,9 @@ builder.Services.AddScoped<IComplainRepository, ComplainRepository>();
 builder.Services.AddScoped<IComplainService, ComplainService>();
 builder.Services.AddScoped<IConversationRepository, ConversationRepository>();
 builder.Services.AddScoped<IConversationService, ConversationService>();
+builder.Services.AddScoped<INoticeRepository, NoticeRepository>();
+builder.Services.AddScoped<INoticeService, NoticeService>();
+
 
 var app = builder.Build();
 
