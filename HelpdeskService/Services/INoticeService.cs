@@ -20,6 +20,8 @@ namespace HelpdeskService.Services
         Task<bool> ApproveAsync(long id, long adminId);
         Task<bool> RejectAsync(long id, long adminId);
         Task<List<Notice>> GetAllAsync();
+        Task<List<Notice>> GetStaffNoticesAsync(long staffUserId);
+
 
     }
 }

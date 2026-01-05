@@ -1,0 +1,55 @@
+﻿@model IEnumerable<HelpdeskModel.Models.Notice>
+
+@{
+    ViewData["Title"] = "My Notices";
+}
+
+<h2>My Notices</h2>
+
+<a asp-controller="Notice" asp-action="Create" class="btn btn-success mb-3">
+    Create New Notice
+</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Department</th>
+            <th>Approved?</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var n in Model)
+            {
+                <tr>
+                    <td>@n.Description</td>
+                    <td>@n.Department?.Name</td>
+                    <td>@(n.isApproved ? "Yes" : "No")</td>
+                    <td>@n.CreatedAt.ToString("g")</td>
+                    <td>
+                        <a asp-controller="Notice" asp-action="Edit" asp-route-id="@n.Id"
+                           class="btn btn-sm btn-primary">Edit</a>
+
+                        <form asp-controller="Notice" asp-action="Delete" asp-route-id="@n.Id"
+                              method="post" style="display:inline">
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Delete this notice?');">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center">You have not created any notices yet.</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -12,20 +12,34 @@ namespace Student_Complain_Management_System.Controllers
     public class NoticeController : Controller
     {
         private readonly INoticeService _noticeService;
+        private readonly IStaffService _staffService;
         private readonly AppDbContext _context;
 
-        public NoticeController(INoticeService noticeService, AppDbContext context)
+        public NoticeController(INoticeService noticeService, IStaffService staffService, AppDbContext context)
         {
             _noticeService = noticeService;
+            _staffService = staffService;
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
             var isAdmin = User.IsInRole("Admin");
-            var notices = await _noticeService.GetAllApprovedAsync();
+            if (isAdmin)
+            {
+                var notices = await _noticeService.GetAllApprovedAsync();
+                return View(notices);
+            }
 
-            return View(notices);
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            var staff = await _staffService.GetStaffByUserIdAsync(userId);
+            if (staff == null) return Unauthorized();
+
+            var deptNotices = await _noticeService.GetApprovedByDepartmentAsync(staff.DepartmentId);
+            return View(deptNotices);
         }
 
         [Authorize(Roles = "Admin")]
@@ -96,7 +110,10 @@ namespace Student_Complain_Management_System.Controllers
                 return View(model);
             }
 
-            return RedirectToAction(nameof(AllNotice));
+            if (isAdmin)
+                return RedirectToAction(nameof(AllNotice));
+            else
+                return RedirectToAction(nameof(Index));
         }
 
         // GET: Notice/Edit/5
@@ -205,6 +222,17 @@ namespace Student_Complain_Management_System.Controllers
 
             await _noticeService.RejectAsync(id, adminId);
             return RedirectToAction(nameof(Pending));
+        }
+
+        [Authorize(Roles = "Staff")]
+        public async Task<IActionResult> MyNotices()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            var notices = await _noticeService.GetStaffNoticesAsync(userId);
+            return View(notices);
         }
     }
 }

@@ -101,7 +101,9 @@ namespace HelpdeskService.Services
 
                 notice.Description = model.Description;
                 notice.DepartmentId = model.DepartmentId;
+
                 notice.AttachmentId = model.AttachmentId ?? notice.AttachmentId;
+
                 notice.ModifiedAt = DateTime.UtcNow;
                 notice.ModifiedById = userId;
 
@@ -185,6 +187,15 @@ namespace HelpdeskService.Services
         public async Task<List<Notice>> GetAllAsync()
         {
             return await _noticeRepository.GetAllAsync();
+        }
+
+        public async Task<List<Notice>> GetStaffNoticesAsync(long staffUserId)
+        {
+            var all = await _noticeRepository.GetAllAsync();
+            return all
+                .Where(n => n.CreatedById == staffUserId && n.Status == ModelStatus.Active)
+                .OrderByDescending(n => n.CreatedAt)
+                .ToList();
         }
     }
 }
