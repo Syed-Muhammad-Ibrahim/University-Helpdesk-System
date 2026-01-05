@@ -46,7 +46,7 @@ namespace HelpdeskService.Services
                     CreatedById = userId,
                     CreatedAt = DateTime.UtcNow,
                     Status = ModelStatus.Active,
-                    AttachmentId = model.AttachmentId ?? 0 
+                    AttachmentId = model.AttachmentId
                 };
 
                 if (isAdmin)

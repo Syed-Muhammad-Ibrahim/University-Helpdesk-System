@@ -96,7 +96,7 @@ namespace Student_Complain_Management_System.Controllers
                 return View(model);
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(AllNotice));
         }
 
         // GET: Notice/Edit/5
