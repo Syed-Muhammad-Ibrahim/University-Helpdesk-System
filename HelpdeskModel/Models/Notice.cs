@@ -13,7 +13,9 @@ namespace HelpdeskModel.Models
         public long CreatedById { get; set; }
         public ApplicationUser CreatedBy { get; set; }
         public long? ModifiedById { get; set; }
+        public ApplicationUser? ModifiedBy { get; set; }
         public long AttachmentId { get; set; }
+        public Attachment Attachment { get; set; }
         public long? ApprovedById { get; set; }
         public ApplicationUser? ApprovedBy { get; set; }
         public long? RejectedById { get; set; }
