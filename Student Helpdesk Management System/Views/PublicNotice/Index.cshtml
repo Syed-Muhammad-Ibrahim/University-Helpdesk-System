@@ -1,0 +1,39 @@
+﻿@model IEnumerable<HelpdeskModel.Models.Notice>
+
+@{
+    ViewData["Title"] = "Notices";
+    Layout = "_Layout";
+}
+
+<h2>Notices</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Title / Description</th>
+            <th>Department</th>
+            <th>Created By</th>
+            <th>Created At</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var n in Model)
+            {
+                <tr>
+                    <td>@n.Description</td>
+                    <td>@n.Department?.Name</td>
+                    <td>@n.CreatedBy?.FullName</td>
+                    <td>@n.CreatedAt.ToString("g")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">No notices available.</td>
+            </tr>
+        }
+    </tbody>
+</table>
