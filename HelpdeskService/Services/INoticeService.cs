@@ -19,5 +19,7 @@ namespace HelpdeskService.Services
         Task<bool> DeleteNoticeAsync(long id, long userId, bool isAdmin);
         Task<bool> ApproveAsync(long id, long adminId);
         Task<bool> RejectAsync(long id, long adminId);
+        Task<List<Notice>> GetAllAsync();
+
     }
 }

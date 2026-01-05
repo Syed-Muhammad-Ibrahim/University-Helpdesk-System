@@ -182,5 +182,9 @@ namespace HelpdeskService.Services
                 return false;
             }
         }
+        public async Task<List<Notice>> GetAllAsync()
+        {
+            return await _noticeRepository.GetAllAsync();
+        }
     }
 }

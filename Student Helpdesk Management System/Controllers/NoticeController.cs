@@ -29,6 +29,13 @@ namespace Student_Complain_Management_System.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AllNotice()
+        {
+            var notices = await _noticeService.GetAllAsync();
+            return View(notices);
+        }
+
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Pending()
         {
             var pending = await _noticeService.GetPendingNoticesAsync();
