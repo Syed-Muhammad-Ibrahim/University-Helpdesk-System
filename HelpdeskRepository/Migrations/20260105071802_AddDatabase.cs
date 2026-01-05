@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HelpdeskRepository.Migrations
 {
     /// <inheritdoc />
-    public partial class Adddatabase : Migration
+    public partial class AddDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -303,9 +303,21 @@ namespace HelpdeskRepository.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_Notices_AspNetUsers_ModifiedById",
+                        column: x => x.ModifiedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Notices_AspNetUsers_RejectedById",
                         column: x => x.RejectedById,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Notices_Attachments_AttachmentId",
+                        column: x => x.AttachmentId,
+                        principalTable: "Attachments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -813,6 +825,11 @@ namespace HelpdeskRepository.Migrations
                 column: "ApprovedById");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Notices_AttachmentId",
+                table: "Notices",
+                column: "AttachmentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Notices_CreatedById",
                 table: "Notices",
                 column: "CreatedById");
@@ -821,6 +838,11 @@ namespace HelpdeskRepository.Migrations
                 name: "IX_Notices_DepartmentId",
                 table: "Notices",
                 column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notices_ModifiedById",
+                table: "Notices",
+                column: "ModifiedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notices_RejectedById",

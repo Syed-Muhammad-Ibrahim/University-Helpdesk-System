@@ -1,0 +1,51 @@
+﻿@model IEnumerable<HelpdeskModel.Models.Notice>
+@{
+    ViewData["Title"] = "All Notices (Admin)";
+}
+
+<h2>All Notices</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Creator</th>
+            <th>Department</th>
+            <th>Description</th>
+            <th>Created At</th>
+            <th>Approved?</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var n in Model)
+            {
+                <tr>
+                    <td>@n.Id</td>
+                    <td>@n.CreatedBy?.FullName</td>
+                    <td>@n.Department?.Name</td>
+                    <td>@(n.Description?.Length > 40 ? n.Description.Substring(0, 40) + "..." : n.Description)</td>
+                    <td>@n.CreatedAt.ToString("g")</td>
+                    <td>@(n.isApproved ? "Yes" : "No")</td>
+                    <td>@n.Status</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@n.Id" class="btn btn-sm btn-warning">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@n.Id" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8" class="text-center">No notices found.</td>
+            </tr>
+        }
+    </tbody>
+</table>

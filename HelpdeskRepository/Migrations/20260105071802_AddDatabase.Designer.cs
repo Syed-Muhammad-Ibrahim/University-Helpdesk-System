@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HelpdeskRepository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260104063738_Add-database")]
-    partial class Adddatabase
+    [Migration("20260105071802_AddDatabase")]
+    partial class AddDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -477,9 +477,13 @@ namespace HelpdeskRepository.Migrations
 
                     b.HasIndex("ApprovedById");
 
+                    b.HasIndex("AttachmentId");
+
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("DepartmentId");
+
+                    b.HasIndex("ModifiedById");
 
                     b.HasIndex("RejectedById");
 
@@ -963,6 +967,12 @@ namespace HelpdeskRepository.Migrations
                         .HasForeignKey("ApprovedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("HelpdeskModel.Models.Attachment", "Attachment")
+                        .WithMany()
+                        .HasForeignKey("AttachmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
@@ -975,6 +985,11 @@ namespace HelpdeskRepository.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "ModifiedBy")
+                        .WithMany()
+                        .HasForeignKey("ModifiedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("HelpdeskModel.Models.ApplicationUser", "RejectedBy")
                         .WithMany()
                         .HasForeignKey("RejectedById")
@@ -982,9 +997,13 @@ namespace HelpdeskRepository.Migrations
 
                     b.Navigation("ApprovedBy");
 
+                    b.Navigation("Attachment");
+
                     b.Navigation("CreatedBy");
 
                     b.Navigation("Department");
+
+                    b.Navigation("ModifiedBy");
 
                     b.Navigation("RejectedBy");
                 });
