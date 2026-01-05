@@ -11,12 +11,15 @@ namespace Student_Complain_Management_System.Controllers
     {
         private readonly ILogger<StaffController> _logger;
         private readonly IStaffService _staffService;
+        private readonly INoticeService _noticeService;
 
         public StaffController(ILogger<StaffController> logger,
-                                 IStaffService staffService)
+                                 IStaffService staffService,
+                                 INoticeService noticeService)
         {
             _logger = logger;
             _staffService = staffService;
+            _noticeService = noticeService;
         }
 
         public IActionResult Index()
@@ -73,6 +76,21 @@ namespace Student_Complain_Management_System.Controllers
                 return Unauthorized();
 
             return RedirectToAction("Profile"); 
+        }
+
+        // GET: /Staff/DepartmentNotices
+        public async Task<IActionResult> DepartmentNotices()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            var staff = await _staffService.GetStaffByUserIdAsync(userId);
+            if (staff == null)
+                return Unauthorized();
+
+            var notices = await _noticeService.GetApprovedByDepartmentAsync(staff.DepartmentId);
+            return View(notices);
         }
 
     }
