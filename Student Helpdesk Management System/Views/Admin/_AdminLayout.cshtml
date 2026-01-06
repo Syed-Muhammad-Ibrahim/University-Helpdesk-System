@@ -22,14 +22,15 @@
 
     <div class="dashboard">
         <div class="sidebar">
-            <a asp-controller="Complain" asp-action="Index">View All Complaints</a>
+            <a asp-controller="Admin" asp-action="ComplainList">View All Complaints</a>
             <a asp-controller="Admin" asp-action="StudentList">View All Students</a>
             <a asp-controller="Admin" asp-action="CreateStudent">Add New Student</a>
             <a asp-controller="Admin" asp-action="StaffList">View All Staff</a>
             <a asp-controller="Admin" asp-action="CreateStaff">Add New Staff</a>
-            <a asp-controller="Admin" asp-action="ComplainList">All Complains</a>
             <a asp-controller="Department" asp-action="Index">Department</a>
             <a asp-controller="Notice" asp-action="AllNotice">Notice</a>
+            <a asp-controller="Notice" asp-action="Pending"> Pending Notice</a>
+
         </div>
 
         <div class="content">
