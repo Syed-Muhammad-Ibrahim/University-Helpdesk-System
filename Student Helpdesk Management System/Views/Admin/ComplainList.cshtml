@@ -2,56 +2,123 @@
 
 @{
     ViewData["Title"] = "All Complains";
+
+    // Optional: filter value gulo ViewData / ViewBag theke ashte pare
+    var currentSearch = ViewBag.Search as string ?? "";
+    var currentDept = ViewBag.Department as string ?? "";
+    var departments = ViewBag.Departments as List<string> ?? new List<string>();
 }
 
-<h2>All Complains</h2>
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h2 class="mb-0">All Complains</h2>
+        <span class="badge bg-primary">@Model?.Count() complains</span>
+    </div>
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Student</th>
-            <th>Department</th>
-            <th>Description</th>
-            <th>Created At</th>
-            <th>Solved</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Any())
-        {
-            foreach (var c in Model)
-            {
-                <tr>
-                    <td>@c.Id</td>
-                    <td>@c.CreatedBy?.FullName</td>
-                    <td>@c.Department?.Name</td>
-                    <td>@(c.Description?.Length > 40 ? c.Description.Substring(0, 40) + "..." : c.Description)</td>
-                    <td>@c.CreatedAt.ToString("g")</td>
-                    <td>@(c.isSolved ? "Yes" : "No")</td>
-                    <td>
-                        <a asp-controller="StaffComplain"
-                           asp-action="Details"
-                           asp-route-id="@c.Id"
-                           class="btn btn-sm btn-info">
-                            Details
-                        </a>
-                        <a asp-controller="Conversation"
-                           asp-action="Thread"
-                           asp-route-complainId="@c.Id"
-                           class="btn btn-sm btn-secondary">
-                            Conversation
-                        </a>
-                    </td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="7" class="text-center">No complains found.</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="card-body">
+
+        <!-- Filter / Search Bar -->
+        <form method="get" class="row g-2 mb-3">
+            <div class="col-md-4">
+                <input type="text"
+                       name="search"
+                       value="@currentSearch"
+                       class="form-control"
+                       placeholder="Search by student, description...">
+            </div>
+
+            <div class="col-md-3">
+                <select name="department"
+                        class="form-select">
+                    <option value="">All departments</option>
+                    @foreach (var dept in departments)
+                    {
+                        <option value="@dept" selected="@(dept == currentDept)">
+                            @dept
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <select name="status"
+                        class="form-select">
+                    <option value="">All status</option>
+                    <option value="solved">Solved</option>
+                    <option value="pending">Pending</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary">
+                    Filter
+                </button>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Id</th>
+                        <th>Student</th>
+                        <th>Department</th>
+                        <th>Description</th>
+                        <th>Created At</th>
+                        <th>Solved</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var c in Model)
+                        {
+                            <tr>
+                                <td>@c.Id</td>
+                                <td>@c.CreatedBy?.FullName</td>
+                                <td>@c.Department?.Name</td>
+                                <td>
+                                    @(c.Description?.Length > 40
+                                                                ? c.Description.Substring(0, 40) + "..."
+                                                                : c.Description)
+                        </td>
+                        <td>@c.CreatedAt.ToString("g")</td>
+                        <td>
+                            @if (c.isSolved)
+                                    {
+                                        <span class="badge bg-success">Solved</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <a asp-controller="StaffComplain"
+                                       asp-action="Details"
+                                       asp-route-id="@c.Id"
+                                       class="btn btn-sm btn-info me-1">
+                                        Details
+                                    </a>
+                                    <a asp-controller="Conversation"
+                                       asp-action="Thread"
+                                       asp-route-complainId="@c.Id"
+                                       class="btn btn-sm btn-secondary">
+                                        Conversation
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center">No complains found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
