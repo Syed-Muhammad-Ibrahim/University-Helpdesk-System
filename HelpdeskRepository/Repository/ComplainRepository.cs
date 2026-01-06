@@ -35,11 +35,14 @@ namespace HelpdeskRepository.Repository
 
         public async Task<List<Complain>> GetByStudentIdAsync(long studentUserId)
             => await _context.Complains
+            .Include(c=> c.Department)
                 .Where(c => c.CreatedById == studentUserId)
                 .ToListAsync();
 
         public async Task<List<Complain>> GetByDepartmentIdAsync(long departmentId)
-            => await _context.Complains
+            =>  await _context.Complains
+                .Include(c => c.CreatedBy)
+                .Include(c => c.Department)
                 .Where(c => c.DepartmentId == departmentId)
                 .ToListAsync();
 

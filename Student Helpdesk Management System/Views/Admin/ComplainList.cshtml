@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "All Complains";
 
-    // Optional: filter value gulo ViewData / ViewBag theke ashte pare
     var currentSearch = ViewBag.Search as string ?? "";
     var currentDept = ViewBag.Department as string ?? "";
     var departments = ViewBag.Departments as List<string> ?? new List<string>();
@@ -56,6 +55,13 @@
             </div>
         </form>
 
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["Error"]
+            </div>
+        }
+
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-hover align-middle">
                 <thead class="table-dark">
@@ -104,9 +110,25 @@
                                     <a asp-controller="Conversation"
                                        asp-action="Thread"
                                        asp-route-complainId="@c.Id"
-                                       class="btn btn-sm btn-secondary">
+                                       class="btn btn-sm btn-secondary me-1">
                                         Conversation
                                     </a>
+
+                                    @* Mark Solved button *@
+                                    @if (!c.isSolved)
+                                    {
+                                        <form asp-controller="StaffComplain"
+                                              asp-action="MarkSolved"
+                                              asp-route-id="@c.Id"
+                                              method="post"
+                                              style="display:inline">
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-success"
+                                                    onclick="return confirm('Mark this complain as solved?');">
+                                                Mark Solved
+                                            </button>
+                                        </form>
+                                    }
                                 </td>
                             </tr>
                         }

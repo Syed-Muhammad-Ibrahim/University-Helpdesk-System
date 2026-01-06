@@ -2,13 +2,6 @@
 
 <h2>Complain Details</h2>
 
-<a asp-controller="Conversation"
-   asp-action="Thread"
-   asp-route-complainId="@Model.Id"
-   class="btn btn-info">
-    Open Conversation
-</a>
-
 <dl class="row">
     <dt class="col-sm-3">Id</dt>
     <dd class="col-sm-9">@Model.Id</dd>
@@ -29,4 +22,4 @@
     <dd class="col-sm-9">@((Model.isSolved) ? "Yes" : "No")</dd>
 </dl>
 
-<a asp-action="DepartmentComplains" class="btn btn-secondary">Back to list</a>
+<a asp-controller="@ViewBag.BackController" asp-action="@ViewBag.BackAction" class="btn btn-secondary"> Back to list </a>

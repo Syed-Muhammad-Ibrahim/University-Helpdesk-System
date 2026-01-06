@@ -6,6 +6,13 @@
 
 <h2>Department Complains</h2>
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -14,7 +21,7 @@
             <th>Description</th>
             <th>Created At</th>
             <th>Solved</th>
-            <th></th>
+            <th class="text-end">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -25,16 +32,54 @@
                 <tr>
                     <td>@c.Id</td>
                     <td>@c.CreatedBy?.FullName</td>
-                    <td>@(c.Description?.Length > 40 ? c.Description.Substring(0, 40) + "..." : c.Description)</td>
-                    <td>@c.CreatedAt.ToString("g")</td>
-                    <td>@(c.isSolved ? "Yes" : "No")</td>
                     <td>
+                        @(c.Description?.Length > 40
+                                        ? c.Description.Substring(0, 40) + "..."
+                                        : c.Description)
+            </td>
+            <td>@c.CreatedAt.ToString("g")</td>
+            <td>
+                @if (c.isSolved)
+                        {
+                            <span class="badge bg-success">Solved</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        }
+                    </td>
+                    <td class="text-end">
                         <a asp-controller="StaffComplain"
                            asp-action="Details"
                            asp-route-id="@c.Id"
-                           class="btn btn-sm btn-info">
+                           class="btn btn-sm btn-info me-1">
                             Details
                         </a>
+                        <a asp-controller="Conversation"
+                           asp-action="Thread"
+                           asp-route-complainId="@c.Id"
+                           class="btn btn-sm btn-secondary me-1">
+                            Conversation
+                        </a>
+
+                        @if (!c.isSolved)
+                        {
+                            <form asp-controller="StaffComplain"
+                                  asp-action="MarkSolved"
+                                  asp-route-id="@c.Id"
+                                  method="post"
+                                  style="display:inline">
+                                <button type="submit"
+                                        class="btn btn-sm btn-success"
+                                        onclick="return confirm('Mark this complain as solved?');">
+                                    Mark Solved
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Already solved</span>
+                        }
                     </td>
                 </tr>
             }
