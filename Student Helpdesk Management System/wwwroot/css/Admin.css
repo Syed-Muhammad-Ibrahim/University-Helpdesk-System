@@ -83,14 +83,12 @@
     margin: 0 auto;
 }
 
-/* Optional title style */
 .form-title {
     margin-bottom: 20px;
     font-weight: 600;
     color: #333;
 }
 
-/* Extra wrapper (jodi use koro) */
 .page-container {
     margin: 0;
     padding: 0;

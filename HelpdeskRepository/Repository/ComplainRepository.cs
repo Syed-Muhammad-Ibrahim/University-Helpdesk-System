@@ -28,7 +28,10 @@ namespace HelpdeskRepository.Repository
                 .FirstOrDefaultAsync(c => c.Id == id);
 
         public async Task<List<Complain>> GetAllAsync()
-            => await _context.Complains.ToListAsync();
+            =>  await _context.Complains
+                .Include(c => c.CreatedBy)
+                .Include(c => c.Department)
+                .ToListAsync();
 
         public async Task<List<Complain>> GetByStudentIdAsync(long studentUserId)
             => await _context.Complains
