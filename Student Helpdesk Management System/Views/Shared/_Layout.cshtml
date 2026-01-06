@@ -1,53 +1,80 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = null;
+    var title = ViewData["Title"] ?? "Dashboard";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Student Helpdesk Management System</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Student Helpdesk Management System.styles.css" asp-append-version="true" />
+    <meta charset="UTF-8" />
+    <title>@title</title>
+    <link rel="stylesheet" href="~/css/admin.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Student Helpdesk Management System</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Notice">Notice</a>
-                        </li>
-                        <partial name="_LoginPartial" />
-                    </ul>
-                </div>
+    <div class="navbar">
+        <h2>@title</h2>
+
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <form asp-controller="Account" asp-action="Logout" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        }
+        else
+        {
+            <div>
+                <a asp-controller="Account" asp-action="Login" class="logout-btn">Login</a>
+                <a asp-controller="Account" asp-action="RegisterStudent" class="logout-btn">Register</a>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        }
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Student_Helpdesk_Management_System - <a asp-area="" asp-controller="Home"  asp-action="Privacy">Privacy </a>
+    <div class="dashboard">
+        @* Sidebar only for logged-in users *@
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <div class="sidebar">
+                @* Admin links *@
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-controller="Admin" asp-action="ComplainList">View All Complaints</a>
+                    <a asp-controller="Admin" asp-action="StudentList">View All Students</a>
+                    <a asp-controller="Admin" asp-action="CreateStudent">Add New Student</a>
+                    <a asp-controller="Admin" asp-action="StaffList">View All Staff</a>
+                    <a asp-controller="Admin" asp-action="CreateStaff">Add New Staff</a>
+                    <a asp-controller="Department" asp-action="Index">Department</a>
+                    <a asp-controller="Notice" asp-action="AllNotice">Notice</a>
+                    <a asp-controller="Notice" asp-action="Pending">Pending Notice</a>
+                }
+
+                @* Staff links *@
+                @if (User.IsInRole("Staff"))
+                {
+                    <a asp-controller="StaffComplain" asp-action="DepartmentComplains">View All Complains</a>
+                    <a asp-controller="StaffComplain" asp-action="RepliedComplains">Complains I Replied</a>
+                    <a asp-controller="Notice" asp-action="Create">Create Notice</a>
+                    <a asp-controller="Notice" asp-action="Index">Notices</a>
+                    <a asp-controller="Notice" asp-action="MyNotices">My Notices</a>
+                    <a asp-controller="Staff" asp-action="Profile">Profile</a>
+                }
+
+                @* Student links *@
+                @if (User.IsInRole("Student"))
+                {
+                    <a asp-controller="Complain" asp-action="Create">Open New Complain</a>
+                    <a asp-controller="Complain" asp-action="MyComplains">My Complains</a>
+                    <a asp-controller="Notice" asp-action="Index">Notice</a>
+                    <a asp-controller="Student" asp-action="Profile">Profile</a>
+                }
+            </div>
+        }
+
+        <div class="content">
+            @RenderBody()
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    </div>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
