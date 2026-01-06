@@ -2,6 +2,7 @@
 using HelpdeskRepository.Data;
 using HelpdeskService.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
@@ -168,6 +169,7 @@ namespace Student_Complain_Management_System.Controllers
             if (!ok)
             {
                 ModelState.AddModelError("", "Could not update notice.");
+                ModelState.AddModelError("", "You are not allowed to edit an approved notice.");
                 ViewBag.Departments = _context.Departments
                     .Select(d => new SelectListItem
                     {
@@ -191,7 +193,12 @@ namespace Student_Complain_Management_System.Controllers
                 return Unauthorized();
 
             var isAdmin = User.IsInRole("Admin");
-            await _noticeService.DeleteNoticeAsync(id, userId, isAdmin);
+            var ok = await _noticeService.DeleteNoticeAsync(id, userId, isAdmin);
+
+            if (!ok)
+            {
+                TempData["Error"] = "You are not allowed to delete this notice (it may be approved or not created by you).";
+            }
 
             return RedirectToAction(nameof(Index));
         }
