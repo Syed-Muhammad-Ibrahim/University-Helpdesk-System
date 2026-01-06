@@ -61,7 +61,7 @@ namespace Student_Complain_Management_System.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PostMessage(ConversationThreadViewModel model)
         {
-            var msg = model.NewMessage; // ekhane ComplainId 21 pabe
+            var msg = model.NewMessage;
 
             if (msg.ComplainId <= 0)
                 return NotFound();
