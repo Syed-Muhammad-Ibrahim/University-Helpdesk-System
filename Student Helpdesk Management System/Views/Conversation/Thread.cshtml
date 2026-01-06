@@ -2,10 +2,16 @@
 
 <h2>Conversation for Complain #@Model.ComplainId</h2>
 
-<div>
+<div class="mb-3">
     <p><strong>Complain:</strong> @Model.ComplainDescription</p>
     <p><strong>Status:</strong> @(Model.IsSolved ? "Solved" : "Open")</p>
 </div>
+
+<a asp-controller="@ViewBag.BackController"
+   asp-action="@ViewBag.BackAction"
+   class="btn btn-secondary mb-3">
+    Back
+</a>
 
 <hr />
 
@@ -31,5 +37,5 @@
     @Html.AntiForgeryToken()
     <input asp-for="NewMessage.ComplainId" type="hidden" />
     <textarea asp-for="NewMessage.Text" class="form-control" rows="3"></textarea>
-    <button type="submit" class="btn btn-primary">Send</button>
+    <button type="submit" class="btn btn-primary mt-2">Send</button>
 </form>

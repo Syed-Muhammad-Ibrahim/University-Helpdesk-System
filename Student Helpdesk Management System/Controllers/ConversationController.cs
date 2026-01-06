@@ -20,9 +20,7 @@ namespace Student_Complain_Management_System.Controllers
         public async Task<IActionResult> Thread(long complainId)
         {
             if (complainId <= 0)
-            {
-                return NotFound(); // or redirect somewhere
-            }
+                return NotFound();
 
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId))
@@ -30,6 +28,31 @@ namespace Student_Complain_Management_System.Controllers
 
             var model = await _conversationService.GetThreadForUserAsync(complainId, userId, User);
             if (model == null) return NotFound();
+
+            var isAdmin = User.IsInRole("Admin");
+            var isStaff = User.IsInRole("Staff");
+            var isStudent = User.IsInRole("Student");
+
+            if (isAdmin)
+            {
+                ViewBag.BackController = "Admin";
+                ViewBag.BackAction = "ComplainList";
+            }
+            else if (isStaff)
+            {
+                ViewBag.BackController = "StaffComplain";
+                ViewBag.BackAction = "DepartmentComplains";
+            }
+            else if (isStudent)
+            {
+                ViewBag.BackController = "Complain";
+                ViewBag.BackAction = "MyComplains";
+            }
+            else
+            {
+                ViewBag.BackController = "Home";
+                ViewBag.BackAction = "Index";
+            }
 
             return View(model);
         }

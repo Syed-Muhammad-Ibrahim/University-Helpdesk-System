@@ -39,7 +39,6 @@ namespace HelpdeskService.Services
             var complain = await _complainRepository.GetByIdAsync(complainId);
             if (complain == null) return null;
 
-            // permission check: student own complain, staff same dept, admin all
             var isAdmin = user.IsInRole("Admin");
             var isStaff = user.IsInRole("Staff");
             var isStudent = user.IsInRole("Student");
