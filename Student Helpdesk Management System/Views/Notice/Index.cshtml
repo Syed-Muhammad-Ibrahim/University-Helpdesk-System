@@ -1,9 +1,5 @@
 ﻿@model IEnumerable<HelpdeskModel.Models.Notice>
 
-@{
-    ViewData["Title"] = "Notices";
-}
-
 <h2>Notices</h2>
 
 <table class="table table-bordered table-striped">
@@ -14,7 +10,6 @@
             <th>Created By</th>
             <th>Created At</th>
             <th>Approved?</th>
-            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -28,25 +23,13 @@
                     <td>@n.CreatedBy?.FullName</td>
                     <td>@n.CreatedAt.ToString("g")</td>
                     <td>@(n.isApproved ? "Yes" : "No")</td>
-                    <td>
-                        <!-- Edit/Delete staff+admin er jonne, service layer e permission check thakbe -->
-                        <a asp-controller="Notice" asp-action="Edit" asp-route-id="@n.Id" class="btn btn-sm btn-primary">Edit</a>
-
-                        <form asp-controller="Notice" asp-action="Delete" asp-route-id="@n.Id"
-                              method="post" style="display:inline">
-                            <button type="submit" class="btn btn-sm btn-danger"
-                                    onclick="return confirm('Are you sure to delete this notice?');">
-                                Delete
-                            </button>
-                        </form>
-                    </td>
                 </tr>
             }
         }
         else
         {
             <tr>
-                <td colspan="6" class="text-center">No notices found.</td>
+                <td colspan="5" class="text-center">No notices found.</td>
             </tr>
         }
     </tbody>
