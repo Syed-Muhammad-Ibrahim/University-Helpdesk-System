@@ -45,7 +45,7 @@ namespace HelpdeskService.Services
                 {
                     var adminUser = new ApplicationUser
                     {
-                        FullName = "Md Ibrahim",
+                        FullName = "Admin 1",
                         UserName = adminEmail,
                         Email = adminEmail,
                         EmailConfirmed = true,
