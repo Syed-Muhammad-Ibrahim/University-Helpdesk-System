@@ -85,7 +85,7 @@ namespace Student_Complain_Management_System.Controllers
             }
 
             if (isAdmin)
-                return RedirectToAction("ComplainsList", "Admin");
+                return RedirectToAction("ComplainList", "Admin");
             else if (isStaff)
                 return RedirectToAction("DepartmentComplains", "Staff");
 
