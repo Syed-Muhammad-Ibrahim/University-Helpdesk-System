@@ -135,6 +135,7 @@ namespace Student_Complain_Management_System.Controllers
                 DepartmentId = student.DepartmentId,
                 Status = student.Status
             };
+            ViewBag.DepartmentName = student.Department?.Name;
 
             return View(model);
         }
