@@ -1,8 +1,159 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "University Helpdesk Management System";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to The Student Helpdesk System</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="min-vh-100 bg-light">
+    <section class="hero-section bg-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center min-vh-75">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">
+                        University Helpdesk
+                        <span class="text-warning">Management</span>
+                        System
+                    </h1>
+                    <p class="lead mb-4">
+                        Submit querys online, track status in real-time,
+                        and communicate seamlessly with staff and admin.
+                        Your voice, heard and resolved.
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a asp-controller="Account" asp-action="RegisterStudent" class="btn btn-warning btn-lg px-5">
+                            <i class="fas fa-user-plus me-2"></i>Student Register
+                        </a>
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-lg px-5">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="hero-image">
+                        <i class="fas fa-university fa-8x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-dark mb-3">Why Choose Our System?</h2>
+                <p class="lead text-muted">Streamlined helpdesk management for modern universities</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 80px; height: 80px;">
+                                <i class="fas fa-edit fa-2x text-primary"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-3">Easy Complaint Submission</h5>
+                            <p class="card-text text-muted">
+                                Submit querys with department selection,
+                                attachment support, and real-time status updates.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 80px; height: 80px;">
+                                <i class="fas fa-comments fa-2x text-success"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-3">Real-time Communication</h5>
+                            <p class="card-text text-muted">
+                                Threaded conversations between students,
+                                staff, and admin for quick resolution.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 80px; height: 80px;">
+                                <i class="fas fa-bell fa-2x text-info"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-3">Department Notices</h5>
+                            <p class="card-text text-muted">
+                                Stay updated with approved notices
+                                specific to your department.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-5 bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <div class="row text-center text-white">
+                <div class="col-md-3 mb-4">
+                    <div class="display-4 fw-bold mb-2">500+</div>
+                    <div class="h5">Students</div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="display-4 fw-bold mb-2">250+</div>
+                    <div class="h5">Complaints Resolved</div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="display-4 fw-bold mb-2">15</div>
+                    <div class="h5">Departments</div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="display-4 fw-bold mb-2">100+</div>
+                    <div class="h5">Active Staff</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-5 bg-dark text-white">
+        <div class="container text-center">
+            <h2 class="display-5 fw-bold mb-4">Ready to Get Started?</h2>
+            <p class="lead mb-4">
+                Join thousands of students who trust our system
+                for efficient helpdesk management.
+            </p>
+            <div class="d-flex flex-column flex-md-row gap-3 justify-content-center">
+                <a asp-controller="Account" asp-action="RegisterStudent" class="btn btn-warning btn-lg px-5">
+                    <i class="fas fa-user-plus me-2"></i>Register as Student
+                </a>
+                <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-lg px-5">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login Now
+                </a>
+            </div>
+        </div>
+    </section>
 </div>
+
+<style>
+    .hover-shadow {
+        transition: box-shadow 0.3s ease;
+    }
+
+        .hover-shadow:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+        }
+
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .feature-icon {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
