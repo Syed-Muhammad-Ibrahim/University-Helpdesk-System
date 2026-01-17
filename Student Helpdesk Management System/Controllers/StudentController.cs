@@ -129,6 +129,7 @@ namespace Student_Complain_Management_System.Controllers
             var model = new StudentEditViewModel
             {
                 Id = student.Id,
+                StudentId = student.StudentId,
                 Name = student.Name,
                 Address = student.Address,
                 Phone = student.Phone,

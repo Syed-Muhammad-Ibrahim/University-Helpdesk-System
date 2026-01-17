@@ -120,14 +120,6 @@ namespace HelpdeskService.Services
                 student.Name = model.Name;
                 student.Address = model.Address;
                 student.Phone = model.Phone;
-               
-                
-
-                var dept = await _departmentRepository.GetByIdAsync(model.DepartmentId);
-
-                if (dept != null)
-                    student.Department = dept;
-
                 student.Status = model.Status;
                 student.ModifiedAt = DateTime.UtcNow;
                 student.ModifiedById = modifiedById;
