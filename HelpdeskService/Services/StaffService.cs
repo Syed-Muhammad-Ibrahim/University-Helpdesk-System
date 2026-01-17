@@ -114,13 +114,6 @@ namespace HelpdeskService.Services
                 staff.Name = model.Name;
                 staff.Address = model.Address;
                 staff.Phone = model.Phone;
-
-                var dept = await _departmentRepository.GetByIdAsync(model.DepartmentId);
-
-                if (dept != null)
-                    staff.Department = dept;
-
-                staff.Status = model.Status;
                 staff.ModifiedAt = DateTime.UtcNow;
                 staff.ModifiedById = modifiedById;
 

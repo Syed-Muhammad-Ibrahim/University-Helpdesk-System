@@ -1,4 +1,5 @@
-﻿using HelpdeskModel.ViewModels.UpdateViewModels;
+﻿using HelpdeskModel.Models;
+using HelpdeskModel.ViewModels.UpdateViewModels;
 using HelpdeskRepository.Data;
 using HelpdeskService.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -59,6 +60,7 @@ namespace Student_Complain_Management_System.Controllers
                 DepartmentId = staff.DepartmentId,
                 Status = staff.Status
             };
+            ViewBag.DepartmentName = staff.Department?.Name;
 
             if (TempData["Success"] != null)
             {
@@ -88,15 +90,9 @@ namespace Student_Complain_Management_System.Controllers
                 Phone = staff.Phone,
                 DepartmentId = staff.DepartmentId,
                 Status = staff.Status
-            };
 
-            ViewBag.Departments = _context.Departments
-                .Select(d => new SelectListItem
-                {
-                    Value = d.Id.ToString(),
-                    Text = d.Name
-                })
-                .ToList();
+            };
+ 
 
             return View(model);
         }
