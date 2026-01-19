@@ -104,23 +104,22 @@ namespace Student_Complain_Management_System.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Departments = _context.Departments
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.Id.ToString(),
-                        Text = d.Name
-                    })
-                    .ToList();
                 return View(model);
             }
 
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId))
-                return Unauthorized();
+            if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var currentUserId))
+            {
+                ModelState.AddModelError("", "Could not determine current user.");
+                return View(model);
+            }
 
-            var ok = await _staffService.UpdateOwnProfileAsync(model, userId);
+            var ok = await _staffService.UpdateOwnProfileAsync(model, currentUserId);
             if (!ok)
-                return Unauthorized();
+            {
+                ModelState.AddModelError("", "Failed to update profile. Please try again.");
+                return View(model);
+            }
 
             TempData["Success"] = "Profile updated successfully!";
             return RedirectToAction("Profile");
