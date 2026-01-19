@@ -2,11 +2,13 @@
 using HelpdeskModel.Models;
 using HelpdeskModel.ViewModels;
 using HelpdeskRepository.Data;
+using HelpdeskService.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace UserRoles.Controllers
 {
@@ -15,18 +17,21 @@ namespace UserRoles.Controllers
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<ApplicationRole> roleManager;
-        private readonly AppDbContext _context;
+        private readonly AppDbContext context;
+        private readonly IStudentService studentService;
 
         public AccountController(
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
-            AppDbContext context)
+            AppDbContext context,
+            IStudentService studentService)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.roleManager = roleManager;
-            _context = context;
+            this.context = context;
+            this.studentService = studentService;
         }
 
         [HttpGet]
@@ -119,99 +124,49 @@ namespace UserRoles.Controllers
 
         // STUDENT REGISTER
         [HttpGet]
+
+        [AllowAnonymous]
+        [HttpGet]
         public IActionResult RegisterStudent()
         {
-            ViewBag.Departments = _context.Departments
-                .Select(d => new SelectListItem
-                {
-                    Value = d.Id.ToString(),
-                    Text = d.Name
-                })
+            ViewBag.Departments = context.Departments
+                .Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Name })
                 .ToList();
 
             return View("RegisterStudent");
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterStudent(StudentRegisterViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Departments = _context.Departments
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.Id.ToString(),
-                        Text = d.Name
-                    })
-                    .ToList();
+            ViewBag.Departments = context.Departments
+                .Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Name })
+                .ToList();
 
+            if (!ModelState.IsValid)
+                return View("RegisterStudent", model);
+
+            long? createdById = null;
+            var currentUserIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!string.IsNullOrEmpty(currentUserIdString) && long.TryParse(currentUserIdString, out var currentUserId))
+            {
+                createdById = currentUserId;
+            }
+
+            var success = await studentService.CreateStudentAsync(model, createdById);
+            if (!success)
+            {
+                ModelState.AddModelError("", "Registration failed. Please try again.");
                 return View("RegisterStudent", model);
             }
 
-            var user = new ApplicationUser
-            {
-                FullName = model.Name,
-                UserName = model.Email,
-                Email = model.Email
-            };
+            var newUser = await userManager.FindByEmailAsync(model.Email);
+            if (newUser != null)
+                await signInManager.SignInAsync(newUser, isPersistent: false);
 
-            var result = await userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                if (!await roleManager.RoleExistsAsync("Student"))
-                    await roleManager.CreateAsync(new ApplicationRole { Name = "Student" });
-
-                await userManager.AddToRoleAsync(user, "Student");
-
-                // Department
-                var department = await _context.Departments
-                    .FirstOrDefaultAsync(d => d.Id == model.DepartmentId);
-
-                if (department == null)
-                {
-                    ModelState.AddModelError("", "Invalid Department selected.");
-                    ViewBag.Departments = _context.Departments
-                        .Select(d => new SelectListItem
-                        {
-                            Value = d.Id.ToString(),
-                            Text = d.Name
-                        })
-                        .ToList();
-                    return View("RegisterStudent", model);
-                }
-
-                var student = new Student
-                {
-                    Name = model.Name,
-                    User = user,
-                    Address = model.Address,
-                    Phone = model.Phone,
-                    Department = department,
-                    CreatedAt = DateTime.UtcNow,
-                    Status = ModelStatus.Active,
-                    StudentId = model.StudentId,
-                };
-
-                _context.Students.Add(student);
-                await _context.SaveChangesAsync();
-
-                await signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "Student");
-            }
-
-            foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
-
-            ViewBag.Departments = _context.Departments
-                .Select(d => new SelectListItem
-                {
-                    Value = d.Id.ToString(),
-                    Text = d.Name
-                })
-                .ToList();
-
-            return View("RegisterStudent", model);
+            return RedirectToAction("Index", "Student");
         }
 
 
