@@ -48,6 +48,7 @@ namespace HelpdeskRepository.Repository
         public async Task<List<Staff>> GetByDepartmentIdAsync(long departmentId)
         {
             return await _context.Staffs
+                .Include(s => s.Department)
                 .Include(s => s.User)
                 .Where(s => s.DepartmentId == departmentId)
                 .ToListAsync();

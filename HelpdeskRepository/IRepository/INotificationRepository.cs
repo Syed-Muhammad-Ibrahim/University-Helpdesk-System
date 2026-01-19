@@ -13,6 +13,9 @@ namespace HelpdeskRepository.IRepository
         Task<List<Notification>> GetUnreadByUserIdAsync(long userId);
         Task MarkAsReadAsync(long notificationId, long userId);
         Task SaveChangesAsync();
+        Task<Notification?> GetByUserAndComplainAsync(long userId, long complainId);
+        Task AddAsync(Notification notification);
+        Task<Notification?> GetByIdForUserAsync(long id, long userId);
     }
 
 }

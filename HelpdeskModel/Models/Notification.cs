@@ -16,6 +16,10 @@ namespace HelpdeskModel.Models
         public string Message { get; set; }
         public bool IsRead { get; set; } = false;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public int UnreadCount { get; set; } = 1;
+        public DateTime LastAt { get; set; } = DateTime.UtcNow;
+        public string LastMessage { get; set; }
+
     }
 
 }

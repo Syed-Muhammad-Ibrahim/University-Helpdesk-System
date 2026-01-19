@@ -8,33 +8,35 @@ namespace Student_Complain_Management_System.Controllers
     [Authorize]
     public class NotificationController : Controller
     {
-        private readonly INotificationService notificationService;
+        private readonly INotificationService _notificationService;
 
         public NotificationController(INotificationService notificationService)
         {
-            this.notificationService = notificationService;
+            _notificationService = notificationService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Unread()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
-            var list = await notificationService.GetUnreadAsync(userId);
+            var list = await _notificationService.GetUnreadAsync(userId);
             return View(list);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Read(long id)
+        [HttpGet]
+        public async Task<IActionResult> Open(long id)
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
-            await notificationService.MarkAsReadAsync(id, userId);
-            return RedirectToAction(nameof(Unread));
+            var complainId = await _notificationService.OpenNotificationAsync(id, userId);
+            if (complainId == null) return NotFound();
+
+            return RedirectToAction("Thread", "Conversation", new { complainId = complainId.Value });
         }
     }
 

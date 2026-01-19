@@ -105,8 +105,15 @@ namespace HelpdeskService.Services
                 if (complain == null || complain.isSolved) return false;
 
                 var conversation = await _conversationRepository.GetByComplainIdAsync(model.ComplainId);
-                if (conversation == null)
-                    return false;
+                if (conversation == null) return false;
+
+                try
+                {
+                    await _notificationService.ClearMyComplainNotificationAsync(userId, model.ComplainId);
+                }
+                catch
+                {
+                }
 
                 var log = new ConversationLog
                 {
@@ -119,7 +126,9 @@ namespace HelpdeskService.Services
 
                 await _conversationRepository.AddLogAsync(log);
                 await _conversationRepository.SaveChangesAsync();
+
                 await _notificationService.CreateReplyNotificationAsync(model.ComplainId, userId);
+
                 return true;
             }
             catch (Exception ex)

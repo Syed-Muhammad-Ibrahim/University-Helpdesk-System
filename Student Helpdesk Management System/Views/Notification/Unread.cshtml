@@ -2,27 +2,21 @@
 
 @{
     ViewData["Title"] = "Notifications";
-    var unreadCount = Model?.Count ?? 0;
+    var totalUnread = (Model == null) ? 0 : Model.Sum(x => x.UnreadCount);
 }
 
 <div class="container mt-4">
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h3 class="mb-0">
             Notifications
-            <span class="badge bg-primary ms-2">@unreadCount</span>
+            <span class="badge bg-primary ms-2">@totalUnread</span>
         </h3>
-
-        @if (unreadCount > 0)
-        {
-            <small class="text-muted">Unread</small>
-        }
+        <small class="text-muted">Unread</small>
     </div>
 
-    @if (unreadCount == 0)
+    @if (Model == null || !Model.Any())
     {
-        <div class="alert alert-info">
-            No new notifications.
-        </div>
+        <div class="alert alert-info">No new notifications.</div>
     }
     else
     {
@@ -31,29 +25,25 @@
             {
                 <div class="list-group-item d-flex justify-content-between align-items-start">
                     <div class="me-3">
-                        <div class="fw-bold">@n.Message</div>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="fw-bold">@n.LastMessage</div>
+                            <span class="badge bg-danger">@n.UnreadCount</span>
+                        </div>
+
                         <small class="text-muted">
                             Complaint ID: @n.ComplainId |
-                            @n.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")
+                            @n.LastAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")
                         </small>
 
                         <div class="mt-2">
                             <a class="btn btn-sm btn-outline-primary"
-                               asp-controller="Conversation"
-                               asp-action="Thread"
-                               asp-route-complainId="@n.ComplainId">
+                               asp-controller="Notification"
+                               asp-action="Open"
+                               asp-route-id="@n.Id">
                                 Open Conversation
                             </a>
                         </div>
                     </div>
-
-                    <form asp-action="Read" method="post">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="id" value="@n.Id" />
-                        <button type="submit" class="btn btn-sm btn-success">
-                            Mark as read
-                        </button>
-                    </form>
                 </div>
             }
         </div>

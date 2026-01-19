@@ -10,10 +10,12 @@ namespace Student_Complain_Management_System.Controllers
     public class ConversationController : Controller
     {
         private readonly IConversationService _conversationService;
+        private readonly INotificationService _notificationService;
 
-        public ConversationController(IConversationService conversationService)
+        public ConversationController(IConversationService conversationService, INotificationService notificationService)
         {
             _conversationService = conversationService;
+            _notificationService = notificationService;
         }
 
         [HttpGet]
@@ -25,6 +27,8 @@ namespace Student_Complain_Management_System.Controllers
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId))
                 return Unauthorized();
+
+            await _notificationService.ClearMyComplainNotificationAsync(userId, complainId);
 
             var model = await _conversationService.GetThreadForUserAsync(complainId, userId, User);
             if (model == null) return NotFound();
