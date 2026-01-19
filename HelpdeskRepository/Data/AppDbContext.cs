@@ -23,6 +23,8 @@ namespace HelpdeskRepository.Data
         public DbSet<ConversationLog> ConversationLogs { get; set; }
         public DbSet<Notice> Notices { get; set; }
         public DbSet<NoticeLog>NoticeLogs { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+
 
         //protected override void OnModelCreating(ModelBuilder builder)
         //{
