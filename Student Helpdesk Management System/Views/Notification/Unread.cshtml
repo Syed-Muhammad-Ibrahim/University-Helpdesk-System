@@ -1,0 +1,61 @@
+﻿@model List<HelpdeskModel.Models.Notification>
+
+@{
+    ViewData["Title"] = "Notifications";
+    var unreadCount = Model?.Count ?? 0;
+}
+
+<div class="container mt-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h3 class="mb-0">
+            Notifications
+            <span class="badge bg-primary ms-2">@unreadCount</span>
+        </h3>
+
+        @if (unreadCount > 0)
+        {
+            <small class="text-muted">Unread</small>
+        }
+    </div>
+
+    @if (unreadCount == 0)
+    {
+        <div class="alert alert-info">
+            No new notifications.
+        </div>
+    }
+    else
+    {
+        <div class="list-group">
+            @foreach (var n in Model)
+            {
+                <div class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="me-3">
+                        <div class="fw-bold">@n.Message</div>
+                        <small class="text-muted">
+                            Complaint ID: @n.ComplainId |
+                            @n.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")
+                        </small>
+
+                        <div class="mt-2">
+                            <a class="btn btn-sm btn-outline-primary"
+                               asp-controller="Conversation"
+                               asp-action="Thread"
+                               asp-route-complainId="@n.ComplainId">
+                                Open Conversation
+                            </a>
+                        </div>
+                    </div>
+
+                    <form asp-action="Read" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@n.Id" />
+                        <button type="submit" class="btn btn-sm btn-success">
+                            Mark as read
+                        </button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+</div>

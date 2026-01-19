@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HelpdeskModel.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,12 @@ using System.Threading.Tasks;
 
 namespace HelpdeskRepository.IRepository
 {
-    internal interface INotificationRepository
+    public interface INotificationRepository
     {
+        Task AddRangeAsync(List<Notification> items);
+        Task<List<Notification>> GetUnreadByUserIdAsync(long userId);
+        Task MarkAsReadAsync(long notificationId, long userId);
+        Task SaveChangesAsync();
     }
+
 }

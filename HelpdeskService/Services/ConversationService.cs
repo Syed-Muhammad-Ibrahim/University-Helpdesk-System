@@ -18,6 +18,7 @@ namespace HelpdeskService.Services
         private readonly IComplainRepository _complainRepository;
         private readonly IStaffService _staffService;
         private readonly IStudentService _studentService;
+        private readonly INotificationService _notificationService;
         private readonly ILogger _logger;
 
         public ConversationService(
@@ -25,12 +26,14 @@ namespace HelpdeskService.Services
             IComplainRepository complainRepository,
             IStaffService staffService,
             IStudentService studentService,
+            INotificationService notificationService,
             ILogger<ConversationService> logger)
         {
             _conversationRepository = conversationRepository;
             _complainRepository = complainRepository;
             _staffService = staffService;
             _studentService = studentService;
+            _notificationService = notificationService;
             _logger = logger;
         }
 
@@ -116,6 +119,7 @@ namespace HelpdeskService.Services
 
                 await _conversationRepository.AddLogAsync(log);
                 await _conversationRepository.SaveChangesAsync();
+                await _notificationService.CreateReplyNotificationAsync(model.ComplainId, userId);
                 return true;
             }
             catch (Exception ex)

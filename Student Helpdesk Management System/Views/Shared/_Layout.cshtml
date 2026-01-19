@@ -51,6 +51,8 @@
                     <a asp-controller="Department" asp-action="Index">Department</a>
                     <a asp-controller="Notice" asp-action="AllNotice">Notice</a>
                     <a asp-controller="Notice" asp-action="Pending">Pending Notice</a>
+                    <a asp-controller="Notification" asp-action="Unread">Notifications</a>
+
                 }
 
                 @* Staff links *@
@@ -62,6 +64,8 @@
                     <a asp-controller="Notice" asp-action="Index">Notices</a>
                     <a asp-controller="Notice" asp-action="MyNotices">My Notices</a>
                     <a asp-controller="Staff" asp-action="Profile">Profile</a>
+                    <a asp-controller="Notification" asp-action="Unread">Notifications</a>
+
                 }
 
                 @* Student links *@
@@ -71,6 +75,8 @@
                     <a asp-controller="Complain" asp-action="MyComplains">My Complains</a>
                     <a asp-controller="PublicNotice" asp-action="Index">Notice</a>
                     <a asp-controller="Student" asp-action="Profile">Profile</a>
+                    <a asp-controller="Notification" asp-action="Unread">Notifications</a>
+
                 }
             </div>
         }

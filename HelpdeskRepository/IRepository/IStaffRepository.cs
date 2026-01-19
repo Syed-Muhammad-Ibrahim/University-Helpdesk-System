@@ -13,5 +13,6 @@ namespace HelpdeskRepository.IRepository
         Task<List<Staff>> GetAllAsync();
         Task AddAsync(Staff staff);
         Task SaveChangesAsync();
+        Task<List<Staff>> GetByDepartmentIdAsync(long departmentId);
     }
 }
