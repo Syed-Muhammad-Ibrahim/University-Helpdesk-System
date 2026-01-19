@@ -54,20 +54,13 @@ namespace Student_Complain_Management_System.Controllers
             var model = new StudentEditViewModel
             {
                 Id = student.Id,
+                StudentId = student.StudentId,
                 Name = student.Name,
                 Address = student.Address,
                 Phone = student.Phone,
                 DepartmentId = student.DepartmentId,
                 Status = student.Status
             };
-
-            ViewBag.Departments = _context.Departments
-                .Select(d => new SelectListItem
-                {
-                    Value = d.Id.ToString(),
-                    Text = d.Name
-                })
-                .ToList();
 
             return View(model);
         }
@@ -78,13 +71,6 @@ namespace Student_Complain_Management_System.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Departments = _context.Departments
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.Id.ToString(),
-                        Text = d.Name
-                    })
-                    .ToList();
                 return View(model);
             }
 
@@ -99,16 +85,9 @@ namespace Student_Complain_Management_System.Controllers
             if (!ok)
             {
                 ModelState.AddModelError("", "Failed to update profile. Please try again.");
-                ViewBag.Departments = _context.Departments
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.Id.ToString(),
-                        Text = d.Name
-                    })
-                    .ToList();
                 return View(model);
             }
-            return RedirectToAction("DashBoard", "Student");
+            return RedirectToAction("Profile", "Student");
         }
 
         [HttpGet]

@@ -26,8 +26,6 @@ namespace HelpdeskModel.ViewModels.UpdateViewModels
         [RegularExpression(@"^(01)[0-9]{9}$", ErrorMessage = "Phone must be a valid number (Ex: 01XXXXXXXXX)")]
         public string Phone { get; set; }
 
-        [Required(ErrorMessage = "Department is required.")]
-        [Range(1, long.MaxValue, ErrorMessage = "Please select a valid Department.")]
         public long DepartmentId { get; set; }
         public ModelStatus Status { get; set; }
     }
