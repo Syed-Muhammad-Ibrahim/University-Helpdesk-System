@@ -41,9 +41,41 @@ namespace Student_Complain_Management_System.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ComplainList()
+        [HttpGet]
+        public async Task<IActionResult> ComplainList(string? search, long? department, bool? solved)
         {
-            var complains = await _complainService.GetAllComplainsAsync();
+            ViewBag.Departments = await _context.Departments
+                .OrderBy(d => d.Name)
+                .ToListAsync();
+
+            ViewBag.CurrentSearch = search;
+            ViewBag.CurrentDept = department;
+            ViewBag.CurrentSolved = solved;
+
+            var q = _context.Complains
+                .Include(c => c.Student)
+                    .ThenInclude(s => s.User)
+                .Include(c => c.Department)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var term = search.Trim().ToLower();
+                q = q.Where(c =>
+                    c.Id.ToString().Contains(term) ||
+                    c.Description.ToLower().Contains(term) ||
+                    c.Student.StudentId.ToString().Contains(term) ||
+                    c.Student.Name.ToLower().Contains(term) ||
+                    (c.Student.User != null && c.Student.User.Email.ToLower().Contains(term)));
+            }
+
+            if (department.HasValue)
+                q = q.Where(c => c.DepartmentId == department.Value);
+
+            if (solved.HasValue)
+                q = q.Where(c => c.isSolved == solved.Value);
+
+            var complains = await q.OrderByDescending(c => c.CreatedAt).ToListAsync();
             return View(complains);
         }
 
