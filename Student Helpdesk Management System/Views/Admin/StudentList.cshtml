@@ -10,6 +10,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Student Id</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Department</th>
@@ -23,6 +24,7 @@
             @foreach (var s in Model)
             {
                 <tr>
+                    <td>@s.StudentId</td>
                     <td>@s.Name</td>
                     <td>@s.User?.Email</td>
                     <td>@s.Department?.Name</td>
