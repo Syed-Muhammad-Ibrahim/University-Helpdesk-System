@@ -105,15 +105,50 @@ namespace Student_Complain_Management_System.Controllers
         }
 
         // Staff List
-        public async Task<IActionResult> StaffList()
-        {
-            var staffs = await _staffService.GetAllStaffAsync();
-            return View(staffs);
-        }
+            [HttpGet]
+            public async Task<IActionResult> StaffList(string? search, long? department, string? status)
+            {
+                // dropdown departments
+                ViewBag.Departments = await _context.Departments
+                    .OrderBy(d => d.Name)
+                    .ToListAsync();
+
+                // default only active
+                if (string.IsNullOrWhiteSpace(status))
+                    status = "active";
+
+                ViewBag.CurrentSearch = search;
+                ViewBag.CurrentDept = department;
+                ViewBag.CurrentStatus = status;
+
+                var q = _context.Staffs
+                    .Include(s => s.User)
+                    .Include(s => s.Department)
+                    .AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(search))
+                {
+                    var term = search.Trim().ToLower();
+                    q = q.Where(s =>
+                        s.Name.ToLower().Contains(term) ||
+                        (s.User != null && s.User.Email.ToLower().Contains(term)));
+                }
+
+                if (department.HasValue)
+                    q = q.Where(s => s.DepartmentId == department.Value);
+
+                var st = status.Trim().ToLower();
+                if (st == "active") q = q.Where(s => s.Status == ModelStatus.Active);
+                else if (st == "inactive") q = q.Where(s => s.Status == ModelStatus.InActive);
+                else if (st == "deleted") q = q.Where(s => s.Status == ModelStatus.Deleted);
+
+                var staffs = await q.OrderBy(s => s.Name).ToListAsync();
+                return View(staffs);
+            }
 
 
-        // Update Staff
-        [HttpGet]
+            // Update Staff
+            [HttpGet]
         public async Task<IActionResult> EditStaff(long id)
         {
             var staff = await _staffService.GetStaffByIdAsync(id);
@@ -199,9 +234,43 @@ namespace Student_Complain_Management_System.Controllers
         }
 
         // Student List
-        public async Task<IActionResult> StudentList()
+        [HttpGet]
+        public async Task<IActionResult> StudentList(string? search, long? department, string? status)
         {
-            var students = await _studentService.GetAllStudentsAsync();
+            ViewBag.Departments = await _context.Departments
+                .OrderBy(d => d.Name)
+                .ToListAsync();
+
+            if (string.IsNullOrWhiteSpace(status))
+                status = "active";
+
+            ViewBag.CurrentSearch = search;
+            ViewBag.CurrentDept = department;
+            ViewBag.CurrentStatus = status;
+
+            var q = _context.Students
+                .Include(s => s.User)
+                .Include(s => s.Department)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var term = search.Trim().ToLower();
+                q = q.Where(s =>
+                    s.Name.ToLower().Contains(term) ||
+                    (s.User != null && s.User.Email.ToLower().Contains(term)) ||
+                    s.StudentId.ToString().Contains(term));
+            }
+
+            if (department.HasValue)
+                q = q.Where(s => s.DepartmentId == department.Value);
+
+            var st = status.Trim().ToLower();
+            if (st == "active") q = q.Where(s => s.Status == ModelStatus.Active);
+            else if (st == "inactive") q = q.Where(s => s.Status == ModelStatus.InActive);
+            else if (st == "deleted") q = q.Where(s => s.Status == ModelStatus.Deleted);
+
+            var students = await q.OrderBy(s => s.StudentId).ToListAsync();
             return View(students);
         }
 

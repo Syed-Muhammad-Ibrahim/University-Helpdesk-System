@@ -160,7 +160,7 @@ namespace HelpdeskService.Services
                     return false;
                 }
 
-                student.Status = ModelStatus.InActive;
+                student.Status = ModelStatus.Deleted;
                 student.ModifiedAt = DateTime.UtcNow;
                 student.ModifiedById = deletedById;
 

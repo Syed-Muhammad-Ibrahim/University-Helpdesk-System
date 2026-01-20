@@ -7,6 +7,58 @@
 <div class="card">
     <h3>All Staff</h3>
 
+    @{
+        var currentSearch = ViewBag.CurrentSearch as string;
+        long? currentDept = ViewBag.CurrentDept as long?;
+        var currentStatus = ViewBag.CurrentStatus as string;
+
+        var departments = ViewBag.Departments as IEnumerable<HelpdeskModel.Models.Department>
+        ?? Enumerable.Empty<HelpdeskModel.Models.Department>();
+    }
+
+    <form method="get" class="row g-2 mb-3">
+        <div class="col-md-4">
+            <input type="text"
+                   name="search"
+                   value="@currentSearch"
+                   class="form-control"
+                   placeholder="Search by name, email...">
+        </div>
+
+        <div class="col-md-3">
+            <select name="department" class="form-select">
+                <option value="">All departments</option>
+                @foreach (var dept in departments)
+                {
+                    <option value="@dept.Id" selected="@(currentDept.HasValue && dept.Id == currentDept.Value)">
+                        @dept.Name
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="status" class="form-select">
+                <option value="">All status</option>
+                <option value="active" selected="@(currentStatus == "active")">Active</option>
+                <option value="inactive" selected="@(currentStatus == "inactive")">InActive</option>
+                <option value="deleted" selected="@(currentStatus == "deleted")">Deleted</option>
+            </select>
+        </div>
+
+        <div class="col-md-1 d-grid">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+
+        <div class="col-md-1 d-grid">
+            <a asp-controller="Admin"
+               asp-action="StaffList"
+               class="btn btn-outline-secondary">
+                Clear
+            </a>
+        </div>
+    </form>
+
     <table class="table">
         <thead>
             <tr>
@@ -54,10 +106,15 @@
                             Edit
                         </a>
 
-                        <form asp-controller="Admin" asp-action="DeleteStaff" method="post" style="display:inline;">
+                        <form asp-controller="Admin"
+                              asp-action="DeleteStaff"
+                              method="post"
+                              style="display:inline;">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="id" value="@s.Id" />
-                            <button type="submit" class="btn btn-sm btn-danger"
+
+                            <button type="submit"
+                                    class="btn btn-sm btn-danger"
                                     onclick="return confirm('Are you sure you want to soft delete this staff?');">
                                 Delete
                             </button>

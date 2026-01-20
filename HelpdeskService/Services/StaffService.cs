@@ -114,6 +114,7 @@ namespace HelpdeskService.Services
                 staff.Name = model.Name;
                 staff.Address = model.Address;
                 staff.Phone = model.Phone;
+                staff.Status = model.Status;
                 staff.ModifiedAt = DateTime.UtcNow;
                 staff.ModifiedById = modifiedById;
 
@@ -187,7 +188,7 @@ namespace HelpdeskService.Services
                 var staff = await _staffRepository.GetByIdAsync(staffId);
                 if (staff == null) return false;
 
-                staff.Status = ModelStatus.InActive;
+                staff.Status = ModelStatus.Deleted;
                 staff.ModifiedAt = DateTime.UtcNow;
                 staff.ModifiedById = deletedById;
 
