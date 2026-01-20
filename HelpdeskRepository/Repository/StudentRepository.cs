@@ -1,4 +1,5 @@
-﻿using HelpdeskModel.Models;
+﻿using HelpdeskModel.BusinessRules;
+using HelpdeskModel.Models;
 using HelpdeskRepository.Data;
 using HelpdeskRepository.IRepository;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,7 @@ namespace HelpdeskRepository.Repository
             return await _context.Students
                 .Include(s => s.User)
                 .Include(s => s.Department)
+                .Where(s => s.Status == ModelStatus.Active)
                 .ToListAsync();
         }
 

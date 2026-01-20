@@ -321,6 +321,30 @@ namespace Student_Complain_Management_System.Controllers
             return RedirectToAction("DashBoard", "Admin");
         }
 
+        // Soft Delete Student
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteStudent(long id)
+        {
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var currentUserId))
+            {
+                return Unauthorized();
+            }
+
+            var ok = await _studentService.SoftDeleteStudentAsync(id, currentUserId);
+            if (!ok)
+            {
+                TempData["ErrorMessage"] = "Failed to delete student.";
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Student deleted successfully.";
+            }
+
+            return RedirectToAction("StudentList");
+        }
+
 
 
 

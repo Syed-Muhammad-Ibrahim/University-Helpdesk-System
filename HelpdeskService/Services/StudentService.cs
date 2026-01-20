@@ -149,6 +149,33 @@ namespace HelpdeskService.Services
             return await _studentRepository.GetByUserIdAsync(userId);
         }
 
+        public async Task<bool> SoftDeleteStudentAsync(long studentId, long? deletedById)
+        {
+            try
+            {
+                var student = await _studentRepository.GetByIdAsync(studentId);
+                if (student == null)
+                {
+                    _logger.LogWarning("Student {Id} not found for deletion", studentId);
+                    return false;
+                }
+
+                student.Status = ModelStatus.InActive;
+                student.ModifiedAt = DateTime.UtcNow;
+                student.ModifiedById = deletedById;
+
+                await _studentRepository.SaveChangesAsync();
+
+                _logger.LogInformation("Student {Id} soft deleted by user {UserId}", studentId, deletedById);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while soft deleting student {Id}", studentId);
+                return false;
+            }
+        }
+
     }
 
 }

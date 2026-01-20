@@ -16,5 +16,7 @@ namespace HelpdeskService.Services
         Task<List<Student>> GetAllStudentsAsync();
         Task<Student?> GetStudentByIdAsync(long id);
         Task<Student?> GetStudentByUserIdAsync(long userId);
+        Task<bool> SoftDeleteStudentAsync(long studentId, long? deletedById);
+
     }
 }
