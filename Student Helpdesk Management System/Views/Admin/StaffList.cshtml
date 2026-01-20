@@ -53,6 +53,15 @@
                            class="btn btn-sm btn-primary">
                             Edit
                         </a>
+
+                        <form asp-controller="Admin" asp-action="DeleteStaff" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@s.Id" />
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Are you sure you want to soft delete this staff?');">
+                                Delete
+                            </button>
+                        </form>
                     </td>
                 </tr>
             }

@@ -157,7 +157,7 @@ namespace HelpdeskService.Services
                     .FirstOrDefaultAsync(s => s.Id == model.Id);
 
                 if (staff == null || staff.UserId != userId)
-                    return false; // unauthorized
+                    return false;
 
                 staff.Name = model.Name;
                 staff.Address = model.Address;
@@ -168,7 +168,7 @@ namespace HelpdeskService.Services
                     staff.Department = dept;
 
                 staff.ModifiedAt = DateTime.UtcNow;
-                staff.ModifiedById = userId; // nijer Id
+                staff.ModifiedById = userId;
 
                 await _staffRepository.SaveChangesAsync();
                 return true;
@@ -176,6 +176,27 @@ namespace HelpdeskService.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while updating own staff profile {Id}", model.Id);
+                return false;
+            }
+        }
+
+        public async Task<bool> SoftDeleteStaffAsync(long staffId, long? deletedById)
+        {
+            try
+            {
+                var staff = await _staffRepository.GetByIdAsync(staffId);
+                if (staff == null) return false;
+
+                staff.Status = ModelStatus.InActive;
+                staff.ModifiedAt = DateTime.UtcNow;
+                staff.ModifiedById = deletedById;
+
+                await _staffRepository.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while soft deleting staff {Id}", staffId);
                 return false;
             }
         }

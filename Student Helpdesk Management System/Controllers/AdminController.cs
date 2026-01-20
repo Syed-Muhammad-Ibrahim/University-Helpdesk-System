@@ -182,6 +182,22 @@ namespace Student_Complain_Management_System.Controllers
             return RedirectToAction("StaffList");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteStaff(long id)
+        {
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var currentUserId))
+                return Unauthorized();
+
+            var ok = await _staffService.SoftDeleteStaffAsync(id, currentUserId);
+
+            if (!ok) TempData["ErrorMessage"] = "Failed to delete staff.";
+            else TempData["SuccessMessage"] = "Staff deleted successfully.";
+
+            return RedirectToAction("StaffList");
+        }
+
         // Student List
         public async Task<IActionResult> StudentList()
         {
