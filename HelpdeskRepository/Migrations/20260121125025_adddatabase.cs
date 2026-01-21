@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HelpdeskRepository.Migrations
 {
     /// <inheritdoc />
-    public partial class AddDatabase : Migration
+    public partial class adddatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -275,7 +275,7 @@ namespace HelpdeskRepository.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedById = table.Column<long>(type: "bigint", nullable: false),
                     ModifiedById = table.Column<long>(type: "bigint", nullable: true),
-                    AttachmentId = table.Column<long>(type: "bigint", nullable: false),
+                    AttachmentId = table.Column<long>(type: "bigint", nullable: true),
                     ApprovedById = table.Column<long>(type: "bigint", nullable: true),
                     RejectedById = table.Column<long>(type: "bigint", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -600,6 +600,38 @@ namespace HelpdeskRepository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    ComplainId = table.Column<long>(type: "bigint", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UnreadCount = table.Column<int>(type: "int", nullable: false),
+                    LastAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastMessage = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Complains_ComplainId",
+                        column: x => x.ComplainId,
+                        principalTable: "Complains",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ConversationLogs",
                 columns: table => new
                 {
@@ -850,6 +882,16 @@ namespace HelpdeskRepository.Migrations
                 column: "RejectedById");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Notifications_ComplainId",
+                table: "Notifications",
+                column: "ComplainId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_UserId",
+                table: "Notifications",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Staffs_CreatedById",
                 table: "Staffs",
                 column: "CreatedById");
@@ -919,6 +961,9 @@ namespace HelpdeskRepository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Notices");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "Staffs");

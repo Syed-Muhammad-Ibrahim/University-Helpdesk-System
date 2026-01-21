@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HelpdeskRepository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260108082341_adddata")]
-    partial class adddata
+    [Migration("20260121125025_adddatabase")]
+    partial class adddatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -542,6 +542,49 @@ namespace HelpdeskRepository.Migrations
                     b.ToTable("NoticeLogs");
                 });
 
+            modelBuilder.Entity("HelpdeskModel.Models.Notification", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ComplainId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastMessage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UnreadCount")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComplainId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("HelpdeskModel.Models.Staff", b =>
                 {
                     b.Property<long>("Id")
@@ -1038,6 +1081,25 @@ namespace HelpdeskRepository.Migrations
                     b.Navigation("Department");
 
                     b.Navigation("RejectedBy");
+                });
+
+            modelBuilder.Entity("HelpdeskModel.Models.Notification", b =>
+                {
+                    b.HasOne("HelpdeskModel.Models.Complain", "Complain")
+                        .WithMany()
+                        .HasForeignKey("ComplainId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HelpdeskModel.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Complain");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("HelpdeskModel.Models.Staff", b =>
