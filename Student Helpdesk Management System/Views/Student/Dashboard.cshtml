@@ -2,8 +2,64 @@
     ViewData["Title"] = "Student Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Student Dashboard</h1>
-    <p>Choose any option from the sidebar</p>
-</div>
+<div class="container-fluid py-3">
 
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+        <div>
+            <h2 class="mb-1">Student Dashboard</h2>
+            <p class="text-muted mb-0">Create complains, track updates, and view notices.</p>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">My Complains</h5>
+                    <p class="card-text text-muted">See all complains you submitted and their current status.</p>
+                    <a asp-controller="Complain" asp-action="MyComplains" class="btn btn-sm btn-primary">
+                        Open List
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">Create Complain</h5>
+                    <p class="card-text text-muted">Submit a new complain to your department.</p>
+                    <a asp-controller="Complain" asp-action="Create" class="btn btn-sm btn-primary">
+                        + New Complain
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">Notices</h5>
+                    <p class="card-text text-muted">Read approved notices published for your department.</p>
+                    <a asp-controller="Notice" asp-action="Index" class="btn btn-sm btn-primary">
+                        View Notices
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">Tips</h5>
+                    <ul class="mb-0">
+                        <li>Open a complain to read conversation and post replies.</li>
+                        <li>Check notices regularly for updates from staff/admin.</li>
+                        <li>Use clear subject/description while creating a complain.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

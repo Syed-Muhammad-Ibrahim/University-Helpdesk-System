@@ -20,6 +20,18 @@
 
     <dt class="col-sm-3">Solved</dt>
     <dd class="col-sm-9">@((Model.isSolved) ? "Yes" : "No")</dd>
+
+    @if (Model.AttachmentId != null)
+    {
+        <dt class="col-sm-3">Attachment</dt>
+        <dd class="col-sm-9">
+            <a asp-controller="Attachment"
+               asp-action="DownloadComplain"
+               asp-route-complainId="@Model.Id">
+                Download
+            </a>
+        </dd>
+    }
 </dl>
 
 <a asp-controller="@ViewBag.BackController" asp-action="@ViewBag.BackAction" class="btn btn-secondary"> Back to list </a>

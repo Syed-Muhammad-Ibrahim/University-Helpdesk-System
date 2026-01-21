@@ -43,6 +43,7 @@
                 @* Admin links *@
                 @if (User.IsInRole("Admin"))
                 {
+                    <a asp-controller="Admin" asp-action="DashBoard">Dashboard</a>
                     <a asp-controller="Admin" asp-action="ComplainList">View All Complaints</a>
                     <a asp-controller="Admin" asp-action="StudentList">View All Students</a>
                     <a asp-controller="Admin" asp-action="CreateStudent">Add New Student</a>
@@ -50,7 +51,6 @@
                     <a asp-controller="Admin" asp-action="CreateStaff">Add New Staff</a>
                     <a asp-controller="Department" asp-action="Index">Department</a>
                     <a asp-controller="Notice" asp-action="AllNotice">Notice</a>
-                    <a asp-controller="Notice" asp-action="Pending">Pending Notice</a>
                     <a asp-controller="Notification" asp-action="Unread">Notifications</a>
 
                 }
@@ -58,9 +58,9 @@
                 @* Staff links *@
                 @if (User.IsInRole("Staff"))
                 {
+                    <a asp-controller="Staff" asp-action="Dashboard">Dashboard</a>
                     <a asp-controller="StaffComplain" asp-action="DepartmentComplains">View All Complains</a>
                     <a asp-controller="StaffComplain" asp-action="RepliedComplains">Complains I Replied</a>
-                    <a asp-controller="Notice" asp-action="Create">Create Notice</a>
                     <a asp-controller="Notice" asp-action="Index">Notices</a>
                     <a asp-controller="Notice" asp-action="MyNotices">My Notices</a>
                     <a asp-controller="Staff" asp-action="Profile">Profile</a>
@@ -71,6 +71,7 @@
                 @* Student links *@
                 @if (User.IsInRole("Student"))
                 {
+                    <a asp-controller="Student" asp-action="Dashboard">Dashboard</a>
                     <a asp-controller="Complain" asp-action="Create">Open New Complain</a>
                     <a asp-controller="Complain" asp-action="MyComplains">My Complains</a>
                     <a asp-controller="PublicNotice" asp-action="Index">Notice</a>

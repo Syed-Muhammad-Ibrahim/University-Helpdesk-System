@@ -1,6 +1,6 @@
 ﻿using HelpdeskModel.BusinessRules;
 using HelpdeskModel.Models;
-using HelpdeskModel.ViewModels;      // ComplainViewModel ekhane thakbe
+using HelpdeskModel.ViewModels;
 using HelpdeskService.Services;
 using HelpdeskRepository.Data;
 using Microsoft.AspNetCore.Authorization;
@@ -48,11 +48,7 @@ namespace Student_Complain_Management_System.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.Departments = _context.Departments
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.Id.ToString(),
-                        Text = d.Name
-                    })
+                    .Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Name })
                     .ToList();
                 return View(model);
             }
@@ -62,26 +58,48 @@ namespace Student_Complain_Management_System.Controllers
             {
                 ModelState.AddModelError("", "Could not determine current user.");
                 ViewBag.Departments = _context.Departments
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.Id.ToString(),
-                        Text = d.Name
-                    })
+                    .Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Name })
                     .ToList();
                 return View(model);
             }
 
-            // Service diye complain create (business rule inside service)
+            // ===== Attachment save (optional) =====
+            if (model.File != null && model.File.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "complains");
+                Directory.CreateDirectory(uploadsFolder);
+
+                var storedName = $"{Guid.NewGuid()}{Path.GetExtension(model.File.FileName)}";
+                var physicalPath = Path.Combine(uploadsFolder, storedName);
+
+                using (var stream = new FileStream(physicalPath, FileMode.Create))
+                {
+                    await model.File.CopyToAsync(stream);
+                }
+
+                var attachment = new Attachment
+                {
+                    FileNmae = model.File.FileName,
+                    FileType = model.File.ContentType,
+                    FilePath = "/uploads/complains/" + storedName,
+                    CreatedAt = DateTime.UtcNow,
+                    Status = ModelStatus.Active,
+                    CreatedById = userId
+                };
+
+                _context.Attachments.Add(attachment);
+                await _context.SaveChangesAsync();
+
+                model.AttachmentId = attachment.Id;
+            }
+
             var ok = await _complainService.CreateComplainAsync(model, userId);
             if (!ok)
             {
                 ModelState.AddModelError("", "Failed to create complain.");
+
                 ViewBag.Departments = _context.Departments
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.Id.ToString(),
-                        Text = d.Name
-                    })
+                    .Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Name })
                     .ToList();
                 return View(model);
             }
@@ -141,11 +159,7 @@ namespace Student_Complain_Management_System.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.Departments = _context.Departments
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.Id.ToString(),
-                        Text = d.Name
-                    })
+                    .Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Name })
                     .ToList();
                 return View(model);
             }
@@ -154,16 +168,42 @@ namespace Student_Complain_Management_System.Controllers
             if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
+            if (model.File != null && model.File.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "complains");
+                Directory.CreateDirectory(uploadsFolder);
+
+                var storedName = $"{Guid.NewGuid()}{Path.GetExtension(model.File.FileName)}";
+                var physicalPath = Path.Combine(uploadsFolder, storedName);
+
+                using (var stream = new FileStream(physicalPath, FileMode.Create))
+                {
+                    await model.File.CopyToAsync(stream);
+                }
+
+                var attachment = new Attachment
+                {
+                    FileNmae = model.File.FileName,
+                    FileType = model.File.ContentType,
+                    FilePath = "/uploads/complains/" + storedName,
+                    CreatedAt = DateTime.UtcNow,
+                    Status = ModelStatus.Active,
+                    CreatedById = userId
+                };
+
+                _context.Attachments.Add(attachment);
+                await _context.SaveChangesAsync();
+
+                model.AttachmentId = attachment.Id;
+            }
+
             var ok = await _complainService.UpdateComplainAsync(model, userId);
             if (!ok)
             {
                 ModelState.AddModelError("", "Could not update complain.");
+
                 ViewBag.Departments = _context.Departments
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.Id.ToString(),
-                        Text = d.Name
-                    })
+                    .Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Name })
                     .ToList();
                 return View(model);
             }

@@ -22,10 +22,13 @@ namespace HelpdeskRepository.Repository
             => await _context.Complains.AddAsync(complain);
 
         public async Task<Complain?> GetByIdAsync(long id)
-            => await _context.Complains
+        {
+            return await _context.Complains
                 .Include(c => c.Department)
                 .Include(c => c.CreatedBy)
+                .Include(c => c.Attachment)
                 .FirstOrDefaultAsync(c => c.Id == id);
+        }
 
         public async Task<List<Complain>> GetAllAsync()
             =>  await _context.Complains
@@ -57,6 +60,7 @@ namespace HelpdeskRepository.Repository
             return await _context.Complains
                 .Include(c => c.Department)
                 .Include(c => c.CreatedBy)
+                .Include(c => c.Attachment)
                 .Where(c => ids.Contains(c.Id))
                 .ToListAsync();
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,6 @@ namespace HelpdeskModel.ViewModels
         public string Description { get; set; }
         public long DepartmentId { get; set; }
         public long? AttachmentId { get; set; }
+        public IFormFile? File { get; set; }
     }
 }
