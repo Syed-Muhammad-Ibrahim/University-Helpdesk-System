@@ -181,7 +181,7 @@ namespace UserRoles.Controllers
             return View("RegisterAdmin");
         }
 
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterAdmin(RegisterViewModel model)
