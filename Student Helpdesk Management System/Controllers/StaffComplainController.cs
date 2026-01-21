@@ -19,13 +19,33 @@ namespace Student_Complain_Management_System.Controllers
         }
 
         // GET: /StaffComplain/DepartmentComplains
-        public async Task<IActionResult> DepartmentComplains()
+        [HttpGet]
+        public async Task<IActionResult> DepartmentComplains(string? search, bool? solved)
         {
+            ViewBag.CurrentSearch = search;
+            ViewBag.CurrentSolved = solved;
+
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
-            var complains = await _complainService.GetDepartmentComplainsForStaffAsync(userId);
+            var complains = await _complainService.GetDepartmentComplainsForStaffAsync(userId); // dept wise [file:111]
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var term = search.Trim().ToLower();
+                complains = complains.Where(c =>
+                    c.Id.ToString().Contains(term) ||
+                    c.Description.ToLower().Contains(term) ||
+                    (c.CreatedBy != null && c.CreatedBy.FullName.ToLower().Contains(term))
+                ).ToList();
+            }
+
+            if (solved.HasValue)
+                complains = complains.Where(c => c.isSolved == solved.Value).ToList();
+
+            complains = complains.OrderByDescending(c => c.CreatedAt).ToList();
+
             return View(complains);
         }
 
@@ -87,9 +107,9 @@ namespace Student_Complain_Management_System.Controllers
             if (isAdmin)
                 return RedirectToAction("ComplainList", "Admin");
             else if (isStaff)
-                return RedirectToAction("DepartmentComplains", "Staff");
+                return RedirectToAction("DepartmentComplains", "StaffComplain");
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Dashboard", "Staff");
         }
     }
 }

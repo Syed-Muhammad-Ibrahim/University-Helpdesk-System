@@ -13,6 +13,37 @@
     </div>
 }
 
+@{
+    var currentSearch = ViewBag.CurrentSearch as string;
+    bool? currentSolved = ViewBag.CurrentSolved as bool?;
+}
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-8">
+        <input type="text"
+               name="search"
+               value="@currentSearch"
+               class="form-control"
+               placeholder="Search by complain id / description / student name..." />
+    </div>
+
+    <div class="col-md-2">
+        <select name="solved" class="form-select">
+            <option value="">All</option>
+            <option value="false" selected="@(currentSolved.HasValue && currentSolved.Value == false)">Pending</option>
+            <option value="true" selected="@(currentSolved.HasValue && currentSolved.Value == true)">Solved</option>
+        </select>
+    </div>
+
+    <div class="col-md-1 d-grid">
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </div>
+
+    <div class="col-md-1 d-grid">
+        <a asp-action="DepartmentComplains" class="btn btn-outline-secondary">Clear</a>
+    </div>
+</form>
+
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
