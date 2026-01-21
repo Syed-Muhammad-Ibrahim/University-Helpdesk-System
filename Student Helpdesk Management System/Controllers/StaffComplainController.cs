@@ -18,7 +18,7 @@ namespace Student_Complain_Management_System.Controllers
             _complainService = complainService;
         }
 
-        // GET: /StaffComplain/DepartmentComplains
+        //DepartmentComplains
         [HttpGet]
         public async Task<IActionResult> DepartmentComplains(string? search, bool? solved)
         {
@@ -49,6 +49,7 @@ namespace Student_Complain_Management_System.Controllers
             return View(complains);
         }
 
+        //Complain Details
         [HttpGet]
         public async Task<IActionResult> Details(long id)
         {
@@ -76,6 +77,7 @@ namespace Student_Complain_Management_System.Controllers
             return View(complain);
         }
 
+        //Replied Complain
         public async Task<IActionResult> RepliedComplains()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -86,6 +88,7 @@ namespace Student_Complain_Management_System.Controllers
             return View(complains);
         }
 
+        //Mark Solve
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MarkSolved(long id)

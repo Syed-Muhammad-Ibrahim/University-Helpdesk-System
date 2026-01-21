@@ -35,6 +35,7 @@ namespace Student_Complain_Management_System.Controllers
             return View();
         }
 
+        //Update
         [HttpGet]
         public async Task<IActionResult> EditProfile()
         {
@@ -90,6 +91,7 @@ namespace Student_Complain_Management_System.Controllers
             return RedirectToAction("Profile", "Student");
         }
 
+        //View
         [HttpGet]
         public async Task<IActionResult> Profile()
         {

@@ -41,6 +41,7 @@ namespace Student_Complain_Management_System.Controllers
             return View();
         }
 
+        //All Complain
         [HttpGet]
         public async Task<IActionResult> ComplainList(string? search, long? department, bool? solved)
         {
@@ -79,7 +80,7 @@ namespace Student_Complain_Management_System.Controllers
             return View(complains);
         }
 
-        // Create Staff
+        // Add Staff
         [HttpGet]
         public IActionResult CreateStaff()
         {
@@ -179,8 +180,8 @@ namespace Student_Complain_Management_System.Controllers
             }
 
 
-            // Update Staff
-            [HttpGet]
+        // Update Staff
+        [HttpGet]
         public async Task<IActionResult> EditStaff(long id)
         {
             var staff = await _staffService.GetStaffByIdAsync(id);
@@ -249,6 +250,7 @@ namespace Student_Complain_Management_System.Controllers
             return RedirectToAction("StaffList");
         }
 
+        //Delete Staff
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteStaff(long id)
@@ -306,80 +308,7 @@ namespace Student_Complain_Management_System.Controllers
             return View(students);
         }
 
-        // Edit Student
-        [HttpGet]
-        public async Task<IActionResult> EditStudent(long id)
-        {
-            var student = await _context.Students
-                .Include(s => s.User)
-                .FirstOrDefaultAsync(s => s.Id == id);
-
-            if (student == null)
-                return NotFound();
-
-            var model = new StudentEditViewModel
-            {
-                Id = student.Id,
-                Name = student.Name,
-                Address = student.Address,
-                Phone = student.Phone,
-                Status = student.Status,
-                DepartmentId= student.DepartmentId
-            };
-
-            ViewBag.Departments = _context.Departments
-                .Select(d => new SelectListItem
-                {
-                    Value = d.Id.ToString(),
-                    Text = d.Name
-                })
-                .ToList();
-
-            return View(model);
-        }
-
-        // Edit Student
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditStudent(StudentEditViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Departments = _context.Departments
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.Id.ToString(),
-                        Text = d.Name
-                    })
-                    .ToList();
-                return View(model);
-            }
-
-            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var currentUserId))
-            {
-                ModelState.AddModelError("", "Could not determine current user.");
-                return View(model);
-            }
-
-            var ok = await _studentService.UpdateStudentAsync(model, currentUserId);
-
-            if (!ok)
-            {
-                ViewBag.Departments = _context.Departments
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.Id.ToString(),
-                        Text = d.Name
-                    })
-                    .ToList();
-                return View(model);
-            }
-
-            return RedirectToAction("StudentList");
-        }
-
-        // Create Student
+        // Add Student
         [HttpGet]
         public IActionResult CreateStudent()
         {
@@ -393,7 +322,6 @@ namespace Student_Complain_Management_System.Controllers
 
             return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -439,7 +367,81 @@ namespace Student_Complain_Management_System.Controllers
             return RedirectToAction("DashBoard", "Admin");
         }
 
-        // Soft Delete Student
+        // Upade Student
+        [HttpGet]
+        public async Task<IActionResult> EditStudent(long id)
+        {
+            var student = await _context.Students
+                .Include(s => s.User)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (student == null)
+                return NotFound();
+
+            var model = new StudentEditViewModel
+            {
+                Id = student.Id,
+                Name = student.Name,
+                Address = student.Address,
+                Phone = student.Phone,
+                Status = student.Status,
+                DepartmentId= student.DepartmentId
+            };
+
+            ViewBag.Departments = _context.Departments
+                .Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.Name
+                })
+                .ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditStudent(StudentEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Departments = _context.Departments
+                    .Select(d => new SelectListItem
+                    {
+                        Value = d.Id.ToString(),
+                        Text = d.Name
+                    })
+                    .ToList();
+                return View(model);
+            }
+
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var currentUserId))
+            {
+                ModelState.AddModelError("", "Could not determine current user.");
+                return View(model);
+            }
+
+            var ok = await _studentService.UpdateStudentAsync(model, currentUserId);
+
+            if (!ok)
+            {
+                ViewBag.Departments = _context.Departments
+                    .Select(d => new SelectListItem
+                    {
+                        Value = d.Id.ToString(),
+                        Text = d.Name
+                    })
+                    .ToList();
+                return View(model);
+            }
+
+            return RedirectToAction("StudentList");
+        }
+
+        
+
+        //Delete Student
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteStudent(long id)

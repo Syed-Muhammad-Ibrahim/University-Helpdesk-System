@@ -124,7 +124,6 @@ namespace UserRoles.Controllers
 
         // STUDENT REGISTER
         [HttpGet]
-
         [AllowAnonymous]
         [HttpGet]
         public IActionResult RegisterStudent()
@@ -170,7 +169,6 @@ namespace UserRoles.Controllers
 
             return RedirectToAction("Dashboard", "Student");
         }
-
 
 
         // ADMIN REGISTER (usually protected)

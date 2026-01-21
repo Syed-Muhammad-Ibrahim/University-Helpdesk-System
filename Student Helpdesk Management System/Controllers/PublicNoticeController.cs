@@ -14,6 +14,7 @@ namespace Student_Complain_Management_System.Controllers
             _noticeService = noticeService;
         }
 
+        //Notice for Student
         public async Task<IActionResult> Index()
         {
             var notices = await _noticeService.GetAllApprovedAsync();

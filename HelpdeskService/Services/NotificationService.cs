@@ -54,7 +54,7 @@ namespace HelpdeskService.Services
                 var admins = await _userManager.GetUsersInRoleAsync("Admin");
                 receiverIds.AddRange(admins.Select(a => a.Id));
 
-                // staff/admin reply দিলে student (complain owner) notify
+                // staff/admin reply 
                 if (!senderIsStudent)
                     receiverIds.Add(complain.CreatedById);
 

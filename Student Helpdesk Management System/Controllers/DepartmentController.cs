@@ -17,34 +17,33 @@ namespace Student_Complain_Management_System.Controllers
             _deptService = deptService;
         }
 
-        // GET: /Department
+        //Department List
         public async Task<IActionResult> Index()
         {
             var list = await _deptService.GetAllAsync();
             return View(list);
         }
 
-        // GET: /Department/Create
+        //Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: /Department/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DepartmentViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
-            var success = await _deptService.CreateAsync(model, 1); // createdById dummy
+            var success = await _deptService.CreateAsync(model, 1);
             if (success) return RedirectToAction("Index", "Department");
 
             ModelState.AddModelError("", "Failed to create department");
             return View(model);
         }
 
-        // GET: /Department/Edit/
+        //Edit
         public async Task<IActionResult> Edit(long id)
         {
             var dept = await _deptService.GetByIdAsync(id);
@@ -54,7 +53,6 @@ namespace Student_Complain_Management_System.Controllers
             return View(vm);
         }
 
-        // POST: /Department/Edit/
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(DepartmentViewModel model)
@@ -68,7 +66,7 @@ namespace Student_Complain_Management_System.Controllers
             return View(model);
         }
 
-        // GET: /Department/Delete/
+        //Delete
         public async Task<IActionResult> Delete(long id)
         {
             var dept = await _deptService.GetByIdAsync(id);
@@ -76,7 +74,7 @@ namespace Student_Complain_Management_System.Controllers
             return View(dept);
         }
 
-        // POST: /Department/DeleteConfirmed/
+        //DeleteConfirmed
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)

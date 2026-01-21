@@ -44,6 +44,7 @@ namespace Student_Complain_Management_System.Controllers
             return View(deptNotices);
         }
 
+        //All Notice
         [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> AllNotice(string? search, long? department, string? approved)
@@ -84,6 +85,7 @@ namespace Student_Complain_Management_System.Controllers
             return View(notices);
         }
 
+        //Approval Notice
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Pending()
         {
@@ -91,7 +93,7 @@ namespace Student_Complain_Management_System.Controllers
             return View(pending);
         }
 
-        // GET: Notice/Create
+        //Create
         [HttpGet]
         public IActionResult Create()
         {
@@ -106,7 +108,6 @@ namespace Student_Complain_Management_System.Controllers
             return View();
         }
 
-        // POST: Notice/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(NoticeViewModel model)
@@ -151,7 +152,7 @@ namespace Student_Complain_Management_System.Controllers
                 return RedirectToAction(nameof(Index));
         }
 
-        // GET: Notice/Edit/5
+        //Edit
         [HttpGet]
         public async Task<IActionResult> Edit(long id)
         {
@@ -177,7 +178,6 @@ namespace Student_Complain_Management_System.Controllers
             return View(model);
         }
 
-        // POST: Notice/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(NoticeViewModel model)
@@ -217,7 +217,7 @@ namespace Student_Complain_Management_System.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Notice/Delete/5
+        //Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(long id)
@@ -237,7 +237,7 @@ namespace Student_Complain_Management_System.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Notice/Approve/5
+        //Approve
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
@@ -251,6 +251,7 @@ namespace Student_Complain_Management_System.Controllers
             return RedirectToAction(nameof(AllNotice));
         }
 
+        //Reject
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
@@ -264,6 +265,7 @@ namespace Student_Complain_Management_System.Controllers
             return RedirectToAction(nameof(AllNotice));
         }
 
+        //NoticeList (Staff)
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> MyNotices()
         {

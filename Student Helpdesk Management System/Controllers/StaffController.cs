@@ -70,7 +70,7 @@ namespace Student_Complain_Management_System.Controllers
             return View("Profile", model);
         }
 
-        // EditProfile
+        // Update
         [HttpGet]
         public async Task<IActionResult> EditProfile()
         {
@@ -97,7 +97,6 @@ namespace Student_Complain_Management_System.Controllers
             return View(model);
         }
 
-        // EditProfile
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditProfile(StaffUpdateViewModel model)
@@ -125,7 +124,7 @@ namespace Student_Complain_Management_System.Controllers
             return RedirectToAction("Profile");
         }
 
-        // GET: /Staff/DepartmentNotices
+        //DepartmentNotices
         public async Task<IActionResult> DepartmentNotices()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);

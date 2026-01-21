@@ -70,7 +70,7 @@ namespace HelpdeskService.Services
                 var complain = await _complainRepository.GetByIdAsync(model.Id);
                 if (complain == null) return false;
 
-                if (complain.CreatedById != studentUserId) return false; 
+                if (complain.CreatedById != studentUserId) return false;
                 if (complain.isSolved) return false;
 
                 complain.Description = model.Description;
@@ -113,8 +113,8 @@ namespace HelpdeskService.Services
 
         //Student Complain List
         public async Task<List<Complain>> GetStudentComplainsAsync(long studentUserId)
-        { 
-            return await _complainRepository.GetByStudentIdAsync(studentUserId); 
+        {
+            return await _complainRepository.GetByStudentIdAsync(studentUserId);
         }
 
         // Complain List for Staff
@@ -157,7 +157,7 @@ namespace HelpdeskService.Services
             var complain = await _complainRepository.GetByIdAsync(complainId);
             if (complain == null) return null;
 
-            
+
             return complain.CreatedById == studentUserId ? complain : null;
         }
 
@@ -181,4 +181,5 @@ namespace HelpdeskService.Services
             return await _complainRepository.GetAllAsync();
         }
     }
+}
 

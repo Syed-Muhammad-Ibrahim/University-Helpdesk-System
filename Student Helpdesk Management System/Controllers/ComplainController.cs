@@ -63,7 +63,6 @@ namespace Student_Complain_Management_System.Controllers
                 return View(model);
             }
 
-            // ===== Attachment save (optional) =====
             if (model.File != null && model.File.Length > 0)
             {
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "complains");
@@ -107,7 +106,7 @@ namespace Student_Complain_Management_System.Controllers
             return RedirectToAction(nameof(MyComplains));
         }
 
-        // GET: Complain/MyComplains
+        //MyComplains
         public async Task<IActionResult> MyComplains()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -117,10 +116,10 @@ namespace Student_Complain_Management_System.Controllers
             }
 
             var complains = await _complainService.GetStudentComplainsAsync(userId);
-            return View(complains); // MyComplains.cshtml
+            return View(complains);
         }
 
-        // GET: Complain/Edit/5
+        //Update
         [HttpGet]
         public async Task<IActionResult> Edit(long id)
         {
@@ -151,7 +150,6 @@ namespace Student_Complain_Management_System.Controllers
             return View(model);
         }
 
-        // POST: Complain/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ComplainViewModel model)
@@ -211,7 +209,7 @@ namespace Student_Complain_Management_System.Controllers
             return RedirectToAction(nameof(MyComplains));
         }
 
-        // POST: Complain/Delete/5
+        //Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(long id)
