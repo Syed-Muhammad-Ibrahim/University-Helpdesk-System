@@ -401,7 +401,7 @@ namespace Student_Complain_Management_System.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("StudentCode", "This Student Id is already taken.");
+                ModelState.AddModelError("StudentId", "This Student Id is already taken.");
                 ViewBag.Departments = _context.Departments
                     .Select(d => new SelectListItem
                     {

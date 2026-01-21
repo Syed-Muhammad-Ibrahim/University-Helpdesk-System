@@ -16,6 +16,12 @@
 
             <div class="row">
                 <div class="col-md-6 mb-3">
+                    <label asp-for="StudentId" class="form-label"></label>
+                    <input asp-for="StudentId" class="form-input" />
+                    <span asp-validation-for="StudentId" class="validation"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
                     <label asp-for="Name" class="form-label"></label>
                     <input asp-for="Name" class="form-input" />
                     <span asp-validation-for="Name" class="validation"></span>
