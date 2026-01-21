@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Student_Complain_Management_System.Controllers
@@ -44,9 +45,42 @@ namespace Student_Complain_Management_System.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AllNotice()
+        [HttpGet]
+        public async Task<IActionResult> AllNotice(string? search, long? department, string? approved)
         {
+            ViewBag.Departments = await _context.Departments
+                .OrderBy(d => d.Name)
+                .ToListAsync();
+
+            ViewBag.CurrentSearch = search;
+            ViewBag.CurrentDept = department;
+            ViewBag.CurrentApproved = approved;
+
             var notices = await _noticeService.GetAllAsync();
+
+            
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var term = search.Trim().ToLower();
+                notices = notices.Where(n =>
+                    n.Description.ToLower().Contains(term) ||
+                    (n.CreatedBy != null && n.CreatedBy.FullName.ToLower().Contains(term)) ||
+                    (n.Department != null && n.Department.Name.ToLower().Contains(term))
+                ).ToList();
+            }
+
+            // department filter
+            if (department.HasValue)
+                notices = notices.Where(n => n.DepartmentId == department.Value).ToList();
+
+            // approved filter
+            if (!string.IsNullOrWhiteSpace(approved))
+            {
+                if (approved == "yes") notices = notices.Where(n => n.isApproved).ToList();
+                else if (approved == "no") notices = notices.Where(n => !n.isApproved).ToList();
+            }
+
+            notices = notices.OrderByDescending(n => n.CreatedAt).ToList();
             return View(notices);
         }
 
@@ -214,10 +248,9 @@ namespace Student_Complain_Management_System.Controllers
                 return Unauthorized();
 
             await _noticeService.ApproveAsync(id, adminId);
-            return RedirectToAction(nameof(Pending));
+            return RedirectToAction(nameof(AllNotice));
         }
 
-        // POST: Notice/Reject/5
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
@@ -228,7 +261,7 @@ namespace Student_Complain_Management_System.Controllers
                 return Unauthorized();
 
             await _noticeService.RejectAsync(id, adminId);
-            return RedirectToAction(nameof(Pending));
+            return RedirectToAction(nameof(AllNotice));
         }
 
         [Authorize(Roles = "Staff")]

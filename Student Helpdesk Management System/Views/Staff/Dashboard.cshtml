@@ -2,8 +2,67 @@
     ViewData["Title"] = "Staff Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Staff Dashboard</h1>
-    <p>Choose any option from the sidebar</p>
-</div>
+<div class="container-fluid py-3">
 
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+        <div>
+            <h2 class="mb-1">Staff Dashboard</h2>
+            <p class="text-muted mb-0">Handle department complains, reply conversations and post notices.</p>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">Department Complains</h5>
+                    <p class="card-text text-muted">View complains assigned to your department and respond quickly.</p>
+                    <a asp-controller="StaffComplain" asp-action="DepartmentComplains"
+                       class="btn btn-sm btn-primary">
+                        Open List
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">Notices</h5>
+                    <p class="card-text text-muted">Create a notice for your department (admin will approve if needed).</p>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a asp-controller="Notice" asp-action="Create" class="btn btn-sm btn-primary">Create Notice</a>
+                        <a asp-controller="Notice" asp-action="Index" class="btn btn-sm btn-outline-secondary">View Notices</a>
+                        <a asp-controller="Notice" asp-action="MyNotices" class="btn btn-sm btn-outline-primary">My Notices</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">Notifications</h5>
+                    <p class="card-text text-muted">Check latest notifications and updates.</p>
+                    <a asp-controller="Notification" asp-action="Unread" class="btn btn-sm btn-primary">
+                        Open Notifications
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">Tips</h5>
+                    <ul class="mb-0">
+                        <li>Use the complain list search/filter to find specific items faster.</li>
+                        <li>Reply from the conversation thread; newest replies can be shown on top.</li>
+                        <li>Create notice with clear description and correct department.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

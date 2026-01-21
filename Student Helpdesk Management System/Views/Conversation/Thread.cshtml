@@ -7,22 +7,38 @@
     <p><strong>Status:</strong> @(Model.IsSolved ? "Solved" : "Open")</p>
 </div>
 
-<a asp-controller="@ViewBag.BackController"
-   asp-action="@ViewBag.BackAction"
-   class="btn btn-secondary mb-3">
-    Back
-</a>
-
 <hr />
 
+<!-- Reply box on top -->
+<form asp-action="PostMessage" method="post" class="mb-4">
+    @Html.AntiForgeryToken()
+
+    <input asp-for="NewMessage.ComplainId" type="hidden" />
+
+    <label asp-for="NewMessage.Text" class="form-label"><strong>Reply</strong></label>
+    <textarea asp-for="NewMessage.Text" class="form-control" rows="3"></textarea>
+    <span asp-validation-for="NewMessage.Text" class="text-danger"></span>
+
+    <div class="d-flex gap-2 mt-2">
+        <button type="submit" class="btn btn-primary">Send</button>
+
+        <a asp-controller="@ViewBag.BackController"
+           asp-action="@ViewBag.BackAction"
+           class="btn btn-secondary">
+            Back
+        </a>
+    </div>
+</form>
+
+<!-- Most recent replies on top -->
 <div>
     @if (Model.Messages != null && Model.Messages.Any())
     {
-        foreach (var msg in Model.Messages)
+        foreach (var msg in Model.Messages.OrderByDescending(m => m.CreatedAt))
         {
-            <div>
+            <div class="mb-2">
                 <strong>@msg.SenderName</strong> (@msg.CreatedAt.ToString("g")):
-                <p>@msg.Text</p>
+                <p class="mb-1">@msg.Text</p>
             </div>
             <hr />
         }
@@ -33,9 +49,6 @@
     }
 </div>
 
-<form asp-action="PostMessage" method="post">
-    @Html.AntiForgeryToken()
-    <input asp-for="NewMessage.ComplainId" type="hidden" />
-    <textarea asp-for="NewMessage.Text" class="form-control" rows="3"></textarea>
-    <button type="submit" class="btn btn-primary mt-2">Send</button>
-</form>
+@section Scripts {
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}

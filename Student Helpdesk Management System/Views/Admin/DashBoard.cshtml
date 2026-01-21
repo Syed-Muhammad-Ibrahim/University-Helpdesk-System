@@ -2,8 +2,92 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<div class="card">
-    <h3>Welcome Admin</h3>
-    <p>Select an option from the left menu to manage the system.</p>
-</div>
+<div class="container-fluid py-3">
 
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+        <div>
+            <h2 class="mb-1">Admin Dashboard</h2>
+            <p class="text-muted mb-0">Manage students, staff, complains and notices from one place.</p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a asp-controller="Admin" asp-action="CreateStudent" class="btn btn-primary">+ Add Student</a>
+            <a asp-controller="Admin" asp-action="CreateStaff" class="btn btn-outline-primary">+ Add Staff</a>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">Students</h5>
+                    <p class="card-text text-muted">View, filter and manage student accounts.</p>
+                    <div class="d-flex gap-2">
+                        <a asp-controller="Admin" asp-action="StudentList" class="btn btn-sm btn-primary">Student List</a>
+                        <a asp-controller="Admin" asp-action="CreateStudent" class="btn btn-sm btn-outline-secondary">Add</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">Staff</h5>
+                    <p class="card-text text-muted">Manage staff members and their status.</p>
+                    <div class="d-flex gap-2">
+                        <a asp-controller="Admin" asp-action="StaffList" class="btn btn-sm btn-primary">Staff List</a>
+                        <a asp-controller="Admin" asp-action="CreateStaff" class="btn btn-sm btn-outline-secondary">Add</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">Complains</h5>
+                    <p class="card-text text-muted">Track complains, filter by department and solved status.</p>
+                    <div class="d-flex gap-2">
+                        <a asp-controller="Admin" asp-action="ComplainList" class="btn btn-sm btn-primary">Complain List</a>
+                        <a asp-controller="Conversation" asp-action="Thread" asp-route-complainId="0"
+                           class="btn btn-sm btn-outline-secondary disabled"
+                           aria-disabled="true">
+                            Conversation
+                        </a>
+                    </div>
+                    <small class="text-muted d-block mt-2">Open a complain details to access conversation.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">Notices</h5>
+                    <p class="card-text text-muted">Create, approve, reject and manage notices.</p>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a asp-controller="Notice" asp-action="AllNotice" class="btn btn-sm btn-primary">All Notices</a>
+                        <a asp-controller="Notice" asp-action="Pending" class="btn btn-sm btn-outline-primary">Pending</a>
+                        <a asp-controller="Notice" asp-action="Create" class="btn btn-sm btn-outline-secondary">Create</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">System</h5>
+                    <p class="card-text text-muted">Quick maintenance actions and monitoring.</p>
+                    <ul class="mb-0">
+                        <li>Use filters in lists to quickly find records.</li>
+                        <li>Soft delete keeps data safe; status shows Deleted.</li>
+                        <li>Approve/Reject notices from All Notices page.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

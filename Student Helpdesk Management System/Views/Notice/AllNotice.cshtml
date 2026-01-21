@@ -1,9 +1,54 @@
 ﻿@model IEnumerable<HelpdeskModel.Models.Notice>
 @{
     ViewData["Title"] = "All Notices (Admin)";
+
+    var currentSearch = ViewBag.CurrentSearch as string;
+    long? currentDept = ViewBag.CurrentDept as long?;
+    var currentApproved = ViewBag.CurrentApproved as string;
+
+    var departments = ViewBag.Departments as IEnumerable<HelpdeskModel.Models.Department>
+                      ?? Enumerable.Empty<HelpdeskModel.Models.Department>();
 }
 
 <h2>All Notices</h2>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <input type="text"
+               name="search"
+               value="@currentSearch"
+               class="form-control"
+               placeholder="Search by creator/department/description..." />
+    </div>
+
+    <div class="col-md-3">
+        <select name="department" class="form-select">
+            <option value="">All departments</option>
+            @foreach (var dept in departments)
+            {
+                <option value="@dept.Id" selected="@(currentDept.HasValue && dept.Id == currentDept.Value)">
+                    @dept.Name
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <select name="approved" class="form-select">
+            <option value="">All</option>
+            <option value="yes" selected="@(currentApproved == "yes")">Approved</option>
+            <option value="no" selected="@(currentApproved == "no")">Not approved</option>
+        </select>
+    </div>
+
+    <div class="col-md-1 d-grid">
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </div>
+
+    <div class="col-md-1 d-grid">
+        <a asp-action="AllNotice" class="btn btn-outline-secondary">Clear</a>
+    </div>
+</form>
 
 <table class="table table-bordered table-striped">
     <thead>
@@ -32,11 +77,35 @@
                     <td>@(n.isApproved ? "Yes" : "No")</td>
                     <td>@n.Status</td>
                     <td>
+                    <td>
                         <a asp-action="Edit" asp-route-id="@n.Id" class="btn btn-sm btn-warning">Edit</a>
+
                         <form asp-action="Delete" asp-route-id="@n.Id" method="post" class="d-inline">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Delete this notice?');">
+                                Delete
+                            </button>
                         </form>
+
+                        @if (!n.isApproved && n.Status == HelpdeskModel.BusinessRules.ModelStatus.Active)
+                        {
+                            <form asp-action="Approve" asp-route-id="@n.Id" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-success"
+                                        onclick="return confirm('Approve this notice?');">
+                                    Approve
+                                </button>
+                            </form>
+
+                            <form asp-action="Reject" asp-route-id="@n.Id" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-secondary"
+                                        onclick="return confirm('Reject this notice?');">
+                                    Reject
+                                </button>
+                            </form>
+                        }
                     </td>
                 </tr>
             }
