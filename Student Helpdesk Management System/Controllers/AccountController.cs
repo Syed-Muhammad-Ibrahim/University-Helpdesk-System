@@ -203,7 +203,7 @@ namespace UserRoles.Controllers
                     await roleManager.CreateAsync(new ApplicationRole { Name = "Admin" });
 
                 await userManager.AddToRoleAsync(user, "Admin");
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Dashboard", "Admin");
             }
 
             foreach (var error in result.Errors)

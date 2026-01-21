@@ -31,7 +31,7 @@ namespace HelpdeskService.Services
             _logger = logger;
         }
 
-        // already dowa create method dhore nie
+        //Create Complain
         public async Task<bool> CreateComplainAsync(ComplainViewModel model, long studentUserId)
         {
             try
@@ -62,44 +62,7 @@ namespace HelpdeskService.Services
             }
         }
 
-        public async Task<List<Complain>> GetStudentComplainsAsync(long studentUserId)
-            => await _complainRepository.GetByStudentIdAsync(studentUserId);
-
-        // department wise list for staff
-        public async Task<List<Complain>> GetDepartmentComplainsForStaffAsync(long staffUserId)
-        {
-            var staff = await _staffService.GetStaffByUserIdAsync(staffUserId);
-            if (staff == null) return new List<Complain>();
-
-            return await _complainRepository.GetByDepartmentIdAsync(staff.DepartmentId);
-        }
-
-        // single complain for student (details/edit)
-        public async Task<Complain?> GetByIdForStudentAsync(long complainId, long studentUserId)
-        {
-            var complain = await _complainRepository.GetByIdAsync(complainId);
-            if (complain == null) return null;
-
-            // sudhu nijer complain
-            return complain.CreatedById == studentUserId ? complain : null;
-        }
-
-        // single complain for staff/admin (details + visibility)
-        public async Task<Complain?> GetByIdForStaffAsync(long complainId, long staffUserId, bool isAdmin)
-        {
-            var complain = await _complainRepository.GetByIdAsync(complainId);
-            if (complain == null) return null;
-
-            if (isAdmin) return complain;
-
-            var staff = await _staffService.GetStaffByUserIdAsync(staffUserId);
-            if (staff == null) return null;
-
-            // sudhu nijer department
-            return complain.DepartmentId == staff.DepartmentId ? complain : null;
-        }
-
-        // EDIT: sudhu owner student, solved na hole
+        //Update Complain
         public async Task<bool> UpdateComplainAsync(ComplainViewModel model, long studentUserId)
         {
             try
@@ -107,8 +70,8 @@ namespace HelpdeskService.Services
                 var complain = await _complainRepository.GetByIdAsync(model.Id);
                 if (complain == null) return false;
 
-                if (complain.CreatedById != studentUserId) return false; // not owner
-                if (complain.isSolved) return false;                      // solved hole edit na
+                if (complain.CreatedById != studentUserId) return false; 
+                if (complain.isSolved) return false;
 
                 complain.Description = model.Description;
                 complain.DepartmentId = model.DepartmentId;
@@ -126,7 +89,7 @@ namespace HelpdeskService.Services
             }
         }
 
-        // DELETE: sudhu owner student, solved na hole
+        // DELETE Complain
         public async Task<bool> DeleteComplainAsync(long complainId, long studentUserId)
         {
             try
@@ -148,6 +111,22 @@ namespace HelpdeskService.Services
             }
         }
 
+        //Student Complain List
+        public async Task<List<Complain>> GetStudentComplainsAsync(long studentUserId)
+        { 
+            return await _complainRepository.GetByStudentIdAsync(studentUserId); 
+        }
+
+        // Complain List for Staff
+        public async Task<List<Complain>> GetDepartmentComplainsForStaffAsync(long staffUserId)
+        {
+            var staff = await _staffService.GetStaffByUserIdAsync(staffUserId);
+            if (staff == null) return new List<Complain>();
+
+            return await _complainRepository.GetByDepartmentIdAsync(staff.DepartmentId);
+        }
+
+        // Mark Solve
         public async Task<bool> MarkSolvedAsync(long complainId, long actorUserId, bool isAdminOrStaff)
         {
             try
@@ -171,10 +150,35 @@ namespace HelpdeskService.Services
                 return false;
             }
         }
+
+        // single complain for student
+        public async Task<Complain?> GetByIdForStudentAsync(long complainId, long studentUserId)
+        {
+            var complain = await _complainRepository.GetByIdAsync(complainId);
+            if (complain == null) return null;
+
+            
+            return complain.CreatedById == studentUserId ? complain : null;
+        }
+
+        // single complain for staff/admin
+        public async Task<Complain?> GetByIdForStaffAsync(long complainId, long staffUserId, bool isAdmin)
+        {
+            var complain = await _complainRepository.GetByIdAsync(complainId);
+            if (complain == null) return null;
+
+            if (isAdmin) return complain;
+
+            var staff = await _staffService.GetStaffByUserIdAsync(staffUserId);
+            if (staff == null) return null;
+
+            return complain.DepartmentId == staff.DepartmentId ? complain : null;
+        }
+
+        // All Complain For Admin
         public async Task<List<Complain>> GetAllComplainsAsync()
         {
             return await _complainRepository.GetAllAsync();
         }
     }
 
-}
