@@ -418,18 +418,19 @@ namespace Student_Complain_Management_System.Controllers
             if (!string.IsNullOrEmpty(userIdString) && long.TryParse(userIdString, out var parsed))
                 currentUserId = parsed;
 
-            var ok = await _studentService.CreateStudentAsync(model, currentUserId);
+            var result = await _studentService.CreateStudentAsync(model, currentUserId);
 
-            if (!ok)
+            if (!result.Succeeded)
             {
-                ModelState.AddModelError("", "Failed to create Student. Please try again.");
+                foreach (var kv in result.Errors)
+                {
+                    var key = kv.Key;
+                    foreach (var msg in kv.Value)
+                        ModelState.AddModelError(key, msg);
+                }
 
                 ViewBag.Departments = _context.Departments
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.Id.ToString(),
-                        Text = d.Name
-                    })
+                    .Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Name })
                     .ToList();
 
                 return View(model);
@@ -461,6 +462,8 @@ namespace Student_Complain_Management_System.Controllers
 
             return RedirectToAction("StudentList");
         }
+
+
 
 
 

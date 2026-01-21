@@ -41,20 +41,32 @@ namespace HelpdeskService.Services
             _logger = logger;
         }
 
-        public async Task<bool> CreateStudentAsync(StudentRegisterViewModel model, long? createdById)
+        public async Task<OperationResult> CreateStudentAsync(StudentRegisterViewModel model, long? createdById)
         {
+            var res = new OperationResult();
+            ApplicationUser? user = null;
+
             try
             {
                 var existing = await _studentRepository.GetByStudentIdAsync(model.StudentId);
                 if (existing != null)
                 {
                     _logger.LogWarning("Duplicate StudentCode {StudentCode}", model.StudentId);
-                    return false;
+                    AddError(res, "StudentId", "This Student Id is already taken.");
+                    res.Succeeded = false;
+                    return res;
                 }
 
+                var department = await _departmentRepository.GetByIdAsync(model.DepartmentId);
+                if (department == null)
+                {
+                    _logger.LogError("Invalid DepartmentId {DepartmentId} for student {Email}", model.DepartmentId, model.Email);
+                    AddError(res, "DepartmentId", "Please select a valid Department.");
+                    res.Succeeded = false;
+                    return res;
+                }
 
-                // Identity user create
-                var user = new ApplicationUser
+                user = new ApplicationUser
                 {
                     FullName = model.Name,
                     UserName = model.Email,
@@ -67,22 +79,44 @@ namespace HelpdeskService.Services
                 {
                     _logger.LogError("Failed to create student user: {Errors}",
                         string.Join(", ", result.Errors.Select(e => e.Description)));
-                    return false;
+
+                    var emailDupAdded = false;
+
+                    foreach (var e in result.Errors)
+                    {
+                        if (!emailDupAdded && (e.Code.Contains("DuplicateEmail") || e.Code.Contains("DuplicateUserName")))
+                        {
+                            AddError(res, "Email", "The email already exists.");
+                            emailDupAdded = true;
+                            continue;
+                        }
+
+                        AddError(res, "", e.Description);
+                    }
+
+                    res.Succeeded = false;
+                    return res;
                 }
 
-                // Role assign
                 if (!await _roleManager.RoleExistsAsync("Student"))
-                    await _roleManager.CreateAsync(new ApplicationRole { Name = "Student" });
-
-                await _userManager.AddToRoleAsync(user, "Student");
-
-                var department = await _departmentRepository.GetByIdAsync(model.DepartmentId);
-
-                if (department == null)
                 {
-                    _logger.LogError("Invalid DepartmentId {DepartmentId} for student {Email}",
-                        model.DepartmentId, model.Email);
-                    return false;
+                    var roleCreate = await _roleManager.CreateAsync(new ApplicationRole { Name = "Student" });
+                    if (!roleCreate.Succeeded)
+                    {
+                        await _userManager.DeleteAsync(user);
+                        AddError(res, "", "Could not create Student role. Please try again.");
+                        res.Succeeded = false;
+                        return res;
+                    }
+                }
+
+                var addRole = await _userManager.AddToRoleAsync(user, "Student");
+                if (!addRole.Succeeded)
+                {
+                    await _userManager.DeleteAsync(user);
+                    AddError(res, "", "Registration failed while assigning role. Please try again.");
+                    res.Succeeded = false;
+                    return res;
                 }
 
                 var student = new Student
@@ -99,13 +133,32 @@ namespace HelpdeskService.Services
                 };
 
                 await _studentRepository.AddAsync(student);
-                await _studentRepository.SaveChangesAsync();
-                return true;
+
+                try
+                {
+                    await _studentRepository.SaveChangesAsync();
+                }
+                catch
+                {
+                    await _userManager.DeleteAsync(user);
+                    throw;
+                }
+
+                res.Succeeded = true;
+                return res;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while creating student.");
-                return false;
+
+                if (user != null)
+                {
+                    try { await _userManager.DeleteAsync(user); } catch { }
+                }
+
+                AddError(res, "", "Something went wrong. Please try again.");
+                res.Succeeded = false;
+                return res;
             }
         }
 
@@ -114,8 +167,7 @@ namespace HelpdeskService.Services
             try
             {
                 var student = await _studentRepository.GetByIdAsync(model.Id);
-                if (student == null)
-                    return false;
+                if (student == null) return false;
 
                 student.Name = model.Name;
                 student.Address = model.Address;
@@ -176,6 +228,13 @@ namespace HelpdeskService.Services
             }
         }
 
+        private static void AddError(OperationResult res, string key, string message)
+        {
+            if (!res.Errors.ContainsKey(key))
+                res.Errors[key] = new List<string>();
+
+            res.Errors[key].Add(message);
+        }
     }
 
 }

@@ -11,7 +11,7 @@ namespace HelpdeskService.Services
 {
     public interface IStudentService
     {
-        Task<bool> CreateStudentAsync(StudentRegisterViewModel model, long? createdById);
+        Task<OperationResult> CreateStudentAsync(StudentRegisterViewModel model, long? currentUserId);
         Task<bool> UpdateStudentAsync(StudentEditViewModel model, long? modifiedById);
         Task<List<Student>> GetAllStudentsAsync();
         Task<Student?> GetStudentByIdAsync(long id);

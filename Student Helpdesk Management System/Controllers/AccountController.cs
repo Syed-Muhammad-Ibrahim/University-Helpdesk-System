@@ -151,14 +151,16 @@ namespace UserRoles.Controllers
             long? createdById = null;
             var currentUserIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!string.IsNullOrEmpty(currentUserIdString) && long.TryParse(currentUserIdString, out var currentUserId))
-            {
                 createdById = currentUserId;
-            }
 
-            var success = await studentService.CreateStudentAsync(model, createdById);
-            if (!success)
+            var result = await studentService.CreateStudentAsync(model, createdById);
+
+            if (!result.Succeeded)
             {
-                ModelState.AddModelError("", "Registration failed. Please try again.");
+                foreach (var kv in result.Errors)
+                    foreach (var msg in kv.Value)
+                        ModelState.AddModelError(kv.Key, msg);
+
                 return View("RegisterStudent", model);
             }
 
@@ -166,13 +168,13 @@ namespace UserRoles.Controllers
             if (newUser != null)
                 await signInManager.SignInAsync(newUser, isPersistent: false);
 
-            return RedirectToAction("Index", "Student");
+            return RedirectToAction("Dashboard", "Student");
         }
 
 
 
         // ADMIN REGISTER (usually protected)
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult RegisterAdmin()
         {
@@ -201,7 +203,6 @@ namespace UserRoles.Controllers
                     await roleManager.CreateAsync(new ApplicationRole { Name = "Admin" });
 
                 await userManager.AddToRoleAsync(user, "Admin");
-                await signInManager.SignInAsync(user, isPersistent: false);
                 return RedirectToAction("Login", "Account");
             }
 
