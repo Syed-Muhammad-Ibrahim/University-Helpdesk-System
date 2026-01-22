@@ -37,7 +37,7 @@
         foreach (var msg in Model.Messages.OrderByDescending(m => m.CreatedAt))
         {
             <div class="mb-2">
-                <strong>@msg.SenderName</strong> (@msg.CreatedAt.ToString("g")):
+                <strong>@msg.SenderName</strong> (@msg.CreatedAt.ToLocalTime().ToString("g")):
                 <p class="mb-1">@msg.Text</p>
             </div>
             <hr />
